@@ -10,7 +10,7 @@ import org.bson.Document;
 /**
  * Created by linhai on 2018/12/9.
  */
-public class MongoDBJDBC {
+public class MongoDbJdbc {
 
     public static void main( String args[] ){
         try{
