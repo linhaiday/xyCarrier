@@ -1,0 +1,2437 @@
+{
+    "_id" : "2f6df2cc2071744618f8ff38e4f420c2",
+    "tranTimestamp" : "NumberLong(1544275145445)",
+    "orderId" : "order_2",
+    "userId" : 1,
+    "data" : {
+        "smses" : [],
+        "code" : 0,
+        "city" : "西安",
+        "level" : "2",
+        "nets" : [],
+        "last_modify_time" : "2018-12-08 21:15:20",
+        "mobile" : "18710391691",
+        "open_time" : "2010-06-08",
+        "available_balance" : 1884,
+        "packages" : [],
+        "families" : [],
+        "message" : "正常",
+        "recharges" : [],
+        "carrier" : "CHINA_MOBILE",
+        "province" : "陕西",
+        "calls" : [
+            {
+                "code" : "0",
+                "bill_month" : "2018-07",
+                "total_size" : 39,
+                "message" : "正常",
+                "items" : [
+                    {
+                        "peer_number" : "18668101479",
+                        "duration" : "23",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "杭州市",
+                        "time" : "2018-07-01 22:01:49",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "057156264805",
+                        "duration" : "3",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "杭州市",
+                        "time" : "2018-07-02 12:12:59",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "13184248776",
+                        "duration" : "9",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "杭州市",
+                        "time" : "2018-07-03 14:24:52",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "05532621077",
+                        "duration" : "21",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "杭州市",
+                        "time" : "2018-07-05 17:04:58",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "057156264805",
+                        "duration" : "2",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "杭州市",
+                        "time" : "2018-07-06 10:02:31",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18698584537",
+                        "duration" : "19",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "杭州市",
+                        "time" : "2018-07-07 17:02:43",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18698584537",
+                        "duration" : "21",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "杭州市",
+                        "time" : "2018-07-07 17:09:23",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18368800507",
+                        "duration" : "21",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "杭州市",
+                        "time" : "2018-07-07 18:17:44",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18368800507",
+                        "duration" : "42",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "杭州市",
+                        "time" : "2018-07-07 18:23:01",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18258445881",
+                        "duration" : "7",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "杭州市",
+                        "time" : "2018-07-08 11:44:06",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "095187",
+                        "duration" : "208",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "杭州市",
+                        "time" : "2018-07-09 14:05:02",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "057156264805",
+                        "duration" : "3",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "杭州市",
+                        "time" : "2018-07-10 10:01:53",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "057427828888",
+                        "duration" : "14",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "宁波市",
+                        "time" : "2018-07-11 22:13:59",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18657484832",
+                        "duration" : "30",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "宁波市",
+                        "time" : "2018-07-12 01:04:30",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "057156264805",
+                        "duration" : "9",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "宁波市",
+                        "time" : "2018-07-12 09:01:27",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "15963046582",
+                        "duration" : "7",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "宁波市",
+                        "time" : "2018-07-13 14:07:22",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "057427828888",
+                        "duration" : "26",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "宁波市",
+                        "time" : "2018-07-13 21:45:05",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "13468931790",
+                        "duration" : "69",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "宁波市",
+                        "time" : "2018-07-14 10:30:30",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "13468931790",
+                        "duration" : "58",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "宁波市",
+                        "time" : "2018-07-14 10:35:26",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18192205978",
+                        "duration" : "72",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "宁波市",
+                        "time" : "2018-07-15 19:45:33",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "02984045428",
+                        "duration" : "19",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "宁波市",
+                        "time" : "2018-07-16 14:43:02",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "057156264805",
+                        "duration" : "2",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "宁波市",
+                        "time" : "2018-07-17 12:25:38",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "17722588763",
+                        "duration" : "156",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "杭州市",
+                        "time" : "2018-07-18 15:13:43",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18026952614",
+                        "duration" : "30",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "杭州市",
+                        "time" : "2018-07-20 14:01:49",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "02995217136",
+                        "duration" : "23",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "杭州市",
+                        "time" : "2018-07-20 18:21:29",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "057156264805",
+                        "duration" : "2",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "杭州市",
+                        "time" : "2018-07-21 12:05:41",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "057156264805",
+                        "duration" : "10",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "杭州市",
+                        "time" : "2018-07-21 12:18:16",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18066951160",
+                        "duration" : "26",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "杭州市",
+                        "time" : "2018-07-22 17:57:17",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "13227691644",
+                        "duration" : "13",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "杭州市",
+                        "time" : "2018-07-24 12:51:14",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18066951160",
+                        "duration" : "46",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "杭州市",
+                        "time" : "2018-07-24 18:01:12",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "057156264805",
+                        "duration" : "4",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "杭州市",
+                        "time" : "2018-07-25 12:12:39",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18033416104",
+                        "duration" : "9",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "杭州市",
+                        "time" : "2018-07-25 18:07:56",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18025497412",
+                        "duration" : "40",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "杭州市",
+                        "time" : "2018-07-25 18:08:39",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "057156264805",
+                        "duration" : "2",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "杭州市",
+                        "time" : "2018-07-26 12:17:15",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "057156264805",
+                        "duration" : "2",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "杭州市",
+                        "time" : "2018-07-27 12:14:04",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "13186998910",
+                        "duration" : "20",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "杭州市",
+                        "time" : "2018-07-29 12:43:26",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "13186998910",
+                        "duration" : "8",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "杭州市",
+                        "time" : "2018-07-29 12:48:41",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "01053957343",
+                        "duration" : "68",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "杭州市",
+                        "time" : "2018-07-31 13:59:02",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "17342058445",
+                        "duration" : "751",
+                        "dial_type" : "DIAL",
+                        "fee" : 0,
+                        "location" : "杭州市",
+                        "time" : "2018-07-31 18:53:09",
+                        "location_type" : "国内异地主叫"
+                    }
+                ]
+            },
+            {
+                "code" : "0",
+                "bill_month" : "2018-11",
+                "total_size" : 68,
+                "message" : "正常",
+                "items" : [
+                    {
+                        "peer_number" : "1008611",
+                        "duration" : "34",
+                        "dial_type" : "DIAL",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-11-01 08:35:08",
+                        "location_type" : "本地主叫本地"
+                    },
+                    {
+                        "peer_number" : "02995149810",
+                        "duration" : "13",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-11-01 11:16:45",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "15596875625",
+                        "duration" : "14",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-11-01 14:23:52",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "13750834102",
+                        "duration" : "272",
+                        "dial_type" : "DIAL",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-11-01 17:46:22",
+                        "location_type" : "本地主叫异地"
+                    },
+                    {
+                        "peer_number" : "02995064437",
+                        "duration" : "11",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-11-02 10:10:08",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "17600554094",
+                        "duration" : "42",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-11-02 12:09:41",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "02910086",
+                        "duration" : "28",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-11-02 13:50:11",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18933477211",
+                        "duration" : "9",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-11-02 15:08:38",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "13484608408",
+                        "duration" : "9",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-11-02 17:12:44",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "15829312907",
+                        "duration" : "68",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-11-03 18:09:07",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "17702964576",
+                        "duration" : "70",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-11-03 19:04:31",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18691012417",
+                        "duration" : "16",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-11-04 07:12:41",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "02995066",
+                        "duration" : "5",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-11-04 07:17:57",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "15829312907",
+                        "duration" : "28",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "南京市",
+                        "time" : "2018-11-04 15:13:16",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18066951160",
+                        "duration" : "83",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-11-05 10:10:56",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18519414066",
+                        "duration" : "18",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "杭州市",
+                        "time" : "2018-11-05 16:45:43",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "037156091686",
+                        "duration" : "9",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "杭州市",
+                        "time" : "2018-11-06 09:55:32",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "02995149809",
+                        "duration" : "14",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "杭州市",
+                        "time" : "2018-11-06 16:55:51",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "15339100889",
+                        "duration" : "9",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "杭州市",
+                        "time" : "2018-11-06 17:02:29",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "095187",
+                        "duration" : "189",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "杭州市",
+                        "time" : "2018-11-07 17:26:11",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "15779087724",
+                        "duration" : "30",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "杭州市",
+                        "time" : "2018-11-07 20:37:31",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "02995187",
+                        "duration" : "70",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "杭州市",
+                        "time" : "2018-11-08 18:49:25",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18189188639",
+                        "duration" : "31",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-11-09 20:43:44",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18502847694",
+                        "duration" : "18",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "成都市",
+                        "time" : "2018-11-11 11:35:24",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18502847694",
+                        "duration" : "15",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "成都市",
+                        "time" : "2018-11-11 11:39:29",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18602934864",
+                        "duration" : "67",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-11-11 21:07:34",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "17809207275",
+                        "duration" : "17",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-11-12 16:56:14",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "17809207275",
+                        "duration" : "11",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-11-12 17:27:19",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "17809207173",
+                        "duration" : "12",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-11-13 12:16:14",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "13484608408",
+                        "duration" : "14",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-11-13 18:04:48",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "02995149818",
+                        "duration" : "9",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-11-14 09:31:03",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18192205978",
+                        "duration" : "35",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-11-14 11:28:09",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "02995774424",
+                        "duration" : "10",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-11-16 10:58:14",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "02995187",
+                        "duration" : "13",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-11-16 13:30:41",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "02910086",
+                        "duration" : "119",
+                        "dial_type" : "DIAL",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-11-17 17:31:06",
+                        "location_type" : "本地主叫本地"
+                    },
+                    {
+                        "peer_number" : "02995149514",
+                        "duration" : "9",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-11-19 08:51:55",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "02995703017",
+                        "duration" : "10",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-11-19 09:09:37",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "15249048205",
+                        "duration" : "36",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-11-19 10:52:54",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "15249048205",
+                        "duration" : "7",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-11-19 11:06:44",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18602935034",
+                        "duration" : "36",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-11-25 13:11:11",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "17600554094",
+                        "duration" : "38",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-11-25 13:27:50",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "17600554094",
+                        "duration" : "8",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-11-25 13:39:23",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18602964824",
+                        "duration" : "36",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-11-25 20:09:16",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18602964824",
+                        "duration" : "23",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-11-25 20:11:43",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "15829312907",
+                        "duration" : "70",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-11-26 17:39:32",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "02995064486",
+                        "duration" : "12",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-11-27 09:41:35",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "17789129160",
+                        "duration" : "11",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-11-27 12:05:38",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "13991100854",
+                        "duration" : "35",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-11-27 12:09:02",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "13991100854",
+                        "duration" : "17",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-11-27 12:56:56",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "02995064436",
+                        "duration" : "12",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-11-27 15:55:58",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "02968083325",
+                        "duration" : "11",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-11-27 16:28:02",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18602964894",
+                        "duration" : "26",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-11-27 16:45:32",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18189188639",
+                        "duration" : "67",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-11-27 20:58:47",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "17600554094",
+                        "duration" : "17",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-11-27 21:39:02",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18189188639",
+                        "duration" : "16",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-11-28 09:09:15",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "02995064482",
+                        "duration" : "8",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-11-28 10:11:42",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18602935394",
+                        "duration" : "12",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-11-28 12:57:02",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "17789129160",
+                        "duration" : "91",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "郑州市",
+                        "time" : "2018-11-28 17:17:36",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "13482428642",
+                        "duration" : "51",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "上海市",
+                        "time" : "2018-11-29 10:56:18",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "17789129160",
+                        "duration" : "30",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "上海市",
+                        "time" : "2018-11-29 11:49:09",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "17789129160",
+                        "duration" : "32",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "杭州市",
+                        "time" : "2018-11-29 19:25:21",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "17789129160",
+                        "duration" : "72",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "杭州市",
+                        "time" : "2018-11-30 09:45:13",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "13484040527",
+                        "duration" : "13",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "杭州市",
+                        "time" : "2018-11-30 12:19:42",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "03732454367",
+                        "duration" : "13",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "上海市",
+                        "time" : "2018-11-30 14:48:35",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "13482432857",
+                        "duration" : "29",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "上海市",
+                        "time" : "2018-11-30 14:54:38",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "13482432857",
+                        "duration" : "34",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "上海市",
+                        "time" : "2018-11-30 14:56:48",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "13482432857",
+                        "duration" : "9",
+                        "dial_type" : "DIAL",
+                        "fee" : 0,
+                        "location" : "上海市",
+                        "time" : "2018-11-30 15:00:20",
+                        "location_type" : "国内异地主叫"
+                    },
+                    {
+                        "peer_number" : "13482432857",
+                        "duration" : "12",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "上海市",
+                        "time" : "2018-11-30 15:02:07",
+                        "location_type" : "国内被叫"
+                    }
+                ]
+            },
+            {
+                "code" : "0",
+                "bill_month" : "2018-12",
+                "total_size" : 15,
+                "message" : "正常",
+                "items" : [
+                    {
+                        "peer_number" : "18691882297",
+                        "duration" : "29",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-12-02 19:14:34",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "15669459828",
+                        "duration" : "24",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-12-03 12:32:41",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "15669459828",
+                        "duration" : "15",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-12-03 12:39:39",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "095187",
+                        "duration" : "39",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-12-03 14:35:49",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "02995727185",
+                        "duration" : "9",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-12-03 15:50:04",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "17789129160",
+                        "duration" : "10",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-12-03 22:06:46",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "02381123413",
+                        "duration" : "10",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-12-04 14:03:24",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18868944400",
+                        "duration" : "126",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-12-04 21:40:07",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "13750834102",
+                        "duration" : "1197",
+                        "dial_type" : "DIAL",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-12-04 21:55:26",
+                        "location_type" : "本地主叫异地"
+                    },
+                    {
+                        "peer_number" : "13750834102",
+                        "duration" : "565",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-12-04 22:19:39",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "02995064482",
+                        "duration" : "10",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-12-05 09:23:10",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18710316883",
+                        "duration" : "10",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-12-05 09:31:58",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "02995703015",
+                        "duration" : "10",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-12-05 16:24:29",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "13750834102",
+                        "duration" : "108",
+                        "dial_type" : "DIAL",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-12-05 21:05:56",
+                        "location_type" : "本地主叫异地"
+                    },
+                    {
+                        "peer_number" : "17089118016",
+                        "duration" : "6",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-12-07 20:07:05",
+                        "location_type" : "国内被叫"
+                    }
+                ]
+            },
+            {
+                "code" : "0",
+                "bill_month" : "2018-10",
+                "total_size" : 54,
+                "message" : "正常",
+                "items" : [
+                    {
+                        "peer_number" : "13020748079",
+                        "duration" : "30",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-10-01 10:06:06",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "15829312907",
+                        "duration" : "37",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-10-02 09:36:50",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18681850209",
+                        "duration" : "42",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-10-02 11:10:18",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "15091336366",
+                        "duration" : "107",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-10-02 14:05:25",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "15091336366",
+                        "duration" : "12",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-10-02 14:33:54",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "15829312907",
+                        "duration" : "25",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-10-02 16:30:03",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18189188639",
+                        "duration" : "26",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-10-02 17:26:08",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18189188639",
+                        "duration" : "22",
+                        "dial_type" : "DIAL",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-10-02 17:46:58",
+                        "location_type" : "本地主叫本地"
+                    },
+                    {
+                        "peer_number" : "02968628273",
+                        "duration" : "12",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-10-04 16:47:34",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18189188639",
+                        "duration" : "33",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-10-04 18:07:41",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18189188639",
+                        "duration" : "11",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-10-04 18:53:49",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "15109271844",
+                        "duration" : "19",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-10-05 08:13:14",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "13991827405",
+                        "duration" : "198",
+                        "dial_type" : "DIAL",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-10-05 15:43:38",
+                        "location_type" : "本地主叫本地"
+                    },
+                    {
+                        "peer_number" : "13991827405",
+                        "duration" : "21",
+                        "dial_type" : "DIAL",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-10-06 22:46:02",
+                        "location_type" : "本地主叫本地"
+                    },
+                    {
+                        "peer_number" : "13991827405",
+                        "duration" : "77",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-10-07 11:47:28",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18602952504",
+                        "duration" : "4",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-10-07 16:09:05",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18691008564",
+                        "duration" : "57",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-10-07 17:09:54",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18602965074",
+                        "duration" : "112",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-10-07 18:11:58",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "15109271844",
+                        "duration" : "13",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-10-08 11:53:09",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "15109271844",
+                        "duration" : "17",
+                        "dial_type" : "DIAL",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-10-08 11:54:16",
+                        "location_type" : "本地主叫本地"
+                    },
+                    {
+                        "peer_number" : "18133943551",
+                        "duration" : "23",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-10-08 16:23:15",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "02988815802",
+                        "duration" : "34",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-10-09 16:15:45",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18092921686",
+                        "duration" : "10",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-10-09 17:14:25",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "13750834102",
+                        "duration" : "867",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-10-10 11:19:44",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18391067712",
+                        "duration" : "11",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-10-12 18:17:22",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18189188639",
+                        "duration" : "62",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-10-13 11:33:44",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "13991317971",
+                        "duration" : "32",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-10-13 11:34:28",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "17702964576",
+                        "duration" : "35",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-10-13 11:57:17",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "15191886708",
+                        "duration" : "19",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-10-13 19:21:22",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "17789129160",
+                        "duration" : "29",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-10-15 16:15:04",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "03534211939",
+                        "duration" : "22",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-10-16 11:43:25",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "057156394911",
+                        "duration" : "7",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-10-16 17:52:55",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "17789129160",
+                        "duration" : "286",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-10-19 09:05:17",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "15829312907",
+                        "duration" : "20",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-10-19 18:47:31",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18868944400",
+                        "duration" : "31",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-10-20 15:58:57",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "13201795562",
+                        "duration" : "19",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-10-20 19:29:08",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "17392732661",
+                        "duration" : "14",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-10-21 09:18:34",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "17392732661",
+                        "duration" : "10",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-10-21 09:53:37",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "13022812447",
+                        "duration" : "20",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-10-21 11:33:25",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18092921686",
+                        "duration" : "10",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-10-24 09:54:11",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18710316883",
+                        "duration" : "11",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-10-25 09:17:32",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "13484608408",
+                        "duration" : "19",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-10-25 12:00:45",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "13750834102",
+                        "duration" : "1912",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-10-25 23:02:44",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "13348682594",
+                        "duration" : "12",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-10-26 14:45:46",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "13750834102",
+                        "duration" : "189",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-10-27 15:33:17",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "13750834102",
+                        "duration" : "838",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-10-27 15:37:37",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "17782532353",
+                        "duration" : "8",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-10-27 20:13:34",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "02995075347",
+                        "duration" : "15",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-10-28 12:59:27",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "13193303286",
+                        "duration" : "52",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-10-28 18:50:34",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "17791325771",
+                        "duration" : "30",
+                        "dial_type" : "DIAL",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-10-31 09:54:26",
+                        "location_type" : "本地主叫本地"
+                    },
+                    {
+                        "peer_number" : "02995124818",
+                        "duration" : "3",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-10-31 11:30:09",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18591798727",
+                        "duration" : "6",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-10-31 11:38:05",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18868944400",
+                        "duration" : "47",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-10-31 12:39:32",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "02995075442",
+                        "duration" : "16",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-10-31 16:25:50",
+                        "location_type" : "国内被叫"
+                    }
+                ]
+            },
+            {
+                "code" : "0",
+                "bill_month" : "2018-08",
+                "total_size" : 32,
+                "message" : "正常",
+                "items" : [
+                    {
+                        "peer_number" : "057156264805",
+                        "duration" : "2",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "杭州市",
+                        "time" : "2018-08-02 12:16:03",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18668033743",
+                        "duration" : "15",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "杭州市",
+                        "time" : "2018-08-02 14:07:57",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "02995187",
+                        "duration" : "100",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "杭州市",
+                        "time" : "2018-08-02 15:23:07",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18658879241",
+                        "duration" : "26",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "杭州市",
+                        "time" : "2018-08-05 23:20:50",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "057110086",
+                        "duration" : "130",
+                        "dial_type" : "DIAL",
+                        "fee" : 0,
+                        "location" : "杭州市",
+                        "time" : "2018-08-08 11:42:48",
+                        "location_type" : "国内异地主叫"
+                    },
+                    {
+                        "peer_number" : "02869754568",
+                        "duration" : "21",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "杭州市",
+                        "time" : "2018-08-10 10:40:13",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18069826925",
+                        "duration" : "141",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "杭州市",
+                        "time" : "2018-08-12 12:18:06",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18605886626",
+                        "duration" : "21",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "杭州市",
+                        "time" : "2018-08-12 19:20:32",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18668199245",
+                        "duration" : "14",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "杭州市",
+                        "time" : "2018-08-13 18:53:24",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "13484047502",
+                        "duration" : "89",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "杭州市",
+                        "time" : "2018-08-13 21:41:52",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "057156600653",
+                        "duration" : "11",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "杭州市",
+                        "time" : "2018-08-14 09:21:53",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "13750834102",
+                        "duration" : "11",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "杭州市",
+                        "time" : "2018-08-16 23:04:49",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "17691169804",
+                        "duration" : "107",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-08-19 16:41:49",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18189188639",
+                        "duration" : "12",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-08-20 06:56:13",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18602962084",
+                        "duration" : "31",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-08-20 08:10:56",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "02910086",
+                        "duration" : "24",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-08-20 14:06:12",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18092921686",
+                        "duration" : "21",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-08-20 16:12:48",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "15829312907",
+                        "duration" : "27",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-08-20 19:18:54",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18602953034",
+                        "duration" : "60",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-08-20 21:15:50",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18602964124",
+                        "duration" : "28",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-08-21 08:06:14",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18602958194",
+                        "duration" : "26",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-08-21 20:26:08",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "13259962525",
+                        "duration" : "116",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-08-21 20:52:25",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18092921686",
+                        "duration" : "19",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-08-22 16:54:04",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18868944400",
+                        "duration" : "56",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-08-23 13:37:34",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18602949024",
+                        "duration" : "14",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-08-23 20:35:14",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "17782892373",
+                        "duration" : "96",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-08-25 19:32:40",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "13259962525",
+                        "duration" : "19",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-08-26 18:22:31",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18602938534",
+                        "duration" : "36",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-08-26 20:48:06",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18092921686",
+                        "duration" : "10",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-08-27 16:40:31",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "15209259118",
+                        "duration" : "16",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-08-29 11:56:41",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18092921686",
+                        "duration" : "9",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-08-29 16:25:11",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18868944400",
+                        "duration" : "90",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-08-29 21:21:57",
+                        "location_type" : "国内被叫"
+                    }
+                ]
+            },
+            {
+                "code" : "0",
+                "bill_month" : "2018-09",
+                "total_size" : 40,
+                "message" : "正常",
+                "items" : [
+                    {
+                        "peer_number" : "13259962525",
+                        "duration" : "44",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-09-01 17:38:03",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18868944400",
+                        "duration" : "25",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-09-01 19:42:35",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18629038454",
+                        "duration" : "27",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-09-02 20:10:11",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18092921686",
+                        "duration" : "11",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-09-03 17:04:27",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "02987300010",
+                        "duration" : "10",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-09-04 16:50:30",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "057156264805",
+                        "duration" : "3",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-09-05 10:35:53",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "13258140923",
+                        "duration" : "24",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-09-06 10:10:31",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18092921686",
+                        "duration" : "11",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-09-06 11:33:45",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "13342992347",
+                        "duration" : "5",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-09-07 09:57:36",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "0299506513",
+                        "duration" : "11",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-09-07 16:07:59",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18092921686",
+                        "duration" : "11",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-09-07 17:01:33",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "02995075042",
+                        "duration" : "42",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-09-08 14:13:45",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "17789129160",
+                        "duration" : "180",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-09-09 21:09:02",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "02869981005",
+                        "duration" : "1",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-09-10 10:59:40",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18066951160",
+                        "duration" : "19",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-09-10 15:44:57",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "17182111302",
+                        "duration" : "14",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-09-11 10:43:54",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "02869005672",
+                        "duration" : "7",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-09-11 15:19:25",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18702974325",
+                        "duration" : "14",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-09-12 11:53:45",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "0299521358",
+                        "duration" : "34",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-09-13 19:42:06",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18092921686",
+                        "duration" : "11",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-09-14 16:39:16",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18066951160",
+                        "duration" : "23",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-09-15 09:59:47",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "15829312907",
+                        "duration" : "25",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-09-15 20:04:15",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18602951074",
+                        "duration" : "62",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-09-15 21:46:54",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18602970224",
+                        "duration" : "23",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-09-16 20:04:04",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18602970224",
+                        "duration" : "21",
+                        "dial_type" : "DIAL",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-09-16 20:06:58",
+                        "location_type" : "本地主叫本地"
+                    },
+                    {
+                        "peer_number" : "02910086",
+                        "duration" : "154",
+                        "dial_type" : "DIAL",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-09-17 15:24:00",
+                        "location_type" : "本地主叫本地"
+                    },
+                    {
+                        "peer_number" : "04695333151",
+                        "duration" : "5",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-09-19 09:18:45",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18092921686",
+                        "duration" : "10",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-09-19 17:13:29",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "02968281401",
+                        "duration" : "6",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-09-21 11:29:33",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "057156264805",
+                        "duration" : "4",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-09-21 12:11:32",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18291865963",
+                        "duration" : "21",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-09-21 14:37:52",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18291865963",
+                        "duration" : "20",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-09-21 14:39:29",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18189188639",
+                        "duration" : "55",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-09-22 10:03:28",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18189188639",
+                        "duration" : "43",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-09-22 12:18:36",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18189188639",
+                        "duration" : "41",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-09-22 18:10:06",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18189188639",
+                        "duration" : "30",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-09-23 09:29:44",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "051081994785",
+                        "duration" : "31",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-09-26 14:03:22",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "095187",
+                        "duration" : "84",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-09-27 17:13:21",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "02995536",
+                        "duration" : "60",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-09-28 10:06:32",
+                        "location_type" : "国内被叫"
+                    },
+                    {
+                        "peer_number" : "18925891624",
+                        "duration" : "15",
+                        "dial_type" : "DIALED",
+                        "fee" : 0,
+                        "location" : "西安市",
+                        "time" : "2018-09-28 20:16:01",
+                        "location_type" : "国内被叫"
+                    }
+                ]
+            }
+        ],
+        "name" : "陈*力",
+        "package_name" : "移动数据流量 标准套餐",
+        "bills" : [
+            {
+                "bill_start_date" : "2018-07-01",
+                "code" : "0",
+                "actual_fee" : 10310,
+                "discount" : 0,
+                "paid_fee" : 10310,
+                "web_fee" : 10300,
+                "message" : "正常",
+                "sms_fee" : 10,
+                "point" : 0,
+                "base_fee" : 10300,
+                "extra_discount" : 0,
+                "bill_month" : "2018-07",
+                "extra_service_fee" : 0,
+                "total_fee" : 10310,
+                "last_point" : 0,
+                "extra_fee" : 0,
+                "bill_end_date" : "2018-07-31",
+                "voice_fee" : 0,
+                "unpaid_fee" : 0
+            },
+            {
+                "bill_start_date" : "2018-08-01",
+                "code" : "0",
+                "actual_fee" : 12840,
+                "discount" : 0,
+                "paid_fee" : 12840,
+                "web_fee" : 12800,
+                "message" : "正常",
+                "sms_fee" : 40,
+                "point" : 0,
+                "base_fee" : 12800,
+                "extra_discount" : 0,
+                "bill_month" : "2018-08",
+                "extra_service_fee" : 0,
+                "total_fee" : 12840,
+                "last_point" : 0,
+                "extra_fee" : 0,
+                "bill_end_date" : "2018-08-31",
+                "voice_fee" : 0,
+                "unpaid_fee" : 0
+            },
+            {
+                "bill_start_date" : "2018-09-01",
+                "code" : "0",
+                "actual_fee" : 16280,
+                "discount" : 0,
+                "paid_fee" : 16280,
+                "web_fee" : 0,
+                "message" : "正常",
+                "sms_fee" : 180,
+                "point" : 0,
+                "base_fee" : 9800,
+                "extra_discount" : 0,
+                "bill_month" : "2018-09",
+                "extra_service_fee" : 0,
+                "total_fee" : 16280,
+                "last_point" : 0,
+                "extra_fee" : 0,
+                "bill_end_date" : "2018-09-30",
+                "voice_fee" : 0,
+                "unpaid_fee" : 0
+            },
+            {
+                "bill_start_date" : "2018-10-01",
+                "code" : "0",
+                "actual_fee" : 9800,
+                "discount" : 0,
+                "paid_fee" : 9800,
+                "web_fee" : 0,
+                "message" : "正常",
+                "sms_fee" : 0,
+                "point" : 0,
+                "base_fee" : 9800,
+                "extra_discount" : 0,
+                "bill_month" : "2018-10",
+                "extra_service_fee" : 0,
+                "total_fee" : 9800,
+                "last_point" : 0,
+                "extra_fee" : 0,
+                "bill_end_date" : "2018-10-31",
+                "voice_fee" : 0,
+                "unpaid_fee" : 0
+            },
+            {
+                "bill_start_date" : "2018-11-01",
+                "code" : "0",
+                "actual_fee" : 9820,
+                "discount" : 0,
+                "paid_fee" : 9820,
+                "web_fee" : 0,
+                "message" : "正常",
+                "sms_fee" : 20,
+                "point" : 0,
+                "base_fee" : 9800,
+                "extra_discount" : 0,
+                "bill_month" : "2018-11",
+                "extra_service_fee" : 0,
+                "total_fee" : 9820,
+                "last_point" : 0,
+                "extra_fee" : 0,
+                "bill_end_date" : "2018-11-30",
+                "voice_fee" : 0,
+                "unpaid_fee" : 0
+            },
+            {
+                "bill_start_date" : "2018-12-01",
+                "code" : "0",
+                "actual_fee" : 2578,
+                "discount" : 0,
+                "paid_fee" : 2578,
+                "web_fee" : 0,
+                "message" : "正常",
+                "sms_fee" : 0,
+                "point" : 0,
+                "base_fee" : 2578,
+                "extra_discount" : 0,
+                "bill_month" : "2018-12",
+                "extra_service_fee" : 0,
+                "total_fee" : 2578,
+                "last_point" : 0,
+                "extra_fee" : 0,
+                "bill_end_date" : "2018-12-31",
+                "voice_fee" : 0,
+                "unpaid_fee" : 0
+            }
+        ],
+        "state" : 0
+    },
+    "_class" : "com.risk.gateway.service.datadriver.pojo.entity.SourceData"
+}
