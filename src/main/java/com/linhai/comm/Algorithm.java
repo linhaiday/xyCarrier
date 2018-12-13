@@ -2,9 +2,13 @@ package com.linhai.comm;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.linhai.carrier.CarrierDateUtil;
+import com.linhai.comm.MobileFromUtil;
+import com.linhai.comm.PhoneNumberHelper;
 import com.linhai.enums.Enums;
+import org.apache.commons.lang3.StringUtils;
+import org.bson.Document;
 
-import javax.print.attribute.HashAttributeSet;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -13,7 +17,7 @@ import java.util.*;
  */
 public class Algorithm {
 
-    private static final ThreadLocal<Map<String,String>> mobileFrom = ThreadLocal.withInitial(HashMap::new);
+    public static final ThreadLocal<Map<String,String>> mobileFrom = ThreadLocal.withInitial(HashMap::new);
 
     private static String getMobileFrom(String mobileNumber) throws Exception{
         Map<String,String> map = mobileFrom.get();
@@ -45,7 +49,7 @@ public class Algorithm {
     //运营商姓名
     public static void operatorName(JSONObject data, JSONObject result){
 
-        System.out.println("运营商姓名:"+Enums.getName(data.get("carrier").toString()));
+        System.out.println("运营商姓名:"+ Enums.getName(data.get("carrier").toString()));
 
         result.put("operator_name",Enums.getName(data.get("carrier").toString()));
     }
@@ -53,7 +57,7 @@ public class Algorithm {
     //近1个月联系号码数
     //近1个月联系十次以上的号码数量
     //近1个月互通电话的号码数量
-    public static void contactNumberCountByNearlyAMonth(JSONObject data, JSONObject result){
+    public static void contactNumberCountByNearlyAMonth(JSONObject data, JSONObject applicant, JSONObject result){
 
         result.put("good_friend_num_1m",0);
         result.put("friend_num_1m",0);
@@ -68,20 +72,24 @@ public class Algorithm {
         Set<String> dialed = new HashSet<>();
 
         //得到1个月前的时间
-        String monthBefore = Util.monthsBefore(1);
+        String monthBefore = CarrierDateUtil.monthsBefore(1,applicant.get("customerApplyDate").toString());
+        //申请日期
+        String previousDay = applicant.get("customerApplyDate").toString();
         //得到yyyy-mm
-        String month = Util.yearMonth(monthBefore);
+        String pMonth = CarrierDateUtil.yearMonth(previousDay);
+        //得到yyyy-mm
+        String month = CarrierDateUtil.yearMonth(monthBefore);
         //得到通话记录详单（按月份）
         JSONArray jsonArray = data.getJSONArray("calls");
         for (int i = 0; i < jsonArray.size(); i++) {
             //按月遍历
             JSONObject mon = (JSONObject)jsonArray.get(i);
             //如果1个月前的时间小于或者等于历史时间则不做操作，大于则结束本次循环
-            if(Util.compareDate(month+"-01",mon.get("bill_month")+"-01","yyyy-MM-dd")==1) continue;
+            if(!CarrierDateUtil.dateScope(pMonth,month,mon.get("bill_month").toString(),"-01")) continue;
             for (int j = 0; j < mon.getJSONArray("items").size(); j++) {
                 JSONObject day = (JSONObject)mon.getJSONArray("items").get(j);
                 //如果1个月前的时间小于或者等于历史时间则不做操作，大于则结束本次循环
-                if(Util.compareDate(monthBefore,day.get("time").toString(),"yyyy-MM-dd")<1){
+                if(CarrierDateUtil.dateScope(previousDay,monthBefore,day.get("time").toString(),"")){
                     //联系的号码数
                     if(map.get(day.get("peer_number").toString())==null) map.put(day.get("peer_number").toString(),1);
                     else map.put(day.get("peer_number").toString(),map.get(day.get("peer_number").toString())+1);
@@ -121,35 +129,40 @@ public class Algorithm {
         set.addAll(dial);
         set.retainAll(dialed);
         //近1个月互通电话的号码数量
+        System.out.println("近1个月互通电话的号码数量:"+set.size());
         result.put("inter_peer_num_1m",set.size());
     }
 
     //近M个月联系次数最多的归属地
-    public static String friendCity(JSONObject data, int m) throws Exception {
+    public static String friendCity(JSONObject data, JSONObject applicant, int m) throws Exception {
         Map<String,Integer> map = new HashMap<>();
         String local = "";
         //得到N个月前的时间
-        String monthBefore = Util.monthsBefore(m);
+        String monthBefore = CarrierDateUtil.monthsBefore(m,applicant.get("customerApplyDate").toString());
+        //申请日期
+        String previousDay = applicant.get("customerApplyDate").toString();
         //得到yyyy-mm
-        String month = Util.yearMonth(monthBefore);
+        String pMonth = CarrierDateUtil.yearMonth(previousDay);
+        //得到yyyy-mm
+        String month = CarrierDateUtil.yearMonth(monthBefore);
         //得到通话记录详单（按月份）
         JSONArray jsonArray = data.getJSONArray("calls");
         for (int i = 0; i < jsonArray.size(); i++) {
             //按月遍历
             JSONObject mon = (JSONObject)jsonArray.get(i);
             //如果N个月前的时间小于或者等于历史时间则不做操作，大于则结束本次循环
-            if(Util.compareDate(month+"-01",mon.get("bill_month")+"-01","yyyy-MM-dd")==1) continue;
+            if(!CarrierDateUtil.dateScope(pMonth,month,mon.get("bill_month").toString(),"-01")) continue;
             for (int j = 0; j < mon.getJSONArray("items").size(); j++) {
                 JSONObject day = (JSONObject)mon.getJSONArray("items").get(j);
                 //如果N个月前的时间小于或者等于历史时间则不做操作，大于则结束本次循环
-                if(Util.compareDate(monthBefore,day.get("time").toString(),"yyyy-MM-dd")<1){
+                if(CarrierDateUtil.dateScope(previousDay,monthBefore,day.get("time").toString(),"")){
                     local = getMobileFrom(data.get("mobile").toString());
                     map.put(local,(map.get(local)==null?0:map.get(local))+1);
                 }
             }
         }
 
-        map = Util.sortByValueDescending(map);
+        map = CarrierDateUtil.sortByValueDescending(map);
 
         for (String key:map.keySet()) {
             return key;
@@ -159,24 +172,28 @@ public class Algorithm {
     }
 
     //近N个月非11位号码通话次数
-    public static int callsOfNot11(JSONObject data, int num){
+    public static int callsOfNot11(JSONObject data, JSONObject applicant, int num){
 
         int integer = 0;
         //得到N个月前的时间
-        String monthBefore = Util.monthsBefore(num);
+        String monthBefore = CarrierDateUtil.monthsBefore(num,applicant.get("customerApplyDate").toString());
+        //申请日期
+        String previousDay = applicant.get("customerApplyDate").toString();
         //得到yyyy-mm
-        String month = Util.yearMonth(monthBefore);
+        String pMonth = CarrierDateUtil.yearMonth(previousDay);
+        //得到yyyy-mm
+        String month = CarrierDateUtil.yearMonth(monthBefore);
         //得到通话记录详单（按月份）
         JSONArray jsonArray = data.getJSONArray("calls");
         for (int i = 0; i < jsonArray.size(); i++) {
             //按月遍历
             JSONObject mon = (JSONObject)jsonArray.get(i);
             //如果N个月前的时间小于或者等于历史时间则不做操作，大于则结束本次循环
-            if(Util.compareDate(month+"-01",mon.get("bill_month")+"-01","yyyy-MM-dd")==1) continue;
+            if(!CarrierDateUtil.dateScope(pMonth,month,mon.get("bill_month").toString(),"-01")) continue;
             for (int j = 0; j < mon.getJSONArray("items").size(); j++) {
                 JSONObject day = (JSONObject)mon.getJSONArray("items").get(j);
                 //如果N个月前的时间小于或者等于历史时间则不做操作，大于则结束本次循环
-                if(Util.compareDate(monthBefore,day.get("time").toString(),"yyyy-MM-dd")<1 &&
+                if(CarrierDateUtil.dateScope(previousDay,monthBefore,day.get("time").toString(),"") &&
                         PhoneNumberHelper.isMobilePhone(day.get("peer_number").toString())){
                     integer += 1;
                 }
@@ -188,24 +205,28 @@ public class Algorithm {
     }
 
     //近N个月总通话次数
-    public static int callsOfNumbers(JSONObject data, int num){
+    public static int callsOfNumbers(JSONObject data, JSONObject applicant, int num){
 
         int integer = 0;
         //得到N个月前的时间
-        String monthBefore = Util.monthsBefore(num);
+        String monthBefore = CarrierDateUtil.monthsBefore(num,applicant.get("customerApplyDate").toString());
+        //申请日期
+        String previousDay = applicant.get("customerApplyDate").toString();
         //得到yyyy-mm
-        String month = Util.yearMonth(monthBefore);
+        String pMonth = CarrierDateUtil.yearMonth(previousDay);
+        //得到yyyy-mm
+        String month = CarrierDateUtil.yearMonth(monthBefore);
         //得到通话记录详单（按月份）
         JSONArray jsonArray = data.getJSONArray("calls");
         for (int i = 0; i < jsonArray.size(); i++) {
             //按月遍历
             JSONObject mon = (JSONObject)jsonArray.get(i);
             //如果N个月前的时间小于或者等于历史时间则不做操作，大于则结束本次循环
-            if(Util.compareDate(month+"-01",mon.get("bill_month")+"-01","yyyy-MM-dd")==1) continue;
+            if(!CarrierDateUtil.dateScope(pMonth,month,mon.get("bill_month").toString(),"-01")) continue;
             for (int j = 0; j < mon.getJSONArray("items").size(); j++) {
                 JSONObject day = (JSONObject)mon.getJSONArray("items").get(j);
                 //如果N个月前的时间小于或者等于历史时间则不做操作，大于则结束本次循环
-                if(Util.compareDate(monthBefore,day.get("time").toString(),"yyyy-MM-dd")<1){
+                if(CarrierDateUtil.dateScope(previousDay,monthBefore,day.get("time").toString(),"")){
                     integer += 1;
                 }
             }
@@ -216,24 +237,28 @@ public class Algorithm {
     }
 
     //近N个月主叫时长
-    public static int dialingTime(JSONObject data, int num){
+    public static int dialingTime(JSONObject data, JSONObject applicant, int num){
 
         int integer = 0;
         //得到N个月前的时间
-        String monthBefore = Util.monthsBefore(num);
+        String monthBefore = CarrierDateUtil.monthsBefore(num,applicant.get("customerApplyDate").toString());
+        //申请日期
+        String previousDay = applicant.get("customerApplyDate").toString();
         //得到yyyy-mm
-        String month = Util.yearMonth(monthBefore);
+        String pMonth = CarrierDateUtil.yearMonth(previousDay);
+        //得到yyyy-mm
+        String month = CarrierDateUtil.yearMonth(monthBefore);
         //得到通话记录详单（按月份）
         JSONArray jsonArray = data.getJSONArray("calls");
         for (int i = 0; i < jsonArray.size(); i++) {
             //按月遍历
             JSONObject mon = (JSONObject)jsonArray.get(i);
             //如果N个月前的时间小于或者等于历史时间则不做操作，大于则结束本次循环
-            if(Util.compareDate(month+"-01",mon.get("bill_month")+"-01","yyyy-MM-dd")==1) continue;
+            if(!CarrierDateUtil.dateScope(pMonth,month,mon.get("bill_month").toString(),"-01")) continue;
             for (int j = 0; j < mon.getJSONArray("items").size(); j++) {
                 JSONObject day = (JSONObject)mon.getJSONArray("items").get(j);
                 //如果N个月前的时间小于或者等于历史时间则不做操作，大于则结束本次循环
-                if(Util.compareDate(monthBefore,day.get("time").toString(),"yyyy-MM-dd")<1 &&
+                if(CarrierDateUtil.dateScope(previousDay,monthBefore,day.get("time").toString(),"") &&
                         "DIAL".equals(day.get("dial_type").toString())){
                     integer += Integer.parseInt(day.get("duration").toString());
                 }
@@ -245,24 +270,28 @@ public class Algorithm {
     }
 
     //近N个月主叫次数
-    public static int dialingNumbers(JSONObject data, int num){
+    public static int dialingNumbers(JSONObject data, JSONObject applicant, int num){
 
         int integer = 0;
         //得到N个月前的时间
-        String monthBefore = Util.monthsBefore(num);
+        String monthBefore = CarrierDateUtil.monthsBefore(num,applicant.get("customerApplyDate").toString());
+        //申请日期
+        String previousDay = applicant.get("customerApplyDate").toString();
         //得到yyyy-mm
-        String month = Util.yearMonth(monthBefore);
+        String pMonth = CarrierDateUtil.yearMonth(previousDay);
+        //得到yyyy-mm
+        String month = CarrierDateUtil.yearMonth(monthBefore);
         //得到通话记录详单（按月份）
         JSONArray jsonArray = data.getJSONArray("calls");
         for (int i = 0; i < jsonArray.size(); i++) {
             //按月遍历
             JSONObject mon = (JSONObject)jsonArray.get(i);
             //如果N个月前的时间小于或者等于历史时间则不做操作，大于则结束本次循环
-            if(Util.compareDate(month+"-01",mon.get("bill_month")+"-01","yyyy-MM-dd")==1) continue;
+            if(!CarrierDateUtil.dateScope(pMonth,month,mon.get("bill_month").toString(),"-01")) continue;
             for (int j = 0; j < mon.getJSONArray("items").size(); j++) {
                 JSONObject day = (JSONObject)mon.getJSONArray("items").get(j);
                 //如果N个月前的时间小于或者等于历史时间则不做操作，大于则结束本次循环
-                if(Util.compareDate(monthBefore,day.get("time").toString(),"yyyy-MM-dd")<1 &&
+                if(CarrierDateUtil.dateScope(previousDay,monthBefore,day.get("time").toString(),"") &&
                         "DIAL".equals(day.get("dial_type").toString())){
                     integer += 1;
                 }
@@ -274,24 +303,28 @@ public class Algorithm {
     }
 
     //近N个月总通话时长
-    public static int callDuration(JSONObject data, int num){
+    public static int callDuration(JSONObject data, JSONObject applicant, int num){
 
         int integer = 0;
         //得到N个月前的时间
-        String monthBefore = Util.monthsBefore(num);
+        String monthBefore = CarrierDateUtil.monthsBefore(num,applicant.get("customerApplyDate").toString());
+        //申请日期
+        String previousDay = applicant.get("customerApplyDate").toString();
         //得到yyyy-mm
-        String month = Util.yearMonth(monthBefore);
+        String pMonth = CarrierDateUtil.yearMonth(previousDay);
+        //得到yyyy-mm
+        String month = CarrierDateUtil.yearMonth(monthBefore);
         //得到通话记录详单（按月份）
         JSONArray jsonArray = data.getJSONArray("calls");
         for (int i = 0; i < jsonArray.size(); i++) {
             //按月遍历
             JSONObject mon = (JSONObject)jsonArray.get(i);
             //如果N个月前的时间小于或者等于历史时间则不做操作，大于则结束本次循环
-            if(Util.compareDate(month+"-01",mon.get("bill_month")+"-01","yyyy-MM-dd")==1) continue;
+            if(!CarrierDateUtil.dateScope(pMonth,month,mon.get("bill_month").toString(),"-01")) continue;
             for (int j = 0; j < mon.getJSONArray("items").size(); j++) {
                 JSONObject day = (JSONObject)mon.getJSONArray("items").get(j);
                 //如果N个月前的时间小于或者等于历史时间则不做操作，大于则结束本次循环
-                if(Util.compareDate(monthBefore,day.get("time").toString(),"yyyy-MM-dd")<1){
+                if(CarrierDateUtil.dateScope(previousDay,monthBefore,day.get("time").toString(),"")){
                     integer += Integer.parseInt(day.get("duration").toString());
                 }
             }
@@ -306,21 +339,26 @@ public class Algorithm {
 
         int num = 0;
         //得到N个月前的时间
-        String monthBefore = Util.monthsBefore(num);
+        String monthBefore = CarrierDateUtil.monthsBefore(num,applicant.get("customerApplyDate").toString());
+        //申请日期
+        String previousDay = applicant.get("customerApplyDate").toString();
         //得到yyyy-mm
-        String month = Util.yearMonth(monthBefore);
+        String pMonth = CarrierDateUtil.yearMonth(previousDay);
+        //得到yyyy-mm
+        String month = CarrierDateUtil.yearMonth(monthBefore);
         //得到通话记录详单（按月份）
         JSONArray jsonArray = data.getJSONArray("calls");
         for (int i = 0; i < jsonArray.size(); i++) {
             //按月遍历
             JSONObject mon = (JSONObject)jsonArray.get(i);
             //如果N个月前的时间小于或者等于历史时间则不做操作，大于则结束本次循环
-            if(Util.compareDate(month+"-01",mon.get("bill_month")+"-01","yyyy-MM-dd")==1) continue;
+            if(!CarrierDateUtil.dateScope(pMonth,month,mon.get("bill_month").toString(),"-01")) continue;
             for (int j = 0; j < mon.getJSONArray("items").size(); j++) {
                 JSONObject day = (JSONObject)mon.getJSONArray("items").get(j);
                 //如果N个月前的时间小于或者等于历史时间则不做操作，大于则结束本次循环
-                if(Util.compareDate(monthBefore,day.get("time").toString(),"yyyy-MM-dd")<1 &&
-                        applicant.get("apply_place").equals(day.get("location").toString())){
+                if(CarrierDateUtil.dateScope(previousDay,monthBefore,day.get("time").toString(),"") &&
+                        (applicant.get("customerHouseholdRegisterProvince").toString() + applicant.get("customerHouseholdRegisterCity").toString())
+                                .equals(day.get("location").toString())){
                     num += 1;
                 }
             }
@@ -334,21 +372,26 @@ public class Algorithm {
 
         int num = 0;
         //得到N个月前的时间
-        String monthBefore = Util.monthsBefore(num);
+        String monthBefore = CarrierDateUtil.monthsBefore(num,applicant.get("customerApplyDate").toString());
+        //申请日期
+        String previousDay = applicant.get("customerApplyDate").toString();
         //得到yyyy-mm
-        String month = Util.yearMonth(monthBefore);
+        String pMonth = CarrierDateUtil.yearMonth(previousDay);
+        //得到yyyy-mm
+        String month = CarrierDateUtil.yearMonth(monthBefore);
         //得到通话记录详单（按月份）
         JSONArray jsonArray = data.getJSONArray("calls");
         for (int i = 0; i < jsonArray.size(); i++) {
             //按月遍历
             JSONObject mon = (JSONObject)jsonArray.get(i);
             //如果N个月前的时间小于或者等于历史时间则不做操作，大于则结束本次循环
-            if(Util.compareDate(month+"-01",mon.get("bill_month")+"-01","yyyy-MM-dd")==1) continue;
+            if(!CarrierDateUtil.dateScope(pMonth,month,mon.get("bill_month").toString(),"-01")) continue;
             for (int j = 0; j < mon.getJSONArray("items").size(); j++) {
                 JSONObject day = (JSONObject)mon.getJSONArray("items").get(j);
                 //如果N个月前的时间小于或者等于历史时间则不做操作，大于则结束本次循环
-                if(Util.compareDate(monthBefore,day.get("time").toString(),"yyyy-MM-dd")<1 &&
-                        applicant.get("apply_place").equals(day.get("location").toString())){
+                if(CarrierDateUtil.dateScope(previousDay,monthBefore,day.get("time").toString(),"") &&
+                        (applicant.get("customerHouseholdRegisterProvince").toString() + applicant.get("customerHouseholdRegisterCity").toString())
+                                .equals(day.get("location").toString())){
                     num += Integer.parseInt(day.get("duration").toString());
                 }
             }
@@ -358,19 +401,19 @@ public class Algorithm {
     }
 
     //近M个月，除近N个月，剩余M-N个月无通话天数
-    public static int callDuration(JSONObject data, int m, int n){
+    public static int callDuration(JSONObject data, JSONObject applicant, int m, int n){
 
         Set<String> set = new HashSet<String>();
         //得到m个月前的时间
-        String mBefore = Util.monthsBefore(m);
+        String mBefore = CarrierDateUtil.monthsBefore(m,applicant.get("customerApplyDate").toString());
         //得到n个月前的时间
-        String nBefore = Util.monthsBefore(n);
+        String nBefore = CarrierDateUtil.monthsBefore(n,applicant.get("customerApplyDate").toString());
         //得到yyyy-mm
-        String mMonth = Util.yearMonth(mBefore);
+        String mMonth = CarrierDateUtil.yearMonth(mBefore);
         //得到yyyy-mm
-        String nMonth = Util.yearMonth(nBefore);
+        String nMonth = CarrierDateUtil.yearMonth(nBefore);
         //得到剩余M-N个月的总计天数
-        int count = Util.daysBetween(mBefore,nBefore);
+        int count = CarrierDateUtil.daysBetween(mBefore,nBefore);
         //得到通话记录详单（按月份）
         JSONArray jsonArray = data.getJSONArray("calls");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -378,16 +421,13 @@ public class Algorithm {
             //按月遍历
             JSONObject mon = (JSONObject) jsonArray.get(i);
             //当前月份若大于N个月或小于M个月，结束本次循环
-            if(Util.compareDate(nMonth+"-01",mon.get("bill_month")+"-01","yyyy-MM-dd")==-1 ||
-                    Util.compareDate(mMonth+"-01",mon.get("bill_month")+"-01","yyyy-MM-dd")==1)
-                continue;
+            if(!CarrierDateUtil.dateScope(nMonth,mMonth,mon.get("bill_month").toString(),"-01")) continue;
             for (int j = 0; j < mon.getJSONArray("items").size(); j++) {
                 JSONObject day = (JSONObject)mon.getJSONArray("items").get(j);
                 //当前日期大于M且小于N，继续执行
-                if(Util.compareDate(mBefore,day.get("time").toString(),"yyyy-MM-dd")<1 &&
-                        Util.compareDate(nBefore,day.get("time").toString(),"yyyy-MM-dd")>-1){
+                if(CarrierDateUtil.dateScope(nBefore,mBefore,day.get("time").toString(),"")){
                     //有通话天数
-                    set.add(sdf.format(Util.toDate(day.get("time").toString())));
+                    set.add(sdf.format(CarrierDateUtil.toDate(day.get("time").toString())));
                 }
             }
         }
@@ -398,31 +438,35 @@ public class Algorithm {
     }
 
     //近M个月topN联系人号码
-    public static List<String> top10ByPhone(JSONObject data, int m, int n){
+    public static List<String> top10ByPhone(JSONObject data, JSONObject applicant, int m, int n){
 
         Map<String, String> map = new HashMap<>();
         //得到m个月前的时间
-        String monthBefore = Util.monthsBefore(m);
+        String monthBefore = CarrierDateUtil.monthsBefore(m,applicant.get("customerApplyDate").toString());
+        //申请日期
+        String previousDay = applicant.get("customerApplyDate").toString();
         //得到yyyy-mm
-        String month = Util.yearMonth(monthBefore);
+        String pMonth = CarrierDateUtil.yearMonth(previousDay);
+        //得到yyyy-mm
+        String month = CarrierDateUtil.yearMonth(monthBefore);
         //得到通话记录详单（按月份）
         JSONArray jsonArray = data.getJSONArray("calls");
         for (int i = 0; i < jsonArray.size(); i++) {
             //按月遍历
             JSONObject mon = (JSONObject)jsonArray.get(i);
             //如果m个月前的时间小于或者等于历史时间则不做操作，大于则结束本次循环
-            if(Util.compareDate(month+"-01",mon.get("bill_month")+"-01","yyyy-MM-dd")==1) continue;
+            if(!CarrierDateUtil.dateScope(pMonth,month,mon.get("bill_month").toString(),"-01")) continue;
             for (int j = 0; j < mon.getJSONArray("items").size(); j++) {
                 JSONObject day = (JSONObject)mon.getJSONArray("items").get(j);
                 //如果m个月前的时间小于或者等于历史时间则不做操作，大于则结束本次循环
-                if(Util.compareDate(monthBefore,day.get("time").toString(),"yyyy-MM-dd")<1){
+                if(CarrierDateUtil.dateScope(previousDay,monthBefore,day.get("time").toString(),"")){
                     //联系的号码数
                     if(map.get(day.get("peer_number").toString())==null) map.put(day.get("peer_number").toString(),"1");
                     else map.put(day.get("peer_number").toString(),String.valueOf(Integer.parseInt(map.get(day.get("peer_number").toString()))+1));
                 }
             }
         }
-        map = Util.sortByValueDescending(map);
+        map = CarrierDateUtil.sortByValueDescending(map);
         List<String> list = new ArrayList<>();
         for (Map.Entry<String,String> entry : map.entrySet()) {
             //System.out.println("key= " + entry.getKey() + " and value= " + entry.getValue());
@@ -447,35 +491,39 @@ public class Algorithm {
     }
 
     //近M个月S-E主叫次数
-    public static int dialCallNumbers(JSONObject data, int m, String s, String e){
+    public static int dialCallNumbers(JSONObject data, JSONObject applicant, int m, String s, String e){
 
         int num = 0;
         boolean bl = true;
         //判断是否当天，true：当天；false：隔天
         if(Integer.parseInt(s.split(":")[0])>Integer.parseInt(e.split(":")[0])) bl = false;
         //得到M个月前的时间
-        String monthBefore = Util.monthsBefore(m);
+        String monthBefore = CarrierDateUtil.monthsBefore(m,applicant.get("customerApplyDate").toString());
+        //申请日期
+        String previousDay = applicant.get("customerApplyDate").toString();
         //得到yyyy-mm
-        String month = Util.yearMonth(monthBefore);
+        String pMonth = CarrierDateUtil.yearMonth(previousDay);
+        //得到yyyy-mm
+        String month = CarrierDateUtil.yearMonth(monthBefore);
         //得到通话记录详单（按月份）
         JSONArray jsonArray = data.getJSONArray("calls");
         for (int i = 0; i < jsonArray.size(); i++) {
             //按月遍历
             JSONObject mon = (JSONObject)jsonArray.get(i);
             //如果M个月前的时间小于或者等于历史时间则不做操作，大于则结束本次循环
-            if(Util.compareDate(month+"-01",mon.get("bill_month")+"-01","yyyy-MM-dd")==1) continue;
+            if(!CarrierDateUtil.dateScope(pMonth,month,mon.get("bill_month").toString(),"-01")) continue;
             for (int j = 0; j < mon.getJSONArray("items").size(); j++) {
                 JSONObject day = (JSONObject)mon.getJSONArray("items").get(j);
                 //如果M个月前的时间小于或者等于历史时间则不做操作，大于则结束本次循环
-                if(Util.compareDate(monthBefore,day.get("time").toString(),"yyyy-MM-dd")<1 &&
+                if(CarrierDateUtil.dateScope(previousDay,monthBefore,day.get("time").toString(),"") &&
                         "DIAL".equals(day.get("dial_type").toString())){
-                    String date = Util.yearMonthDay(day.get("time").toString());
-                    if(bl && Util.compareDate(date+" "+s,day.get("time").toString(),"yyyy-MM-dd HH:mm:ss")<=0 &&
-                            Util.compareDate(date+" "+e,day.get("time").toString(),"yyyy-MM-dd HH:mm:ss")>=0){
+                    String date = CarrierDateUtil.yearMonthDay(day.get("time").toString());
+                    if(bl && CarrierDateUtil.compareDate(date+" "+s,day.get("time").toString(),"yyyy-MM-dd HH:mm:ss")<=0 &&
+                            CarrierDateUtil.compareDate(date+" "+e,day.get("time").toString(),"yyyy-MM-dd HH:mm:ss")>=0){
                         num += 1;
                     }
-                    if(!bl && (Util.compareDate(date+" "+s,day.get("time").toString(),"yyyy-MM-dd HH:mm:ss")>=0 ||
-                            Util.compareDate(date+" "+e,day.get("time").toString(),"yyyy-MM-dd HH:mm:ss")<=0)){
+                    if(!bl && (CarrierDateUtil.compareDate(date+" "+s,day.get("time").toString(),"yyyy-MM-dd HH:mm:ss")>=0 ||
+                            CarrierDateUtil.compareDate(date+" "+e,day.get("time").toString(),"yyyy-MM-dd HH:mm:ss")<=0)){
                         num += 1;
                     }
                 }
@@ -487,35 +535,39 @@ public class Algorithm {
     }
 
     //近M个月S-E主叫时长
-    public static int dialCallTimes(JSONObject data, int m, String s, String e){
+    public static int dialCallTimes(JSONObject data, JSONObject applicant, int m, String s, String e){
 
         int time = 0;
         boolean bl = true;
         //判断是否当天，true：当天；false：隔天
         if(Integer.parseInt(s.split(":")[0])>Integer.parseInt(e.split(":")[0])) bl = false;
         //得到M个月前的时间
-        String monthBefore = Util.monthsBefore(m);
+        String monthBefore = CarrierDateUtil.monthsBefore(m,applicant.get("customerApplyDate").toString());
+        //申请日期
+        String previousDay = applicant.get("customerApplyDate").toString();
         //得到yyyy-mm
-        String month = Util.yearMonth(monthBefore);
+        String pMonth = CarrierDateUtil.yearMonth(previousDay);
+        //得到yyyy-mm
+        String month = CarrierDateUtil.yearMonth(monthBefore);
         //得到通话记录详单（按月份）
         JSONArray jsonArray = data.getJSONArray("calls");
         for (int i = 0; i < jsonArray.size(); i++) {
             //按月遍历
             JSONObject mon = (JSONObject)jsonArray.get(i);
             //如果M个月前的时间小于或者等于历史时间则不做操作，大于则结束本次循环
-            if(Util.compareDate(month+"-01",mon.get("bill_month")+"-01","yyyy-MM-dd")==1) continue;
+            if(!CarrierDateUtil.dateScope(pMonth,month,mon.get("bill_month").toString(),"-01")) continue;
             for (int j = 0; j < mon.getJSONArray("items").size(); j++) {
                 JSONObject day = (JSONObject)mon.getJSONArray("items").get(j);
                 //如果M个月前的时间小于或者等于历史时间则不做操作，大于则结束本次循环
-                if(Util.compareDate(monthBefore,day.get("time").toString(),"yyyy-MM-dd")<1 &&
+                if(CarrierDateUtil.dateScope(previousDay,monthBefore,day.get("time").toString(),"") &&
                         "DIAL".equals(day.get("dial_type").toString())){
-                    String date = Util.yearMonthDay(day.get("time").toString());
-                    if(bl && Util.compareDate(date+" "+s,day.get("time").toString(),"yyyy-MM-dd HH:mm:ss")<=0 &&
-                            Util.compareDate(date+" "+e,day.get("time").toString(),"yyyy-MM-dd HH:mm:ss")>=0){
+                    String date = CarrierDateUtil.yearMonthDay(day.get("time").toString());
+                    if(bl && CarrierDateUtil.compareDate(date+" "+s,day.get("time").toString(),"yyyy-MM-dd HH:mm:ss")<=0 &&
+                            CarrierDateUtil.compareDate(date+" "+e,day.get("time").toString(),"yyyy-MM-dd HH:mm:ss")>=0){
                         time += Integer.parseInt(day.get("duration").toString());
                     }
-                    if(!bl && Util.compareDate(date+" "+s,day.get("time").toString(),"yyyy-MM-dd HH:mm:ss")>=0 &&
-                            Util.compareDate(date+" "+e,day.get("time").toString(),"yyyy-MM-dd HH:mm:ss")<=0){
+                    if(!bl && CarrierDateUtil.compareDate(date+" "+s,day.get("time").toString(),"yyyy-MM-dd HH:mm:ss")>=0 &&
+                            CarrierDateUtil.compareDate(date+" "+e,day.get("time").toString(),"yyyy-MM-dd HH:mm:ss")<=0){
                         time += Integer.parseInt(day.get("duration").toString());
                     }
                 }
@@ -527,34 +579,38 @@ public class Algorithm {
     }
 
     //近M个月S-E总通话次数
-    public static int callNumbers(JSONObject data, int m, String s, String e){
+    public static int callNumbers(JSONObject data, JSONObject applicant, int m, String s, String e){
 
         int num = 0;
         boolean bl = true;
         //判断是否当天，true：当天；false：隔天
         if(Integer.parseInt(s.split(":")[0])>Integer.parseInt(e.split(":")[0])) bl = false;
         //得到M个月前的时间
-        String monthBefore = Util.monthsBefore(m);
+        String monthBefore = CarrierDateUtil.monthsBefore(m,applicant.get("customerApplyDate").toString());
+        //申请日期
+        String previousDay = applicant.get("customerApplyDate").toString();
         //得到yyyy-mm
-        String month = Util.yearMonth(monthBefore);
+        String pMonth = CarrierDateUtil.yearMonth(previousDay);
+        //得到yyyy-mm
+        String month = CarrierDateUtil.yearMonth(monthBefore);
         //得到通话记录详单（按月份）
         JSONArray jsonArray = data.getJSONArray("calls");
         for (int i = 0; i < jsonArray.size(); i++) {
             //按月遍历
             JSONObject mon = (JSONObject)jsonArray.get(i);
             //如果M个月前的时间小于或者等于历史时间则不做操作，大于则结束本次循环
-            if(Util.compareDate(month+"-01",mon.get("bill_month")+"-01","yyyy-MM-dd")==1) continue;
+            if(!CarrierDateUtil.dateScope(pMonth,month,mon.get("bill_month").toString(),"-01")) continue;
             for (int j = 0; j < mon.getJSONArray("items").size(); j++) {
                 JSONObject day = (JSONObject)mon.getJSONArray("items").get(j);
                 //如果M个月前的时间小于或者等于历史时间则不做操作，大于则结束本次循环
-                if(Util.compareDate(monthBefore,day.get("time").toString(),"yyyy-MM-dd")<1){
-                    String date = Util.yearMonthDay(day.get("time").toString());
-                    if(bl && Util.compareDate(date+" "+s,day.get("time").toString(),"yyyy-MM-dd HH:mm:ss")<=0 &&
-                            Util.compareDate(date+" "+e,day.get("time").toString(),"yyyy-MM-dd HH:mm:ss")>=0){
+                if(CarrierDateUtil.dateScope(previousDay,monthBefore,day.get("time").toString(),"")){
+                    String date = CarrierDateUtil.yearMonthDay(day.get("time").toString());
+                    if(bl && CarrierDateUtil.compareDate(date+" "+s,day.get("time").toString(),"yyyy-MM-dd HH:mm:ss")<=0 &&
+                            CarrierDateUtil.compareDate(date+" "+e,day.get("time").toString(),"yyyy-MM-dd HH:mm:ss")>=0){
                         num += 1;
                     }
-                    if(!bl && Util.compareDate(date+" "+s,day.get("time").toString(),"yyyy-MM-dd HH:mm:ss")>=0 &&
-                            Util.compareDate(date+" "+e,day.get("time").toString(),"yyyy-MM-dd HH:mm:ss")<=0){
+                    if(!bl && CarrierDateUtil.compareDate(date+" "+s,day.get("time").toString(),"yyyy-MM-dd HH:mm:ss")>=0 &&
+                            CarrierDateUtil.compareDate(date+" "+e,day.get("time").toString(),"yyyy-MM-dd HH:mm:ss")<=0){
                         num += 1;
                     }
                 }
@@ -566,34 +622,38 @@ public class Algorithm {
     }
 
     //近M个月S-E总通话时长
-    public static int callTimes(JSONObject data, int m, String s, String e){
+    public static int callTimes(JSONObject data, JSONObject applicant, int m, String s, String e){
 
         int time = 0;
         boolean bl = true;
         //判断是否当天，true：当天；false：隔天
         if(Integer.parseInt(s.split(":")[0])>Integer.parseInt(e.split(":")[0])) bl = false;
         //得到M个月前的时间
-        String monthBefore = Util.monthsBefore(m);
+        String monthBefore = CarrierDateUtil.monthsBefore(m,applicant.get("customerApplyDate").toString());
+        //申请日期
+        String previousDay = applicant.get("customerApplyDate").toString();
         //得到yyyy-mm
-        String month = Util.yearMonth(monthBefore);
+        String pMonth = CarrierDateUtil.yearMonth(previousDay);
+        //得到yyyy-mm
+        String month = CarrierDateUtil.yearMonth(monthBefore);
         //得到通话记录详单（按月份）
         JSONArray jsonArray = data.getJSONArray("calls");
         for (int i = 0; i < jsonArray.size(); i++) {
             //按月遍历
             JSONObject mon = (JSONObject)jsonArray.get(i);
             //如果M个月前的时间小于或者等于历史时间则不做操作，大于则结束本次循环
-            if(Util.compareDate(month+"-01",mon.get("bill_month")+"-01","yyyy-MM-dd")==1) continue;
+            if(!CarrierDateUtil.dateScope(pMonth,month,mon.get("bill_month").toString(),"-01")) continue;
             for (int j = 0; j < mon.getJSONArray("items").size(); j++) {
                 JSONObject day = (JSONObject)mon.getJSONArray("items").get(j);
                 //如果M个月前的时间小于或者等于历史时间则不做操作，大于则结束本次循环
-                if(Util.compareDate(monthBefore,day.get("time").toString(),"yyyy-MM-dd")<1){
-                    String date = Util.yearMonthDay(day.get("time").toString());
-                    if(bl && Util.compareDate(date+" "+s,day.get("time").toString(),"yyyy-MM-dd HH:mm:ss")<=0 &&
-                            Util.compareDate(date+" "+e,day.get("time").toString(),"yyyy-MM-dd HH:mm:ss")>=0){
+                if(CarrierDateUtil.dateScope(previousDay,monthBefore,day.get("time").toString(),"")){
+                    String date = CarrierDateUtil.yearMonthDay(day.get("time").toString());
+                    if(bl && CarrierDateUtil.compareDate(date+" "+s,day.get("time").toString(),"yyyy-MM-dd HH:mm:ss")<=0 &&
+                            CarrierDateUtil.compareDate(date+" "+e,day.get("time").toString(),"yyyy-MM-dd HH:mm:ss")>=0){
                         time += Integer.parseInt(day.get("duration").toString());
                     }
-                    if(!bl && Util.compareDate(date+" "+s,day.get("time").toString(),"yyyy-MM-dd HH:mm:ss")>=0 &&
-                            Util.compareDate(date+" "+e,day.get("time").toString(),"yyyy-MM-dd HH:mm:ss")<=0){
+                    if(!bl && CarrierDateUtil.compareDate(date+" "+s,day.get("time").toString(),"yyyy-MM-dd HH:mm:ss")>=0 &&
+                            CarrierDateUtil.compareDate(date+" "+e,day.get("time").toString(),"yyyy-MM-dd HH:mm:ss")<=0){
                         time += Integer.parseInt(day.get("duration").toString());
                     }
                 }
@@ -605,35 +665,39 @@ public class Algorithm {
     }
 
     //近M个月S-E主叫号码数
-    public static int dialPhoneNumbers(JSONObject data, int m, String s, String e){
+    public static int dialPhoneNumbers(JSONObject data, JSONObject applicant, int m, String s, String e){
 
         Set<String> set = new HashSet<>();
         boolean bl = true;
         //判断是否当天，true：当天；false：隔天
         if(Integer.parseInt(s.split(":")[0])>Integer.parseInt(e.split(":")[0])) bl = false;
         //得到M个月前的时间
-        String monthBefore = Util.monthsBefore(m);
+        String monthBefore = CarrierDateUtil.monthsBefore(m,applicant.get("customerApplyDate").toString());
+        //申请日期
+        String previousDay = applicant.get("customerApplyDate").toString();
         //得到yyyy-mm
-        String month = Util.yearMonth(monthBefore);
+        String pMonth = CarrierDateUtil.yearMonth(previousDay);
+        //得到yyyy-mm
+        String month = CarrierDateUtil.yearMonth(monthBefore);
         //得到通话记录详单（按月份）
         JSONArray jsonArray = data.getJSONArray("calls");
         for (int i = 0; i < jsonArray.size(); i++) {
             //按月遍历
             JSONObject mon = (JSONObject)jsonArray.get(i);
             //如果M个月前的时间小于或者等于历史时间则不做操作，大于则结束本次循环
-            if(Util.compareDate(month+"-01",mon.get("bill_month")+"-01","yyyy-MM-dd")==1) continue;
+            if(!CarrierDateUtil.dateScope(pMonth,month,mon.get("bill_month").toString(),"-01")) continue;
             for (int j = 0; j < mon.getJSONArray("items").size(); j++) {
                 JSONObject day = (JSONObject)mon.getJSONArray("items").get(j);
                 //如果M个月前的时间小于或者等于历史时间则不做操作，大于则结束本次循环
-                if(Util.compareDate(monthBefore,day.get("time").toString(),"yyyy-MM-dd")<1 &&
+                if(CarrierDateUtil.dateScope(previousDay,monthBefore,day.get("time").toString(),"") &&
                         "DIAL".equals(day.get("dial_type").toString())){
-                    String date = Util.yearMonthDay(day.get("time").toString());
-                    if(bl && Util.compareDate(date+" "+s,day.get("time").toString(),"yyyy-MM-dd HH:mm:ss")<=0 &&
-                            Util.compareDate(date+" "+e,day.get("time").toString(),"yyyy-MM-dd HH:mm:ss")>=0){
+                    String date = CarrierDateUtil.yearMonthDay(day.get("time").toString());
+                    if(bl && CarrierDateUtil.compareDate(date+" "+s,day.get("time").toString(),"yyyy-MM-dd HH:mm:ss")<=0 &&
+                            CarrierDateUtil.compareDate(date+" "+e,day.get("time").toString(),"yyyy-MM-dd HH:mm:ss")>=0){
                         set.add(day.get("peer_number").toString());
                     }
-                    if(!bl && Util.compareDate(date+" "+s,day.get("time").toString(),"yyyy-MM-dd HH:mm:ss")>=0 &&
-                            Util.compareDate(date+" "+e,day.get("time").toString(),"yyyy-MM-dd HH:mm:ss")<=0){
+                    if(!bl && CarrierDateUtil.compareDate(date+" "+s,day.get("time").toString(),"yyyy-MM-dd HH:mm:ss")>=0 &&
+                            CarrierDateUtil.compareDate(date+" "+e,day.get("time").toString(),"yyyy-MM-dd HH:mm:ss")<=0){
                         set.add(day.get("peer_number").toString());
                     }
                 }
@@ -645,34 +709,38 @@ public class Algorithm {
     }
 
     //近M个月S-E总通话号码数
-    public static int phoneNumbers(JSONObject data, int m, String s, String e){
+    public static int phoneNumbers(JSONObject data, JSONObject applicant, int m, String s, String e){
 
         Set<String> set = new HashSet<>();
         boolean bl = true;
         //判断是否当天，true：当天；false：隔天
         if(Integer.parseInt(s.split(":")[0])>Integer.parseInt(e.split(":")[0])) bl = false;
         //得到M个月前的时间
-        String monthBefore = Util.monthsBefore(m);
+        String monthBefore = CarrierDateUtil.monthsBefore(m,applicant.get("customerApplyDate").toString());
+        //申请日期
+        String previousDay = applicant.get("customerApplyDate").toString();
         //得到yyyy-mm
-        String month = Util.yearMonth(monthBefore);
+        String pMonth = CarrierDateUtil.yearMonth(previousDay);
+        //得到yyyy-mm
+        String month = CarrierDateUtil.yearMonth(monthBefore);
         //得到通话记录详单（按月份）
         JSONArray jsonArray = data.getJSONArray("calls");
         for (int i = 0; i < jsonArray.size(); i++) {
             //按月遍历
             JSONObject mon = (JSONObject)jsonArray.get(i);
             //如果M个月前的时间小于或者等于历史时间则不做操作，大于则结束本次循环
-            if(Util.compareDate(month+"-01",mon.get("bill_month")+"-01","yyyy-MM-dd")==1) continue;
+            if(!CarrierDateUtil.dateScope(pMonth,month,mon.get("bill_month").toString(),"-01")) continue;
             for (int j = 0; j < mon.getJSONArray("items").size(); j++) {
                 JSONObject day = (JSONObject)mon.getJSONArray("items").get(j);
                 //如果M个月前的时间小于或者等于历史时间则不做操作，大于则结束本次循环
-                if(Util.compareDate(monthBefore,day.get("time").toString(),"yyyy-MM-dd")<1){
-                    String date = Util.yearMonthDay(day.get("time").toString());
-                    if(bl && Util.compareDate(date+" "+s,day.get("time").toString(),"yyyy-MM-dd HH:mm:ss")<=0 &&
-                            Util.compareDate(date+" "+e,day.get("time").toString(),"yyyy-MM-dd HH:mm:ss")>=0){
+                if(CarrierDateUtil.dateScope(previousDay,monthBefore,day.get("time").toString(),"")){
+                    String date = CarrierDateUtil.yearMonthDay(day.get("time").toString());
+                    if(bl && CarrierDateUtil.compareDate(date+" "+s,day.get("time").toString(),"yyyy-MM-dd HH:mm:ss")<=0 &&
+                            CarrierDateUtil.compareDate(date+" "+e,day.get("time").toString(),"yyyy-MM-dd HH:mm:ss")>=0){
                         set.add(day.get("peer_number").toString());
                     }
-                    if(!bl && Util.compareDate(date+" "+s,day.get("time").toString(),"yyyy-MM-dd HH:mm:ss")>=0 &&
-                            Util.compareDate(date+" "+e,day.get("time").toString(),"yyyy-MM-dd HH:mm:ss")<=0){
+                    if(!bl && CarrierDateUtil.compareDate(date+" "+s,day.get("time").toString(),"yyyy-MM-dd HH:mm:ss")>=0 &&
+                            CarrierDateUtil.compareDate(date+" "+e,day.get("time").toString(),"yyyy-MM-dd HH:mm:ss")<=0){
                         set.add(day.get("peer_number").toString());
                     }
                 }
@@ -684,30 +752,34 @@ public class Algorithm {
     }
 
     //近M月停留城市时长（天）
-    public static Map<String,Integer> city(JSONObject data, int m){
+    public static Map<String,Integer> city(JSONObject data, JSONObject applicant, int m){
 
         //city_length_1m
         Map<String,Integer> map = new TreeMap<>();
         String city = "";
         String date = "";
         //得到m个月前的时间
-        String monthBefore = Util.monthsBefore(m);
+        String monthBefore = CarrierDateUtil.monthsBefore(m,applicant.get("customerApplyDate").toString());
+        //申请日期
+        String previousDay = applicant.get("customerApplyDate").toString();
         //得到yyyy-mm
-        String month = Util.yearMonth(monthBefore);
+        String pMonth = CarrierDateUtil.yearMonth(previousDay);
+        //得到yyyy-mm
+        String month = CarrierDateUtil.yearMonth(monthBefore);
         //得到通话记录详单（按月份）
         JSONArray jsonArray = data.getJSONArray("calls");
         for (int i = 0; i < jsonArray.size(); i++) {
             //按月遍历
             JSONObject mon = (JSONObject)jsonArray.get(i);
             //如果m个月前的时间小于或者等于历史时间则不做操作，大于则结束本次循环
-            if(Util.compareDate(month+"-01",mon.get("bill_month")+"-01","yyyy-MM-dd")==1) continue;
+            if(!CarrierDateUtil.dateScope(pMonth,month,mon.get("bill_month").toString(),"-01")) continue;
             for (int j = 0; j < mon.getJSONArray("items").size(); j++) {
                 JSONObject day = (JSONObject)mon.getJSONArray("items").get(j);
                 //如果m个月前的时间小于或者等于历史时间则不做操作，大于则结束本次循环
-                if(Util.compareDate(monthBefore,day.get("time").toString(),"yyyy-MM-dd")<1){
-                    if(!Util.yearMonthDay(day.get("time").toString()).equals(date)){
-                        date = Util.yearMonthDay(day.get("time").toString());
-                        map.put(city,(map.get(city)==null?0:map.get(city))+1);
+                if(CarrierDateUtil.dateScope(previousDay,monthBefore,day.get("time").toString(),"")){
+                    if(!CarrierDateUtil.yearMonthDay(day.get("time").toString()).equals(date)){
+                        date = CarrierDateUtil.yearMonthDay(day.get("time").toString());
+                        map.put(StringUtils.equals(city,"")?day.get("location").toString():city,(map.get(city)==null?0:map.get(city))+1);
                     }
                     city = day.get("location").toString();
                 }
@@ -720,7 +792,7 @@ public class Algorithm {
 
     //近M月停留时长最长的城市
     public static String maxCity(Map<String,Integer> data){
-        data = Util.sortByValueDescending(data);
+        data = CarrierDateUtil.sortByValueDescending(data);
         for (String key:data.keySet()) {
             return key;
         }
@@ -731,9 +803,9 @@ public class Algorithm {
     public static int localNum(List<String> data,JSONObject applicant) throws Exception {
 
         int num = 0;
-        String apply = applicant.get("apply_place").toString();
+        String apply = applicant.get("customerHouseholdRegisterProvince").toString() + applicant.get("customerHouseholdRegisterCity").toString();
         for (String phone:data) {
-           if(PhoneNumberHelper.isMobilePhone(phone) && apply.equals(getMobileFrom(phone))) num += 1;
+            if(PhoneNumberHelper.isMobilePhone(phone) && apply.equals(getMobileFrom(phone))) num += 1;
         }
 
         return num;
@@ -744,7 +816,7 @@ public class Algorithm {
     public static int registerNum(List<String> data,JSONObject applicant) throws Exception {
 
         int num = 0;
-        String apply = applicant.get("household_register").toString();
+        String apply = applicant.get("customerHouseholdRegisterProvince").toString() + applicant.get("customerHouseholdRegisterCity").toString();
         for (String phone:data) {
             if(PhoneNumberHelper.isMobilePhone(phone) && apply.equals(getMobileFrom(phone))) num += 1;
         }
@@ -753,14 +825,14 @@ public class Algorithm {
     }
 
     //近M个月，除近N个月,TOP10联系人变化指数
-    public static int top10ChangeExp(JSONObject data, int m, int n){
+    public static int top10ChangeExp(JSONObject data, JSONObject applicant, int m, int n){
 
         boolean bl = true;
         Set<String> set = null;
         //得到m个月前的时间
-        //String monthBefore = Util.monthsBefore(m);
+        //String monthBefore = CarrierDateUtil.monthsBefore(m,applicant.get("customerApplyDate").toString());
         //得到yyyy-mm
-        //String month = Util.yearMonth(monthBefore);
+        //String month = CarrierDateUtil.yearMonth(monthBefore);
 
         //得到通话记录详单（按月份）
         JSONArray jsonArray = data.getJSONArray("calls");
@@ -769,28 +841,30 @@ public class Algorithm {
         //便利近M个月，除近N个月的每个月
         for (int k =n; k<m; k++){
             //得到n个月前的时间
-            String endDate = Util.monthsBefore(k);
-            String startDate = Util.monthsBefore(k+1);
+            String endDate = CarrierDateUtil.monthsBefore(k,applicant.get("customerApplyDate").toString());
+            String startDate = CarrierDateUtil.monthsBefore(k+1,applicant.get("customerApplyDate").toString());
             //得到yyyy-mm
-            String endMonth = Util.yearMonth(endDate);
-            String startMonth = Util.yearMonth(startDate);
+            String endMonth = CarrierDateUtil.yearMonth(endDate);
+            String startMonth = CarrierDateUtil.yearMonth(startDate);
             Set<String> temp = new HashSet<>();
             Map<String,Integer> map = new HashMap<>();
             for (int i = 0; i < jsonArray.size(); i++) {
                 //按月遍历
                 JSONObject mon = (JSONObject)jsonArray.get(i);
-                if(Util.compareDate(startMonth+"-01",mon.get("bill_month")+"-01","yyyy-MM-dd")==1 ||
-                        Util.compareDate(endMonth+"-01",mon.get("bill_month")+"-01","yyyy-MM-dd")==-1) continue;
+                /*if(CarrierDateUtil.compareDate(startMonth+"-01",mon.get("bill_month")+"-01","yyyy-MM-dd")==1 ||
+                        CarrierDateUtil.compareDate(endMonth+"-01",mon.get("bill_month")+"-01","yyyy-MM-dd")==-1) continue;*/
+                if(!CarrierDateUtil.dateScope(endMonth,startMonth,mon.get("bill_month").toString(),"-01")) continue;
                 for (int j = 0; j < mon.getJSONArray("items").size(); j++) {
                     JSONObject day = (JSONObject)mon.getJSONArray("items").get(j);
                     //如果m个月前的时间小于或者等于历史时间则不做操作，大于则结束本次循环
-                    if(Util.compareDate(startDate,day.get("time").toString(),"yyyy-MM-dd")<1 &&
-                            Util.compareDate(endDate,day.get("time").toString(),"yyyy-MM-dd")>-1){
+                    /*if(CarrierDateUtil.compareDate(startDate,day.get("time").toString(),"yyyy-MM-dd")<1 &&
+                            CarrierDateUtil.compareDate(endDate,day.get("time").toString(),"yyyy-MM-dd")>-1){*/
+                    if(CarrierDateUtil.dateScope(endDate,startDate,day.get("time").toString(),"")){
                         map.put(day.get("peer_number").toString(),(map.get(day.get("peer_number").toString())==null?0:map.get(day.get("peer_number").toString()))+1);
                     }
                 }
             }
-            map = Util.sortByValueDescending(map);
+            map = CarrierDateUtil.sortByValueDescending(map);
             for (String key:map.keySet()) {
                 temp.add(key);
                 if(temp.size()>=10) break;
@@ -804,14 +878,18 @@ public class Algorithm {
     }
 
     //近M个月，每个月都出现的手机号码
-    public static List<String> everMonthLocalNum(JSONObject data, int m){
+    public static List<String> everMonthLocalNum(JSONObject data, JSONObject applicant, int m){
 
         boolean bl = true;
         Set<String> set = new HashSet<>();
         //得到m个月前的时间
-        String monthBefore = Util.monthsBefore(m);
+        String monthBefore = CarrierDateUtil.monthsBefore(m,applicant.get("customerApplyDate").toString());
+        //申请日期
+        String previousDay = applicant.get("customerApplyDate").toString();
         //得到yyyy-mm
-        String month = Util.yearMonth(monthBefore);
+        String pMonth = CarrierDateUtil.yearMonth(previousDay);
+        //得到yyyy-mm
+        String month = CarrierDateUtil.yearMonth(monthBefore);
         //得到通话记录详单（按月份）
         JSONArray jsonArray = data.getJSONArray("calls");
         for (int i = 0; i < jsonArray.size(); i++) {
@@ -820,11 +898,11 @@ public class Algorithm {
             Set<String> phones = new HashSet<>();
             if(i!=0) bl = false;
             //如果m个月前的时间小于或者等于历史时间则不做操作，大于则结束本次循环
-            if(Util.compareDate(month+"-01",mon.get("bill_month")+"-01","yyyy-MM-dd")==1) continue;
+            if(!CarrierDateUtil.dateScope(pMonth,month,mon.get("bill_month").toString(),"-01")) continue;
             for (int j = 0; j < mon.getJSONArray("items").size(); j++) {
                 JSONObject day = (JSONObject)mon.getJSONArray("items").get(j);
                 //如果m个月前的时间小于或者等于历史时间则不做操作，大于则结束本次循环
-                if(Util.compareDate(monthBefore,day.get("time").toString(),"yyyy-MM-dd")<1){
+                if(CarrierDateUtil.dateScope(previousDay,monthBefore,day.get("time").toString(),"")){
                     if(bl) set.add(day.get("peer_number").toString());
                     else phones.add(day.get("peer_number").toString());
                 }
@@ -837,35 +915,33 @@ public class Algorithm {
     }
 
     //近M个月，除近N个月，topX联系人非Y位手机号码数
-    public static int topNumbers(JSONObject data, int m, int n, int x, int y){
+    public static int topNumbers(JSONObject data, JSONObject applicant, int m, int n, int x, int y){
 
         Map<String, Integer> map = new TreeMap<>();
         //得到m个月前的时间
-        String monthBefore = Util.monthsBefore(m);
+        String monthBefore = CarrierDateUtil.monthsBefore(m,applicant.get("customerApplyDate").toString());
         //得到n个月前的时间
-        String nBefore = Util.monthsBefore(n);
+        String nBefore = CarrierDateUtil.monthsBefore(n,applicant.get("customerApplyDate").toString());
         //得到yyyy-mm
-        String month = Util.yearMonth(monthBefore);
-        String nmonth = Util.yearMonth(nBefore);
+        String month = CarrierDateUtil.yearMonth(monthBefore);
+        String nmonth = CarrierDateUtil.yearMonth(nBefore);
         //得到通话记录详单（按月份）
         JSONArray jsonArray = data.getJSONArray("calls");
         for (int i = 0; i < jsonArray.size(); i++) {
             //按月遍历
             JSONObject mon = (JSONObject)jsonArray.get(i);
             //如果m个月前的时间小于或者等于历史时间则不做操作，大于则结束本次循环
-            if(Util.compareDate(month+"-01",mon.get("bill_month")+"-01","yyyy-MM-dd")==1 ||
-                    Util.compareDate(nmonth+"-01",mon.get("bill_month")+"-01","yyyy-MM-dd")==-1) continue;
+            if(!CarrierDateUtil.dateScope(nmonth,month,mon.get("bill_month").toString(),"-01")) continue;
             for (int j = 0; j < mon.getJSONArray("items").size(); j++) {
                 JSONObject day = (JSONObject)mon.getJSONArray("items").get(j);
                 //如果m个月前的时间小于或者等于历史时间则不做操作，大于则结束本次循环
-                if(Util.compareDate(monthBefore,day.get("time").toString(),"yyyy-MM-dd")<1 &&
-                        Util.compareDate(nBefore,day.get("time").toString(),"yyyy-MM-dd")>-1){
+                if(CarrierDateUtil.dateScope(nBefore,monthBefore,day.get("time").toString(),"")){
                     //联系的号码数
                     map.put(day.get("peer_number").toString(),(map.get(day.get("peer_number").toString())==null?0:map.get(day.get("peer_number").toString()))+1);
                 }
             }
         }
-        map = Util.sortByValueDescending(map);
+        map = CarrierDateUtil.sortByValueDescending(map);
         List<String> list = new ArrayList<>();
         int length = 0;
         for (Map.Entry<String,Integer> entry : map.entrySet()) {
@@ -877,31 +953,29 @@ public class Algorithm {
         return list.size();
     }
 
-    //近M个月，除近N个月，topX联系人非Y位手机号码的月份数
-    public static int topMonths(JSONObject data, int m, int n, int x, int y){
+    //近M个月，除近N个月，topX联系人出现过非Y位手机号码的月份数
+    public static int topMonths(JSONObject data, JSONObject applicant, int m, int n, int x, int y){
 
         Map<String, String> map = new HashMap<>();
         Map<String, String> months = new HashMap<>();
         //得到m个月前的时间
-        String monthBefore = Util.monthsBefore(m);
+        String monthBefore = CarrierDateUtil.monthsBefore(m,applicant.get("customerApplyDate").toString());
         //得到n个月前的时间
-        String nBefore = Util.monthsBefore(n);
+        String nBefore = CarrierDateUtil.monthsBefore(n,applicant.get("customerApplyDate").toString());
         //得到yyyy-mm
-        String month = Util.yearMonth(monthBefore);
-        String nmonth = Util.yearMonth(nBefore);
+        String month = CarrierDateUtil.yearMonth(monthBefore);
+        String nmonth = CarrierDateUtil.yearMonth(nBefore);
         //得到通话记录详单（按月份）
         JSONArray jsonArray = data.getJSONArray("calls");
         for (int i = 0; i < jsonArray.size(); i++) {
             //按月遍历
             JSONObject mon = (JSONObject)jsonArray.get(i);
             //如果m个月前的时间小于或者等于历史时间则不做操作，大于则结束本次循环
-            if(Util.compareDate(month+"-01",mon.get("bill_month")+"-01","yyyy-MM-dd")==1 ||
-                    Util.compareDate(nmonth+"-01",mon.get("bill_month")+"-01","yyyy-MM-dd")==-1) continue;
+            if(!CarrierDateUtil.dateScope(nmonth,month,mon.get("bill_month").toString(),"-01")) continue;
             for (int j = 0; j < mon.getJSONArray("items").size(); j++) {
                 JSONObject day = (JSONObject)mon.getJSONArray("items").get(j);
                 //如果m个月前的时间小于或者等于历史时间则不做操作，大于则结束本次循环
-                if(Util.compareDate(monthBefore,day.get("time").toString(),"yyyy-MM-dd")<1 &&
-                        Util.compareDate(nBefore,day.get("time").toString(),"yyyy-MM-dd")>-1){
+                if(CarrierDateUtil.dateScope(nBefore,monthBefore,day.get("time").toString(),"")){
                     //联系的号码数
                     if(map.get(day.get("peer_number").toString())==null) map.put(day.get("peer_number").toString(),"1");
                     else map.put(day.get("peer_number").toString(),String.valueOf(Integer.parseInt(map.get(day.get("peer_number").toString()))+1));
@@ -910,7 +984,7 @@ public class Algorithm {
                 }
             }
         }
-        map = Util.sortByValueDescending(map);
+        map = CarrierDateUtil.sortByValueDescending(map);
         List<String> list = new ArrayList<>();
         int length = 0;
         //取出非Y位的号码
@@ -923,36 +997,37 @@ public class Algorithm {
         for (String key:list) {
             String[] numbers = months.get(key).substring(0,months.get(key).length()-1).split(",");
             for (String time:numbers) {
-                set.add(Util.yearMonth(time));
+                set.add(CarrierDateUtil.yearMonth(time));
             }
         }
 
-        System.out.println("近"+m+"个月，除近"+n+"个月，top"+x+"联系人非"+y+"位手机号码的月份数:"+set.size());
+        System.out.println("近"+m+"个月，除近"+n+"个月，top"+x+"联系人出现过非"+y+"位手机号码的月份数:"+set.size());
         return set.size();
     }
 
     //近M个月通话时长?X秒的次数(n = 1：小于；2：小于等于；0：等于；3：大于；4：大于等于)
-    public static int talkTime(JSONObject data, int m, int n, int x){
+    public static int talkTime(JSONObject data, JSONObject applicant, int m, int n, int x){
 
-       int number = 0;
+        int number = 0;
         //得到m个月前的时间
-        String monthBefore = Util.monthsBefore(m);
-        //得到n个月前的时间
-        //String nBefore = Util.monthsBefore(n);
+        String monthBefore = CarrierDateUtil.monthsBefore(m,applicant.get("customerApplyDate").toString());
+        //申请日期
+        String previousDay = applicant.get("customerApplyDate").toString();
         //得到yyyy-mm
-        String month = Util.yearMonth(monthBefore);
-        //String nmonth = Util.yearMonth(nBefore);
+        String pMonth = CarrierDateUtil.yearMonth(previousDay);
+        //得到yyyy-mm
+        String month = CarrierDateUtil.yearMonth(monthBefore);
         //得到通话记录详单（按月份）
         JSONArray jsonArray = data.getJSONArray("calls");
         for (int i = 0; i < jsonArray.size(); i++) {
             //按月遍历
             JSONObject mon = (JSONObject)jsonArray.get(i);
             //如果m个月前的时间小于或者等于历史时间则不做操作，大于则结束本次循环
-            if(Util.compareDate(month+"-01",mon.get("bill_month")+"-01","yyyy-MM-dd")==1) continue;
+            if(!CarrierDateUtil.dateScope(pMonth,month,mon.get("bill_month").toString(),"-01")) continue;
             for (int j = 0; j < mon.getJSONArray("items").size(); j++) {
                 JSONObject day = (JSONObject)mon.getJSONArray("items").get(j);
                 //如果m个月前的时间小于或者等于历史时间则不做操作，大于则结束本次循环
-                if(Util.compareDate(monthBefore,day.get("time").toString(),"yyyy-MM-dd")<1){
+                if(CarrierDateUtil.dateScope(previousDay,monthBefore,day.get("time").toString(),"")){
                     number += number(Integer.parseInt(day.get("duration").toString()),n,x);
                 }
             }
@@ -963,24 +1038,28 @@ public class Algorithm {
     }
 
     //近M个月S-E总通话次数
-    public static int callNumbers(JSONObject data, int m){
+    public static int callNumbers(JSONObject data, JSONObject applicant, int m){
 
         int num = 0;
         //得到M个月前的时间
-        String monthBefore = Util.monthsBefore(m);
+        String monthBefore = CarrierDateUtil.monthsBefore(m,applicant.get("customerApplyDate").toString());
+        //申请日期
+        String previousDay = applicant.get("customerApplyDate").toString();
         //得到yyyy-mm
-        String month = Util.yearMonth(monthBefore);
+        String pMonth = CarrierDateUtil.yearMonth(previousDay);
+        //得到yyyy-mm
+        String month = CarrierDateUtil.yearMonth(monthBefore);
         //得到通话记录详单（按月份）
         JSONArray jsonArray = data.getJSONArray("calls");
         for (int i = 0; i < jsonArray.size(); i++) {
             //按月遍历
             JSONObject mon = (JSONObject)jsonArray.get(i);
             //如果M个月前的时间小于或者等于历史时间则不做操作，大于则结束本次循环
-            if(Util.compareDate(month+"-01",mon.get("bill_month")+"-01","yyyy-MM-dd")==1) continue;
+            if(!CarrierDateUtil.dateScope(pMonth,month,mon.get("bill_month").toString(),"-01")) continue;
             for (int j = 0; j < mon.getJSONArray("items").size(); j++) {
                 JSONObject day = (JSONObject)mon.getJSONArray("items").get(j);
                 //如果M个月前的时间小于或者等于历史时间则不做操作，大于则结束本次循环
-                if(Util.compareDate(monthBefore,day.get("time").toString(),"yyyy-MM-dd")<1){
+                if(CarrierDateUtil.dateScope(previousDay,monthBefore,day.get("time").toString(),"")){
                     num += 1;
                 }
             }
@@ -991,28 +1070,32 @@ public class Algorithm {
     }
 
     //近M个月连续N天以上无通话的次数
-    public static int noCall(JSONObject data, int m, int n){
+    public static int noCall(JSONObject data, JSONObject applicant, int m, int n){
 
         int num = 0;
         //得到M个月前的时间
-        String monthBefore = Util.monthsBefore(m);
-        String previousDay = Util.getNowDate();
+        String monthBefore = CarrierDateUtil.monthsBefore(m,applicant.get("customerApplyDate").toString());
+        String previousDay = applicant.get("customerApplyDate").toString();
         //得到yyyy-mm
-        String month = Util.yearMonth(monthBefore);
+        String month = CarrierDateUtil.yearMonth(monthBefore);
+        String pMonth = CarrierDateUtil.yearMonth(previousDay);
+        String lastDate = previousDay;
         //得到通话记录详单（按月份）
         JSONArray jsonArray = data.getJSONArray("calls");
         for (int i = 0; i < jsonArray.size(); i++) {
             //按月遍历
             JSONObject mon = (JSONObject)jsonArray.get(i);
             //如果M个月前的时间小于或者等于历史时间则不做操作，大于则结束本次循环
-            if(Util.compareDate(month+"-01",mon.get("bill_month")+"-01","yyyy-MM-dd")==1) continue;
-            for (int j = 0; j < mon.getJSONArray("items").size(); j++) {
+            if(!CarrierDateUtil.dateScope(pMonth,month,mon.get("bill_month").toString(),"-01")) continue;
+            //System.out.println(mon.get("bill_month"));
+            for (int j = mon.getJSONArray("items").size()-1; j > 0; j--) {
                 JSONObject day = (JSONObject)mon.getJSONArray("items").get(j);
                 //如果M个月前的时间小于或者等于历史时间则不做操作，大于则结束本次循环
-                if(Util.compareDate(monthBefore,day.get("time").toString(),"yyyy-MM-dd")<1){
-                    String date = Util.yearMonthDay(day.get("time").toString());
-                    int days = Util.daysBetween(date,previousDay);
-                    previousDay = date;
+                if(CarrierDateUtil.dateScope(previousDay,monthBefore,day.get("time").toString(),"")){
+                    //System.out.println(day.get("time"));
+                    String date = CarrierDateUtil.yearMonthDay(day.get("time").toString());
+                    int days = CarrierDateUtil.daysBetween(date,lastDate);
+                    lastDate = date;
                     if(days>=n) num += Math.floor(days/n);
                 }
             }
@@ -1023,17 +1106,17 @@ public class Algorithm {
     }
 
     //近M个月，除近N个月，其余M-N个月月均通话次数
-    public static String  callAvgNumbers(JSONObject data, int m, int n){
+    public static String  callAvgNumbers(JSONObject data, JSONObject applicant, int m, int n){
 
         int num = 0;
         //得到m个月前的时间
-        String mBefore = Util.monthsBefore(m);
+        String mBefore = CarrierDateUtil.monthsBefore(m,applicant.get("customerApplyDate").toString());
         //得到n个月前的时间
-        String nBefore = Util.monthsBefore(n);
+        String nBefore = CarrierDateUtil.monthsBefore(n,applicant.get("customerApplyDate").toString());
         //得到yyyy-mm
-        String mMonth = Util.yearMonth(mBefore);
+        String mMonth = CarrierDateUtil.yearMonth(mBefore);
         //得到yyyy-mm
-        String nMonth = Util.yearMonth(nBefore);
+        String nMonth = CarrierDateUtil.yearMonth(nBefore);
         //得到剩余M-N个月的总计天数
         //得到通话记录详单（按月份）
         JSONArray jsonArray = data.getJSONArray("calls");
@@ -1042,14 +1125,11 @@ public class Algorithm {
             //按月遍历
             JSONObject mon = (JSONObject) jsonArray.get(i);
             //当前月份若大于N个月或小于M个月，结束本次循环
-            if(Util.compareDate(nMonth+"-01",mon.get("bill_month")+"-01","yyyy-MM-dd")==-1 ||
-                    Util.compareDate(mMonth+"-01",mon.get("bill_month")+"-01","yyyy-MM-dd")==1)
-                continue;
+            if(!CarrierDateUtil.dateScope(nMonth,mMonth,mon.get("bill_month").toString(),"-01")) continue;
             for (int j = 0; j < mon.getJSONArray("items").size(); j++) {
                 JSONObject day = (JSONObject)mon.getJSONArray("items").get(j);
                 //当前日期大于M且小于N，继续执行
-                if(Util.compareDate(mBefore,day.get("time").toString(),"yyyy-MM-dd")<1 &&
-                        Util.compareDate(nBefore,day.get("time").toString(),"yyyy-MM-dd")>-1){
+                if(CarrierDateUtil.dateScope(nBefore,mBefore,day.get("time").toString(),"")){
                     num += 1;
                 }
             }
@@ -1058,6 +1138,69 @@ public class Algorithm {
         System.out.println("近"+m+"个月,除近"+n+"个月，剩余"+(m-n)+"个月月均通话次数:"+String.format("%.2f",Integer.valueOf(num).doubleValue()/(m-n)));
         return String.format("%.2f",Integer.valueOf(num).doubleValue()/(m-n));
     }
+
+    //除近N个月，剩余月总通话时长
+    public static Integer totalCalllength(JSONObject data, JSONObject applicant, int n){
+
+        Integer num = 0;
+        //得到n个月前的时间
+        String nBefore = CarrierDateUtil.monthsBefore(n,applicant.get("customerApplyDate").toString());
+        //得到yyyy-mm
+        String nMonth = CarrierDateUtil.yearMonth(nBefore);
+        //得到剩余M-N个月的总计天数
+        //得到通话记录详单（按月份）
+        JSONArray jsonArray = data.getJSONArray("calls");
+        for (int i = 0; i < jsonArray.size(); i++) {
+            //按月遍历
+            JSONObject mon = (JSONObject) jsonArray.get(i);
+            //当前月份若大于N个月或小于M个月，结束本次循环
+            if(CarrierDateUtil.compareDate(nMonth+"-01",mon.get("bill_month")+"-01","yyyy-MM-dd")==-1)
+                continue;
+            for (int j = 0; j < mon.getJSONArray("items").size(); j++) {
+                JSONObject day = (JSONObject)mon.getJSONArray("items").get(j);
+                //当前日期大于M且小于N，继续执行
+                if(CarrierDateUtil.compareDate(nBefore,day.get("time").toString(),"yyyy-MM-dd")>-1){
+                    num += Integer.parseInt(day.get("duration").toString());
+                }
+            }
+        }
+
+        System.out.println("除近"+n+"个月，剩余月总通话时长:"+num);
+        return num;
+    }
+
+    //除近N个月，剩余月月均总通话时长
+    public static String avgCalllength(JSONObject data, JSONObject applicant, int n){
+
+        Integer num = 0;
+        Integer month = 0;
+        //得到n个月前的时间
+        String nBefore = CarrierDateUtil.monthsBefore(n,applicant.get("customerApplyDate").toString());
+        //得到yyyy-mm
+        String nMonth = CarrierDateUtil.yearMonth(nBefore);
+        //得到剩余M-N个月的总计天数
+        //得到通话记录详单（按月份）
+        JSONArray jsonArray = data.getJSONArray("calls");
+        for (int i = 0; i < jsonArray.size(); i++) {
+            //按月遍历
+            JSONObject mon = (JSONObject) jsonArray.get(i);
+            //当前月份若大于N个月或小于M个月，结束本次循环
+            if(CarrierDateUtil.compareDate(nMonth+"-01",mon.get("bill_month")+"-01","yyyy-MM-dd")==-1)
+                continue;
+            month += 1;
+            for (int j = 0; j < mon.getJSONArray("items").size(); j++) {
+                JSONObject day = (JSONObject)mon.getJSONArray("items").get(j);
+                //当前日期大于M且小于N，继续执行
+                if(CarrierDateUtil.compareDate(nBefore,day.get("time").toString(),"yyyy-MM-dd")>-1){
+                    num += Integer.parseInt(day.get("duration").toString());
+                }
+            }
+        }
+
+        System.out.println("除近"+n+"个月，剩余月均通话时长:"+String.format("%.2f",num.doubleValue()/month));
+        return String.format("%.2f",num.doubleValue()/month);
+    }
+
 
     //比较a、b值的大小（m = 1：小于；2：小于等于；0：等于；3：大于；4：大于等于）
     private static int number(int a,int m,int b){
@@ -1092,4 +1235,78 @@ public class Algorithm {
         }
         return num;
     }
+
+    /**
+     * 将数据按月份倒序排列
+     * @param data
+     * @return
+     */
+    public static void order(JSONObject data){
+
+        if(data==null) return;
+        List<String> list = new ArrayList<>();
+        //JSONArray calls = JSONArray.parseArray(data.get("calls").toString());
+        //List<Object> calls = (ArrayList) data.get("calls");
+        JSONArray calls = data.getJSONArray("calls");
+
+        for (Object obj:calls) {
+            list.add(JSONObject.parseObject(obj.toString()).get("bill_month").toString());
+            //list.add(((JSONObject) obj).get("bill_month").toString());
+        }
+        Object[] arr = list.toArray();
+        list = Arrays.asList(ListSort(arr));
+        JSONArray jsonArray = new JSONArray();
+        for (String str:list) {
+            for (Object obj:calls) {
+                if(StringUtils.equals(str,JSONObject.parseObject(obj.toString()).get("bill_month").toString())){
+                    //Object o = orderDay(obj);
+                    jsonArray.set(jsonArray.size(),obj);
+                }
+            }
+        }
+        data.put("calls",jsonArray);
+
+    }
+
+    /**
+     * 将数据按天倒序排列
+     * @param obj
+     * @return
+     */
+    private static Object orderDay(Object obj){
+
+        JSONArray items = JSONObject.parseObject(obj.toString()).getJSONArray("items");
+        //JSONObject.parseObject(obj.toString()).put("items","");
+        for (int i = 0; i < items.size()-1; i++) {
+            for (int j = items.size()-1; j > i; j--) {
+                JSONObject day = (JSONObject)items.get(j);
+                JSONObject listDay = (JSONObject)items.get(j-1);
+                if(CarrierDateUtil.compareDate(listDay.getString("time"),day.getString("time"),"yyyy-MM-dd")==-1){
+                    items.add(j-1,day);
+                    items.add(j,listDay);
+                }
+            }
+        }
+        JSONObject.parseObject(obj.toString()).put("items",items);
+        return obj;
+    }
+
+    private static String[] ListSort(Object[] arr) {
+        String temp;//定义一个临时变量
+        for(int i=0;i<arr.length-1;i++){//冒泡趟数
+            for(int j=arr.length-1;j>i;j--){
+                if(CarrierDateUtil.compareDate(arr[j-1]+"-01",arr[j]+"-01","yyyy-MM-dd")==-1){
+                    temp = arr[j-1].toString();
+                    arr[j-1] = arr[j];
+                    arr[j] = temp;
+                }
+            }
+        }
+        String[] arrStr = new String[arr.length];
+        for (int i = 0; i < arr.length; i++) {
+            arrStr[i] = arr[i].toString();
+        }
+        return arrStr;
+    }
+
 }
