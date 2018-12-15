@@ -18,6 +18,16 @@ public class DataSource {
         return Util.readTxt(System.getProperty("user.dir")+"/file/report.txt");
     }
 
+    //淘宝自己的数据
+    public static String taoBaoSelf(){
+        return Util.readTxt(System.getProperty("user.dir")+"/file/taoBaoSelf.txt");
+    }
+
+    //淘宝配偶的数据
+    public static String taoBaoPartner(){
+        return Util.readTxt(System.getProperty("user.dir")+"/file/taoBaoPartner.txt");
+    }
+
     //申请人信息（包含申请地、户籍等）
     public static String applicant(){
         return Util.readTxt(System.getProperty("user.dir")+"/file/applyInfo.txt");
