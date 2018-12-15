@@ -1,4 +1,4 @@
-package com.linhai.comm;
+package com.linhai.carrier;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -223,4 +223,5 @@ public class CarrierDateUtil {
 
         return true;
     }
+
 }
