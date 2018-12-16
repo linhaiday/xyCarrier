@@ -223,4 +223,20 @@ public class CarrierDateUtil {
 
         return true;
     }
+
+    /**
+     * 过去N天的时间点
+     * @param dateStr
+     * @param num
+     * @return
+     */
+    public static String getBeforeOrAfterDate(String dateStr, int num) {
+
+        Date date = toDate(dateStr);
+        Calendar calendar = Calendar.getInstance();//获取日历
+        calendar.setTime(date);//当date的值是当前时间，则可以不用写这段代码。
+        calendar.add(Calendar.DATE, -num);
+        Date d = calendar.getTime();//把日历转换为Date
+        return format.format(d);
+    }
 }
