@@ -7,10 +7,7 @@ import com.linhai.comm.CarrierDateUtil;
 import com.linhai.comm.LevenshteinUtil;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by linhai on 2018/12/15.
@@ -386,5 +383,110 @@ public class TaobaoAlgorithm {
     //无购物月数
     public static void noShopMonth(JSONObject self, JSONObject partner, JSONObject application, JSONObject result) {
 
+        /*try {
+            //申请日期
+            String applicationDate = application.getString("customerApplyDate");
+            //申请日期与当前日期之间包含的所有月份
+            List<String> list = CarrierDateUtil.getMonthBetween(applicationDate,CarrierDateUtil.getNowDate());
+            Set<String> set = new HashSet<>();
+            JSONArray tradedetails = self.getJSONObject("tradedetails").getJSONArray("tradedetails");
+            for (Object tradedetail:tradedetails) {
+                if(CarrierDateUtil.dateScope(CarrierDateUtil.getNowDate(),
+                        applicationDate,
+                        CarrierDateUtil.yearMonthDay(JSON.parseObject(tradedetail.toString()).getString("trade_createtime")),"")
+                        && StringUtils.indexOf(JSON.parseObject(tradedetail.toString()).getString("trade_status"),"成功")>=0
+                        && !StringUtils.equals(JSON.parseObject(tradedetail.toString()).getString("deliver_name"),partnerName))
+                    num += 1;
+                if(CarrierDateUtil.compareDate(applicationDate,CarrierDateUtil.getNowDate(),"yyyy-MM-dd")>=0)
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }*/
+    }
+
+    //收件地址总数量
+    //收件地址中收件人为本人的城市个数
+    //收件地址中是否有申请人户籍所在地
+    //收货地址为申请城市的数量
+    //收件人为非本人的地址数量
+    public static void address(JSONObject self, JSONObject partner, JSONObject application, JSONObject result) {
+
+        Set<String> address = new HashSet<>();
+        Set<String> city = new HashSet<>();
+        int applyPlaceCityCount = 0;
+        int exeSelf = 0;
+        boolean bl = false;
+        //申请人姓名
+        String selfName = application.getString("customerName");
+        //申请人户籍所在地
+        String house = application.getString("customerHouseholdRegisterAddress");
+        //申请城市
+        String applyPlaceCity = application.getString("customerApplyPlaceCity");
+        JSONArray recentdeliveraddress = self.getJSONArray("recentdeliveraddress");
+        for (Object recent:recentdeliveraddress) {
+            JSONObject jsonObject = JSON.parseObject(recent.toString());
+            address.add(jsonObject.get("deliver_address").toString());
+            if(StringUtils.equals(selfName,jsonObject.getString("deliver_name")))
+                city.add(jsonObject.getString("city"));
+            else exeSelf += 1;
+            if(!bl && StringUtils.equals(house,jsonObject.getString("deliver_address"))) bl = true;
+            if(StringUtils.equals(applyPlaceCity,jsonObject.getString("city"))) applyPlaceCityCount += 1;
+        }
+
+        result.put("tb_address",address.size());
+        result.put("tb_self_address",city.size());
+        result.put("tb_register",bl);
+        result.put("tb_apply_city",applyPlaceCityCount);
+        result.put("tb_exc_self_address",exeSelf);
+        System.out.println("收件地址总数量："+address.size());
+        System.out.println("收件地址中收件人为本人的城市个数："+city.size());
+        System.out.println("收件地址中是否有申请人户籍所在地："+bl);
+        System.out.println("收货地址为申请城市的数量："+applyPlaceCityCount);
+        System.out.println("收件人为非本人的地址数量："+exeSelf);
+
+
+        address.clear();
+        city.clear();
+        applyPlaceCityCount = 0;
+        exeSelf = 0;
+        bl = false;
+        recentdeliveraddress = partner.getJSONArray("recentdeliveraddress");
+        for (Object recent:recentdeliveraddress) {
+            JSONObject jsonObject = JSON.parseObject(recent.toString());
+            address.add(jsonObject.get("deliver_address").toString());
+            if(StringUtils.equals(selfName,jsonObject.getString("deliver_name")))
+                city.add(jsonObject.getString("city"));
+            else exeSelf += 1;
+            if(!bl && StringUtils.equals(house,jsonObject.getString("deliver_address"))) bl = true;
+            if(StringUtils.equals(applyPlaceCity,jsonObject.getString("city"))) applyPlaceCityCount += 1;
+        }
+
+        result.put("tb_partner_address",address.size());
+        result.put("tb_partner_self_address",city.size());
+        result.put("tb_partner_partner_register",bl);
+        result.put("tb_partner_apply_city",applyPlaceCityCount);
+        result.put("tb_partner_exc_self_address",exeSelf);
+        System.out.println("配偶_收件地址总数量："+address.size());
+        System.out.println("配偶_收件地址中收件人为本人的城市个数："+city.size());
+        System.out.println("配偶_收件地址中是否有申请人户籍所在地："+bl);
+        System.out.println("配偶_收货地址为申请城市的数量："+applyPlaceCityCount);
+        System.out.println("配偶_收件人为非本人的地址数量："+exeSelf);
+
+    }
+
+    //近N天有效订单收件人为本人的地址数量
+    //近N天有效订单收件人为配偶的地址数量
+    //配偶_近N天有效订单收件人为本人的地址数量
+    //配偶_近N天有效订单收件人为申请人的地址数量
+    public static void validOrderSelfAddress(JSONObject self, JSONObject partner, JSONObject application, JSONObject result) {
+
+        /*Set<String> set = new HashSet<>();
+        JSONArray tradedetails = self.getJSONObject("tradedetails").getJSONArray("tradedetails");
+        for (Object tradedetail:tradedetails) {
+            if(StringUtils.indexOf(JSON.parseObject(tradedetail.toString()).getString("trade_status"),"成功")<0) continue;
+                num += 1;
+            if(CarrierDateUtil.compareDate(applicationDate,CarrierDateUtil.getNowDate(),"yyyy-MM-dd")>=0)
+        }*/
     }
 }

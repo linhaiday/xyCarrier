@@ -73,7 +73,21 @@ public class TaobaoVariable {
             TaobaoAlgorithm.excSelfPhoneCnt(self,partner,application,result,90,"tb_exc_self_phone_cnt_90d","tb_partner_exc_self_phone_cnt_90d");
             //无购物月数	tb_no_shop_month	配偶_无购物月数	tb_partner_no_shop_month	int
             TaobaoAlgorithm.noShopMonth(self,partner,application,result);
-
+            //收件地址总数量	tb_address	配偶_收件地址总数量	tb_partner_address	int
+            //收件地址中收件人为本人的城市个数	tb_self_address	配偶_收件地址中收件人为本人的城市个数	tb_partner_self_address	int
+            //收件地址中是否有申请人户籍所在地	tb_register	配偶_收件地址中是否有申请人户籍所在地	tb_partner_register	int(否：0，是：1)
+            //收货地址为申请城市的数量	tb_apply_city	配偶_收货地址为申请城市的数量	tb_partner_apply_city	int
+            //收件人为非本人的地址数量	tb_exc_self_address	配偶_收件人为非本人的地址数量	tb_partner_exc_self_address	int
+            TaobaoAlgorithm.address(self,partner,application,result);
+            //近30天有效订单收件人为本人的地址数量	tb_valid_order_self_address_30d	配偶_近一个月有效订单收件人为本人的地址数量	tb_partner_valid_order_self_address_30d	int
+            TaobaoAlgorithm.validOrderSelfAddress(self,partner,application,result);
+            //近90天有效订单收件人为本人的地址数量	tb_valid_order_self_address_90d	配偶_近三个月有效订单收件人为本人的地址数量	tb_partner_valid_order_self_address_90d	int
+            //近180天有效订单收件人为本人的地址数量	tb_valid_order_self_address_180d	配偶_近六个月有效订单收件人为本人的地址数量	tb_partner_valid_order_self_address_180d	int
+            //近一年内有效订单收件人为本人的地址数量	tb_valid_order_self_address_year	配偶_近一年内有效订单收件人为本人的地址数量	tb_partner_valid_order_self_address_year	int
+            //近30天有效订单收件人为配偶的地址数量	tb_valid_order_spouse_address_30d	配偶_近一个月有效订单收件人为申请人的地址数量	tb_partner_valid_order_spouse_address_30d	int
+            //近90天有效订单收件人为配偶的地址数量	tb_valid_order_spouse_address_90d	配偶_近三个月有效订单收件人为申请人的地址数量	tb_partner_valid_order_spouse_address_90d	int
+            //近180天有效订单收件人为配偶的地址数量	tb_valid_order_spouse_address_180d	配偶_近六个月有效订单收件人为申请人的地址数量	tb_partner_valid_order_spouse_address_180d	int
+            //近一年内有效订单收件人为配偶的地址数量	tb_valid_order_spouse_address_year	配偶_近一年内有效订单收件人为申请人的地址数量	tb_partner_valid_order_spouse_address_year	int
 
 
     }
