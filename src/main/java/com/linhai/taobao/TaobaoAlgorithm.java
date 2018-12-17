@@ -479,7 +479,8 @@ public class TaobaoAlgorithm {
     //近N天有效订单收件人为配偶的地址数量
     //配偶_近N天有效订单收件人为本人的地址数量
     //配偶_近N天有效订单收件人为申请人的地址数量
-    public static void validOrderSelfAddress(JSONObject self, JSONObject partner, JSONObject application, JSONObject result) {
+    public static void validOrderSelfAddress(JSONObject self, JSONObject partner, JSONObject application, JSONObject result,int day) {
+
 
         /*Set<String> set = new HashSet<>();
         JSONArray tradedetails = self.getJSONObject("tradedetails").getJSONArray("tradedetails");
@@ -488,5 +489,56 @@ public class TaobaoAlgorithm {
                 num += 1;
             if(CarrierDateUtil.compareDate(applicationDate,CarrierDateUtil.getNowDate(),"yyyy-MM-dd")>=0)
         }*/
+        Set<String> selfAddress = new HashSet<>();
+        Set<String> partnerAddress = new HashSet<>();
+        //申请日期
+        String applicationDate = application.getString("customerApplyDate");
+        //申请日期最近N天
+        String beforeDate = CarrierDateUtil.getBeforeOrAfterDate(applicationDate,day);
+        //得到yyyy-mm-dd
+        String nBefore = CarrierDateUtil.yearMonthDay(beforeDate);
+        //申请人姓名
+        String selfName = application.getString("customerName");
+        //配偶姓名
+        String partnerName = partner.getJSONObject("userinfo").getString("real_name");
+        JSONArray tradedetails = self.getJSONObject("tradedetails").getJSONArray("tradedetails");
+        for (Object tradedetail:tradedetails) {
+            if(!CarrierDateUtil.dateScope(applicationDate,
+                    nBefore,
+                    CarrierDateUtil.yearMonthDay(JSON.parseObject(tradedetail.toString()).getString("trade_createtime")),"")
+                    || StringUtils.indexOf(JSON.parseObject(tradedetail.toString()).getString("trade_status"),"成功")<0) continue;
+            //本人
+            if(StringUtils.equals(JSON.parseObject(tradedetail.toString()).getString("deliver_name"),selfName))
+                selfAddress.add(JSON.parseObject(tradedetail.toString()).getString("deliver_address"));
+            //配偶
+            if(StringUtils.equals(JSON.parseObject(tradedetail.toString()).getString("deliver_name"),partnerName))
+                partnerAddress.add(JSON.parseObject(tradedetail.toString()).getString("deliver_address"));
+        }
+
+        result.put("tb_valid_order_self_address_"+day+"d",selfAddress.size());
+        result.put("tb_valid_order_spouse_address_"+day+"d",partnerAddress.size());
+        System.out.println("近"+day+"天有效订单收件人为本人的地址数量"+selfAddress.size());
+        System.out.println("近"+day+"天有效订单收件人为配偶的地址数量"+partnerAddress.size());
+
+        selfAddress.clear();
+        partnerAddress.clear();
+        tradedetails = partner.getJSONObject("tradedetails").getJSONArray("tradedetails");
+        for (Object tradedetail:tradedetails) {
+            if(!CarrierDateUtil.dateScope(applicationDate,
+                    nBefore,
+                    CarrierDateUtil.yearMonthDay(JSON.parseObject(tradedetail.toString()).getString("trade_createtime")),"")
+                    || StringUtils.indexOf(JSON.parseObject(tradedetail.toString()).getString("trade_status"),"成功")<0) continue;
+            //本人
+            if(StringUtils.equals(JSON.parseObject(tradedetail.toString()).getString("deliver_name"),partnerName))
+                selfAddress.add(JSON.parseObject(tradedetail.toString()).getString("deliver_address"));
+            //申请人
+            if(StringUtils.equals(JSON.parseObject(tradedetail.toString()).getString("deliver_name"),selfName))
+                partnerAddress.add(JSON.parseObject(tradedetail.toString()).getString("deliver_address"));
+        }
+
+        result.put("tb_partner_valid_order_self_address_"+day+"d",selfAddress.size());
+        result.put("tb_partner_valid_order_spouse_address_"+day+"d",partnerAddress.size());
+        System.out.println("配偶_近"+day+"天有效订单收件人为本人的地址数量"+selfAddress.size());
+        System.out.println("配偶_近"+day+"天有效订单收件人为申请人的地址数量"+partnerAddress.size());
     }
 }

@@ -80,14 +80,17 @@ public class TaobaoVariable {
             //收件人为非本人的地址数量	tb_exc_self_address	配偶_收件人为非本人的地址数量	tb_partner_exc_self_address	int
             TaobaoAlgorithm.address(self,partner,application,result);
             //近30天有效订单收件人为本人的地址数量	tb_valid_order_self_address_30d	配偶_近一个月有效订单收件人为本人的地址数量	tb_partner_valid_order_self_address_30d	int
-            TaobaoAlgorithm.validOrderSelfAddress(self,partner,application,result);
-            //近90天有效订单收件人为本人的地址数量	tb_valid_order_self_address_90d	配偶_近三个月有效订单收件人为本人的地址数量	tb_partner_valid_order_self_address_90d	int
-            //近180天有效订单收件人为本人的地址数量	tb_valid_order_self_address_180d	配偶_近六个月有效订单收件人为本人的地址数量	tb_partner_valid_order_self_address_180d	int
-            //近一年内有效订单收件人为本人的地址数量	tb_valid_order_self_address_year	配偶_近一年内有效订单收件人为本人的地址数量	tb_partner_valid_order_self_address_year	int
             //近30天有效订单收件人为配偶的地址数量	tb_valid_order_spouse_address_30d	配偶_近一个月有效订单收件人为申请人的地址数量	tb_partner_valid_order_spouse_address_30d	int
+            TaobaoAlgorithm.validOrderSelfAddress(self,partner,application,result,30);
+            //近90天有效订单收件人为本人的地址数量	tb_valid_order_self_address_90d	配偶_近三个月有效订单收件人为本人的地址数量	tb_partner_valid_order_self_address_90d	int
             //近90天有效订单收件人为配偶的地址数量	tb_valid_order_spouse_address_90d	配偶_近三个月有效订单收件人为申请人的地址数量	tb_partner_valid_order_spouse_address_90d	int
+            TaobaoAlgorithm.validOrderSelfAddress(self,partner,application,result,90);
+            //近180天有效订单收件人为本人的地址数量	tb_valid_order_self_address_180d	配偶_近六个月有效订单收件人为本人的地址数量	tb_partner_valid_order_self_address_180d	int
             //近180天有效订单收件人为配偶的地址数量	tb_valid_order_spouse_address_180d	配偶_近六个月有效订单收件人为申请人的地址数量	tb_partner_valid_order_spouse_address_180d	int
+            TaobaoAlgorithm.validOrderSelfAddress(self,partner,application,result,180);
+            //近一年内有效订单收件人为本人的地址数量	tb_valid_order_self_address_year	配偶_近一年内有效订单收件人为本人的地址数量	tb_partner_valid_order_self_address_year	int
             //近一年内有效订单收件人为配偶的地址数量	tb_valid_order_spouse_address_year	配偶_近一年内有效订单收件人为申请人的地址数量	tb_partner_valid_order_spouse_address_year	int
+            TaobaoAlgorithm.validOrderSelfAddress(self,partner,application,result,360);
 
 
     }
