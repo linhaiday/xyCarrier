@@ -7,6 +7,7 @@ import com.linhai.comm.CarrierDateUtil;
 import com.linhai.comm.LevenshteinUtil;
 import org.apache.commons.lang3.StringUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -540,5 +541,302 @@ public class TaobaoAlgorithm {
         result.put("tb_partner_valid_order_spouse_address_"+day+"d",partnerAddress.size());
         System.out.println("配偶_近"+day+"天有效订单收件人为本人的地址数量"+selfAddress.size());
         System.out.println("配偶_近"+day+"天有效订单收件人为申请人的地址数量"+partnerAddress.size());
+    }
+
+    //现居住地址送货次数
+    //配偶_申请人现居住地址送货次数
+    public static void placeCnt(JSONObject self, JSONObject partner, JSONObject application, JSONObject result) {
+        //申请人现居住地址
+        String applicationAddress = application.getString("customerHomeAddress");
+
+        int num = 0;
+        JSONArray tradedetails = self.getJSONObject("tradedetails").getJSONArray("tradedetails");
+        for (Object tradedetail:tradedetails) {
+            if(StringUtils.equals(JSON.parseObject(tradedetail.toString()).getString("deliver_address"),applicationAddress))
+                num += 1;
+        }
+
+        result.put("tb_place_cnt",num);
+        System.out.println("现居住地址送货次数:"+num);
+
+        num = 0;
+        tradedetails = partner.getJSONObject("tradedetails").getJSONArray("tradedetails");
+        for (Object tradedetail:tradedetails) {
+            if(StringUtils.equals(JSON.parseObject(tradedetail.toString()).getString("deliver_address"),applicationAddress))
+                num += 1;
+        }
+
+        result.put("tb_partner_place_cnt",num);
+        System.out.println("配偶_申请人现居住地址送货次数:"+num);
+    }
+
+    //现居住地址送货首次使用距离当前天数
+    //现居住地址送货最后一次使用距离当前天数
+    //配偶_申请人现居住地址送货首次使用距离当前天数
+    //配偶_申请人现居住地址送货最后一次使用距离当前天数
+    public static void placeInterval(JSONObject self, JSONObject partner, JSONObject application, JSONObject result) {
+        //申请人现居住地址
+        String applicationAddress = application.getString("customerHomeAddress");
+
+        int days = 0;
+        List<String> list = new ArrayList<>();
+        JSONArray tradedetails = self.getJSONObject("tradedetails").getJSONArray("tradedetails");
+        for (Object tradedetail:tradedetails) {
+            if(StringUtils.equals(JSON.parseObject(tradedetail.toString()).getString("deliver_address"),applicationAddress)) {
+                list.add(CarrierDateUtil.yearMonthDay(JSON.parseObject(tradedetail.toString()).getString("trade_createtime")).replaceAll("-",""));
+            }
+        }
+        days = 0;
+        if(list.size()>0) {
+            Collections.sort(list);
+            days = CarrierDateUtil.differentDays(CarrierDateUtil.toDate(list.get(0)), new Date());
+        }
+        result.put("tb_place_first_interval", days);
+        System.out.println("现居住地址送货首次使用距离当前天数:" + days);
+        days = 0;
+        if(list.size()>0) {
+            days = CarrierDateUtil.differentDays(CarrierDateUtil.toDate(list.get(list.size() - 1)), new Date());
+        }
+        result.put("tb_place_last_interval", days);
+        System.out.println("现居住地址送货最后一次使用距离当前天数:" + days);
+        list.clear();
+        tradedetails = partner.getJSONObject("tradedetails").getJSONArray("tradedetails");
+        for (Object tradedetail:tradedetails) {
+            if(StringUtils.equals(JSON.parseObject(tradedetail.toString()).getString("deliver_address"),applicationAddress)) {
+                list.add(CarrierDateUtil.yearMonthDay(JSON.parseObject(tradedetail.toString()).getString("trade_createtime")).replaceAll("-",""));
+            }
+        }
+
+        days = 0;
+        if(list.size()>0) {
+            Collections.sort(list);
+            days = CarrierDateUtil.differentDays(CarrierDateUtil.toDate(list.get(0)), new Date());
+        }
+        result.put("tb_partner_place_first_interval", days);
+        System.out.println("配偶_申请人现居住地址送货首次使用距离当前天数:" + days);
+
+        days = 0;
+        if(list.size()>0) {
+            days = CarrierDateUtil.differentDays(CarrierDateUtil.toDate(list.get(list.size() - 1)), new Date());
+        }
+        result.put("tb_partner_place_last_interval", days);
+        System.out.println("配偶_申请人现居住地址送货最后一次使用距离当前天数:" + days);
+    }
+
+    //1点-7点下订单的笔数占比
+    //配偶_1点-7点下订单的笔数占比
+    public static void orderPerHour(JSONObject self, JSONObject partner, JSONObject result) {
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+        int num = 0;
+        JSONArray tradedetails = self.getJSONObject("tradedetails").getJSONArray("tradedetails");
+        for (Object tradedetail:tradedetails) {
+            if(CarrierDateUtil.compareDate("01:00:00",format.format(CarrierDateUtil.toDate(JSON.parseObject(tradedetail.toString()).getString("trade_createtime"))),"HH:mm:ss")<1
+            && CarrierDateUtil.compareDate("07:00:00",format.format(CarrierDateUtil.toDate(JSON.parseObject(tradedetail.toString()).getString("trade_createtime"))),"HH:mm:ss")>-1) {
+                num += 1;
+            }
+        }
+
+        result.put("tb_order_per_1_7_hour",String.format("%,2f",Integer.valueOf(num).doubleValue()/tradedetails.size()));
+        System.out.println("1点-7点下订单的笔数占比:"+result.get("tb_order_per_1_7_hour"));
+
+        num = 0;
+        tradedetails = partner.getJSONObject("tradedetails").getJSONArray("tradedetails");
+        for (Object tradedetail:tradedetails) {
+            if(CarrierDateUtil.compareDate("01:00:00",format.format(CarrierDateUtil.toDate(JSON.parseObject(tradedetail.toString()).getString("trade_createtime"))),"HH:mm:ss")<1
+                    && CarrierDateUtil.compareDate("07:00:00",format.format(CarrierDateUtil.toDate(JSON.parseObject(tradedetail.toString()).getString("trade_createtime"))),"HH:mm:ss")>-1) {
+                num += 1;
+            }
+        }
+
+        result.put("tb_partner_order_per_1_7_hour",String.format("%,2f",Integer.valueOf(num).doubleValue()/tradedetails.size()));
+        System.out.println("配偶_1点-7点下订单的笔数占比:"+result.get("tb_partner_order_per_1_7_hour"));
+    }
+
+    //账单中出现某字段的订单次数
+    //账单中出现某字段的订单金额
+    //配偶_账单中出现某字段的订单次数
+    //配偶_账单中出现某字段的订单金额
+    public static void orderCntAmount(JSONObject self, JSONObject partner, JSONObject result,String[] fields,String str) {
+
+        int num = 0;
+        int money = 0;
+        JSONArray tradedetails = self.getJSONObject("tradedetails").getJSONArray("tradedetails");
+        for (Object tradedetail:tradedetails) {
+            JSONArray sub_orders = JSON.parseObject(tradedetail.toString()).getJSONArray("sub_orders");
+            bk:for (Object order:sub_orders) {
+                for (String field:fields) {
+                    if(StringUtils.indexOf(JSON.parseObject(order.toString()).getString("item_name"),field)>=0){
+                        num +=1;
+                        money += Integer.parseInt(JSON.parseObject(tradedetail.toString()).getString("actual_fee"));
+                        break bk;
+                    }
+                }
+            }
+        }
+
+        result.put("tb_"+str+"_order_cnt",num);
+        System.out.println("账单中出现"+str+"字段的订单次数:"+num);
+        result.put("tb_"+str+"_order_amount",money/100);
+        System.out.println("账单中出现"+str+"字段的订单金额:"+money/100);
+
+        num = 0;
+        money = 0;
+        tradedetails = partner.getJSONObject("tradedetails").getJSONArray("tradedetails");
+        for (Object tradedetail:tradedetails) {
+            JSONArray sub_orders = JSON.parseObject(tradedetail.toString()).getJSONArray("sub_orders");
+            bk:for (Object order:sub_orders) {
+                for (String field:fields) {
+                    if(StringUtils.indexOf(JSON.parseObject(order.toString()).getString("item_name"),field)>=0){
+                        num +=1;
+                        money += Integer.parseInt(JSON.parseObject(tradedetail.toString()).getString("actual_fee"));
+                        break bk;
+                    }
+                }
+            }
+        }
+
+        result.put("tb_partner_"+str+"_order_cnt",num);
+        System.out.println("配偶_账单中出现"+str+"字段的订单次数:"+num);
+        result.put("tb_partner_"+str+"_order_amount",money/100);
+        System.out.println("配偶_账单中出现"+str+"字段的订单金额:"+money/100);
+    }
+
+    //近一年内收货地址中是否有和配偶相同的收货地址
+    //配偶_近一年内收货地址中是否有和申请人相同的收货地址
+    public static void sameAddressYear(JSONObject self, JSONObject partner, JSONObject application, JSONObject result,int day) {
+        //申请日期
+        String applicationDate = application.getString("customerApplyDate");
+        //申请日期最近N天
+        String beforeDate = CarrierDateUtil.getBeforeOrAfterDate(applicationDate,day);
+        //得到yyyy-mm-dd
+        String nBefore = CarrierDateUtil.yearMonthDay(beforeDate);
+        //申请人地址
+        Set<String> applicationAddress = new HashSet<>();
+        //配偶地址
+        Set<String> partnerAddress = new HashSet<>();
+        //
+        JSONArray recentdeliveraddress = self.getJSONArray("recentdeliveraddress");
+        for (Object address:recentdeliveraddress) {
+            if(CarrierDateUtil.dateScope(applicationDate,
+                    nBefore,
+                    CarrierDateUtil.yearMonthDay(JSON.parseObject(address.toString()).getString("trade_createtime")),"")
+                && StringUtils.isNotBlank(JSON.parseObject(address.toString()).getString("deliver_address")))
+                applicationAddress.add(JSON.parseObject(address.toString()).getString("deliver_address"));
+        }
+
+        recentdeliveraddress = partner.getJSONArray("recentdeliveraddress");
+        for (Object address:recentdeliveraddress) {
+            if(CarrierDateUtil.dateScope(applicationDate,
+                    nBefore,
+                    CarrierDateUtil.yearMonthDay(JSON.parseObject(address.toString()).getString("trade_createtime")),"")
+                && StringUtils.isNotBlank(JSON.parseObject(address.toString()).getString("deliver_address")))
+                partnerAddress.add(JSON.parseObject(address.toString()).getString("deliver_address"));
+        }
+
+        List<String> address1 = new ArrayList<>(applicationAddress);
+        List<String> address2 = new ArrayList<>(partnerAddress);
+        address1.retainAll(address2);
+
+        result.put("tb_same_address_year",address1.size()>0?1:0);
+        result.put("tb_partner_same_address_year",address1.size()>0?1:0);
+        System.out.println("近一年内收货地址中是否有和配偶相同的收货地址:"+(address1.size()>0?1:0));
+        System.out.println("配偶_近一年内收货地址中是否有和申请人相同的收货地址:"+(address1.size()>0?1:0));
+
+    }
+
+    //淘宝收货号码是否含配偶的电话号码
+    //淘宝收货姓名是否含配偶的姓名
+    //配偶_淘宝收货号码是否含申请人的电话号码
+    //配偶_淘宝收货姓名是否含申请人的姓名
+    public static void samePhone(JSONObject self, JSONObject partner, JSONObject application, JSONObject result) {
+        //申请人电话
+        String applicationPhone = application.getString("customerMobile");
+        //申请人姓名
+        String applicationName = application.getString("customerName");
+        //配偶电话
+        String partnerPhone = partner.getJSONObject("userinfo").getString("phone_number");
+        //配偶姓名
+        String partnerName = partner.getJSONObject("userinfo").getString("real_name");
+        int appPhone = 0;
+        int appName = 0;
+        int partPhone = 0;
+        int partName = 0;
+        JSONArray recentdeliveraddress = self.getJSONArray("recentdeliveraddress");
+        for (Object address:recentdeliveraddress) {
+            if(StringUtils.equals(JSON.parseObject(address.toString()).getString("deliver_mobilephone"),partnerPhone))
+                partPhone = 1;
+            if(StringUtils.equals(JSON.parseObject(address.toString()).getString("deliver_name"),partnerName))
+                partName = 1;
+        }
+
+        recentdeliveraddress = partner.getJSONArray("recentdeliveraddress");
+        for (Object address:recentdeliveraddress) {
+            if(StringUtils.equals(JSON.parseObject(address.toString()).getString("deliver_mobilephone"),applicationPhone))
+                appPhone = 1;
+            if(StringUtils.equals(JSON.parseObject(address.toString()).getString("deliver_name"),applicationName))
+                appName = 1;
+        }
+
+        result.put("tb_same_phone",partPhone);
+        result.put("tb_partner_same_phone",appPhone);
+        System.out.println("淘宝收货号码是否含配偶的电话号码："+partPhone);
+        System.out.println("配偶_淘宝收货号码是否含申请人的电话号码："+appPhone);
+        result.put("tb_same_name",partName);
+        result.put("tb_partner_same_name",appName);
+        System.out.println("淘宝收货姓名是否含配偶的姓名："+partName);
+        System.out.println("配偶_淘宝收货号码是否含申请人的电话号码："+appName);
+    }
+
+    //只有最近N个月的订单包含配偶，而之前没有
+    //配偶_只有最近N个月的订单包含申请人，而之前没有
+    public static void spouseOnlyRecently(JSONObject self, JSONObject partner, JSONObject application, JSONObject result,int m) {
+        int app = 0;
+        int part = 0;
+        //申请人姓名
+        String applicationName = application.getString("customerName");
+        //配偶姓名
+        String partnerName = partner.getJSONObject("userinfo").getString("real_name");
+        //申请日期
+        String applicationDate = application.getString("customerApplyDate");
+        //申请日期最近N个月
+        String beforeDate = CarrierDateUtil.monthsBefore(m,applicationDate);
+        //得到yyyy-mm-dd
+        String nBefore = CarrierDateUtil.yearMonthDay(beforeDate);
+        JSONArray recentdeliveraddress = self.getJSONArray("recentdeliveraddress");
+        for (Object address:recentdeliveraddress) {
+            if(CarrierDateUtil.dateScope(applicationDate,
+                    nBefore,
+                    CarrierDateUtil.yearMonthDay(JSON.parseObject(address.toString()).getString("trade_createtime")),"yyyy-mm-dd")
+                    && StringUtils.equals(JSON.parseObject(address.toString()).getString("deliver_name"),partnerName))
+                part = 1;
+        }
+        for (Object address:recentdeliveraddress) {
+            if(CarrierDateUtil.compareDate(nBefore,
+                    CarrierDateUtil.yearMonthDay(JSON.parseObject(address.toString()).getString("trade_createtime")),"yyyy-mm-dd")>0
+                    && StringUtils.equals(JSON.parseObject(address.toString()).getString("deliver_name"),partnerName))
+                part = 0;
+        }
+
+        result.put("tb_spouse_only_recently",part);
+        System.out.println("只有最近"+m+"个月的订单包含配偶，而之前没有："+part);
+
+        recentdeliveraddress = partner.getJSONArray("recentdeliveraddress");
+        for (Object address:recentdeliveraddress) {
+            if(CarrierDateUtil.dateScope(applicationDate,
+                    nBefore,
+                    CarrierDateUtil.yearMonthDay(JSON.parseObject(address.toString()).getString("trade_createtime")),"yyyy-mm-dd")
+                    && StringUtils.equals(JSON.parseObject(address.toString()).getString("deliver_name"),applicationName))
+                app = 1;
+        }
+        for (Object address:recentdeliveraddress) {
+            if(CarrierDateUtil.compareDate(nBefore,
+                    CarrierDateUtil.yearMonthDay(JSON.parseObject(address.toString()).getString("trade_createtime")),"yyyy-mm-dd")>0
+                    && StringUtils.equals(JSON.parseObject(address.toString()).getString("deliver_name"),applicationName))
+                app = 0;
+        }
+
+        result.put("tb_partner_spouse_only_recently",app);
+        System.out.println("只有最近"+m+"个月的订单包含配偶，而之前没有："+app);
+
     }
 }

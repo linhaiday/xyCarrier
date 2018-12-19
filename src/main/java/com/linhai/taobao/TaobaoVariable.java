@@ -2,6 +2,9 @@ package com.linhai.taobao;
 
 import com.alibaba.fastjson.JSONObject;
 import com.linhai.DataSource.DataSource;
+import com.linhai.comm.CarrierDateUtil;
+
+import java.text.SimpleDateFormat;
 
 /**
  * Created by linhai on 2018/12/15.
@@ -91,8 +94,29 @@ public class TaobaoVariable {
             //近一年内有效订单收件人为本人的地址数量	tb_valid_order_self_address_year	配偶_近一年内有效订单收件人为本人的地址数量	tb_partner_valid_order_self_address_year	int
             //近一年内有效订单收件人为配偶的地址数量	tb_valid_order_spouse_address_year	配偶_近一年内有效订单收件人为申请人的地址数量	tb_partner_valid_order_spouse_address_year	int
             TaobaoAlgorithm.validOrderSelfAddress(self,partner,application,result,360);
-
-
+            //现居住地址送货次数	tb_place_cnt	配偶_申请人现居住地址送货次数	tb_partner_place_cnt	int
+            TaobaoAlgorithm.placeCnt(self,partner,application,result);
+            //现居住地址送货首次使用距离当前天数	tb_place_first_interval	配偶_申请人现居住地址送货首次使用距离当前天数	tb_partner_place_first_interval	int
+            //现居住地址送货最后一次使用距离当前天数	tb_place_last_interval	配偶_申请人现居住地址送货最后一次使用距离当前天数	tb_partner_place_last_interval	int
+            TaobaoAlgorithm.placeInterval(self,partner,application,result);
+            //1点-7点下订单的笔数占比	tb_order_per_1_7_hour	配偶_1点-7点下订单的笔数占比	tb_partner_order_per_1_7_hour	double
+            TaobaoAlgorithm.orderPerHour(self,partner,result);
+            //账单中出现婴儿字段的订单次数	tb_baby_order_cnt	配偶_账单中出现婴儿字段的订单次数	tb_partner_baby_order_cnt	int	关键词：婴儿尿不湿、婴儿奶粉
+            //账单中出现婴儿字段的订单金额	tb_baby_order_amount	配偶_账单中出现婴儿字段的订单金额	tb_partner_baby_order_amount	double
+            TaobaoAlgorithm.orderCntAmount(self,partner,result,new String[]{"婴儿尿不湿","婴儿奶粉"},"baby");
+            //账单中出现儿童字段的订单次数	tb_child_order_cnt	配偶_账单中出现儿童字段的订单次数	tb_partner_child_order_cnt	int	关键词：童装
+            //账单中出现儿童字段的订单金额	tb_child_order_amount	配偶_账单中出现儿童字段的订单金额	tb_partner_child_order_amount	double
+            TaobaoAlgorithm.orderCntAmount(self,partner,result,new String[]{"童装"},"child");
+            //账单中生活用品类字段的订单次数	tb_daily_order_cnt	配偶_账单中生活用品类字段的订单次数	tb_partner_daily_order_cnt	int	关键词：洗发水、洗衣液、卫生纸、洗洁精
+            //账单中生活用品类字段订单金额	tb_daily_order_amount	配偶_账单中生活用品类字段订单金额	tb_partner_daily_order_amount	double
+            TaobaoAlgorithm.orderCntAmount(self,partner,result,new String[]{"洗发水","洗衣液","卫生纸","洗洁精"},"daily");
+            //近一年内收货地址中是否有和配偶相同的收货地址	tb_same_address_year	配偶_近一年内收货地址中是否有和申请人相同的收货地址	tb_partner_same_address_year	int(否：0，是：1)
+            TaobaoAlgorithm.sameAddressYear(self,partner,application,result,365);
+            //淘宝收货号码是否含配偶的电话号码	tb_same_phone	配偶_淘宝收货号码是否含申请人的电话号码	tb_partner_same_phone	int(否：0，是：1)
+            //淘宝收货姓名是否含配偶的姓名	tb_same_name	配偶_淘宝收货姓名是否含申请人的姓名	tb_partner_same_name	int(否：0，是：1)
+            TaobaoAlgorithm.samePhone(self,partner,application,result);
+            //只有最近一个月的订单包含配偶，而之前没有	tb_spouse_only_recently	配偶_只有最近一个月的订单包含申请人，而之前没有	tb_partner_spouse_only_recently	int(否：0，是：1)
+            TaobaoAlgorithm.spouseOnlyRecently(self,partner,application,result,1);
     }
 
 
