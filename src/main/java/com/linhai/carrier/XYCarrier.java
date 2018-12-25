@@ -567,10 +567,19 @@ public class XYCarrier {
         result.put("over_30s_length_num_6m",over_30s_length_num_6m);
         //近1个月的总通话次数
         Integer callNumbersByOneMonth = Algorithm.callNumbers(data,applicant,1);
+        result.put("total_call_num_1m",callNumbersByOneMonth);
         //近3个月的总通话次数
         Integer callNumbersByThreeMonth = Algorithm.callNumbers(data,applicant,3);
+        result.put("total_call_num_3m",callNumbersByThreeMonth);
         //近6个月的总通话次数
         Integer callNumbersBySixMonth = Algorithm.callNumbers(data,applicant,6);
+        result.put("total_call_num_6m",callNumbersBySixMonth);
+        //近3个月月均总通话次数
+        result.put("total_avg_call_num_3m",String.format("%.2f",callNumbersByThreeMonth.doubleValue()/3));
+        //近6个月月均总通话次数
+        result.put("total_avg_call_num_6m",String.format("%.2f",callNumbersBySixMonth.doubleValue()/6));
+        //近6个月月均总通话次数比近1个月总通话次数
+        result.put("total_avg_call_num_6m_1m",String.format("%.2f",callNumbersBySixMonth.doubleValue()/(6*callNumbersByOneMonth)));
         //近1个月通话时长小于等于5秒的次数占总通话次数比例
         result.put("total_low_5s_per_1m",String.format("%.2f",low_5s_length_num_1m.doubleValue()/callNumbersByOneMonth.doubleValue()));
         //近3个月通话时长小于等于5秒的次数占总通话次数比例
@@ -629,6 +638,60 @@ public class XYCarrier {
         //除近3个月，剩余月月均总通话时长
         String day_avg_call_length_3m = Algorithm.avgCalllength(data,applicant,3);
         result.put("day_avg_call_length_3m",day_avg_call_length_3m);
+        //入网时长（天）network_length
+        result.put("network_length",Algorithm.networkLength(data,applicant));
+        //近1个月主叫次数
+        Integer dial_num_1m = Algorithm.dialNum(data,applicant,1);
+        result.put("dial_num_1m",dial_num_1m);
+        //近3个月主叫次数
+        Integer dial_num_3m = Algorithm.dialNum(data,applicant,3);
+        result.put("dial_num_3m",Algorithm.dialNum(data,applicant,3));
+        //近6个月主叫次数
+        Integer dial_num_6m = Algorithm.dialNum(data,applicant,6);
+        result.put("dial_num_6m",Algorithm.dialNum(data,applicant,6));
+        //近3个月月均主叫次数
+        result.put("dial_avg_num_3m",String.format("%.2f",dial_num_3m.doubleValue()/3));
+        //近6个月月均主叫次数
+        result.put("dial_avg_num_6m",String.format("%.2f",dial_num_6m.doubleValue()/6));
+        //近6个月月均主叫次数比近1个月主叫次数
+        result.put("dial_avg_num_6m_1m",String.format("%.2f",dial_num_6m.doubleValue()/(6*dial_num_1m)));
+        //近1个月无通话天数
+        Integer no_call_1m = Algorithm.callDuration(data,applicant,1,0);
+        result.put("no_call_1m",no_call_1m);
+        //近3个月无通话天数
+        Integer no_call_3m = Algorithm.callDuration(data,applicant,3,0);
+        result.put("no_call_3m",no_call_3m);
+        //近6个月无通话天数
+        Integer no_call_6m = Algorithm.callDuration(data,applicant,6,0);
+        result.put("no_call_6m",no_call_6m);
+        //近3个月无通话天数比近1个月无通话天数
+        result.put("no_call_3m_1m",String.format("%.2f",no_call_3m.doubleValue()/no_call_1m.doubleValue()));
+        //近6个月无通话天数比近1个月无通话天数
+        result.put("no_call_6m_1m",String.format("%.2f",no_call_6m.doubleValue()/no_call_1m.doubleValue()));
+        //近3个月消费总金额
+        Integer total_money_3m = Algorithm.totalMoney(data,applicant,3);
+        //近6个月消费总金额
+        Integer total_money_6m = Algorithm.totalMoney(data,applicant,6);
+        //近3个月月均消费金额
+        result.put("total_avg_money_3m",String.format("%.2f",total_money_3m.doubleValue()/(3*100)));
+        //近6个月月均消费金额
+        result.put("total_avg_money_6m",String.format("%.2f",total_money_6m.doubleValue()/(6*100)));
+        //近1个月联系3次以上的号码数
+        result.put("contact_3_num_1m",Algorithm.contactNumbers(data,applicant,1,3).size());
+        //近1个月联系5次以上的号码数
+        result.put("contact_5_num_1m",Algorithm.contactNumbers(data,applicant,1,5).size());
+        //近3个月联系3次以上的号码数
+        result.put("contact_3_num_3m",Algorithm.contactNumbers(data,applicant,3,3).size());
+        //近3个月联系5次以上的号码数
+        result.put("contact_5_num_3m",Algorithm.contactNumbers(data,applicant,3,5).size());
+        //近1个月最多通话所在城
+        //近1个月第二多通话所在城
+        //近3个月最多通话所在城
+        //近3个月第二多通话所在城
+        //近6个月最多通话所在城
+        //近6个月第二多通话所在城
+
+
 
         return result;
     }
