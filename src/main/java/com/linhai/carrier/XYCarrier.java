@@ -21,7 +21,7 @@ public class XYCarrier {
     public static JSONObject clean(JSONObject data, JSONObject applicant, JSONObject result) throws Exception{
 
         //格式化数据
-        Algorithm.order(data);
+        CarrierDateUtil.order(data);
         //清除归属地缓存
         Algorithm.mobileFrom.remove();
         //手机号归属地
@@ -686,12 +686,97 @@ public class XYCarrier {
         result.put("contact_5_num_3m",Algorithm.contactNumbers(data,applicant,3,5).size());
         //近1个月最多通话所在城
         //近1个月第二多通话所在城
+        List<String> firstCallCity1m = Algorithm.firstCallCity(data,applicant,1);
+        result.put("first_call_city_1m",firstCallCity1m.size()>=1?firstCallCity1m.get(0):"");
+        result.put("second_call_city_1m",firstCallCity1m.size()>=2?firstCallCity1m.get(1):"");
         //近3个月最多通话所在城
         //近3个月第二多通话所在城
+        List<String> firstCallCity3m = Algorithm.firstCallCity(data,applicant,3);
+        result.put("first_call_city_3m",firstCallCity3m.size()>=1?firstCallCity3m.get(0):"");
+        result.put("second_call_city_3m",firstCallCity3m.size()>=2?firstCallCity3m.get(1):"");
         //近6个月最多通话所在城
         //近6个月第二多通话所在城
+        List<String> firstCallCity6m = Algorithm.firstCallCity(data,applicant,6);
+        result.put("first_call_city_6m",firstCallCity6m.size()>=1?firstCallCity6m.get(0):"");
+        result.put("second_call_city_6m",firstCallCity6m.size()>=2?firstCallCity6m.get(1):"");
+        //近1个月最多通话所在城市次数
+        //近1个月第二多通话所在城市次数
+        List<Integer> firstCallNumCity1m = Algorithm.firstCallNumCity(data,applicant,1);
+        result.put("first_call_num_city_1m",firstCallNumCity1m.size()>=1?firstCallNumCity1m.get(0):"");
+        result.put("second_call_num_city_1m",firstCallNumCity1m.size()>=2?firstCallNumCity1m.get(1):"");
+        //近3个月最多通话所在城市次数
+        //近3个月第二多通话所在城市次数
+        List<Integer> firstCallNumCity3m = Algorithm.firstCallNumCity(data,applicant,3);
+        result.put("first_call_num_city_3m",firstCallNumCity3m.size()>=1?firstCallNumCity3m.get(0):"");
+        result.put("second_call_num_city_3m",firstCallNumCity3m.size()>=2?firstCallNumCity3m.get(1):"");
+        //近6个月最多通话所在城市次数
+        //近6个月第二多通话所在城市次数
+        List<Integer> firstCallNumCity6m = Algorithm.firstCallNumCity(data,applicant,6);
+        result.put("first_call_num_city_6m",firstCallNumCity6m.size()>=1?firstCallNumCity6m.get(0):"");
+        result.put("second_call_num_city_6m",firstCallNumCity6m.size()>=2?firstCallNumCity6m.get(1):"");
+        //近1个月总通话次数比近1个月最多通话所在城市次数
+        result.put("total_first_call_num_1m",String.format("%.2f",callNumbersByOneMonth.doubleValue()/firstCallNumCity1m.get(0).doubleValue()));
+        //近3个月总通话次数比近3个月最多通话所在城市次数
+        result.put("total_first_call_num_3m",String.format("%.2f",callNumbersByThreeMonth.doubleValue()/firstCallNumCity3m.get(0).doubleValue()));
+        //近6个月总通话次数比近6个月最多通话所在城市次数
+        result.put("total_first_call_num_6m",String.format("%.2f",callNumbersBySixMonth.doubleValue()/firstCallNumCity6m.get(0).doubleValue()));
+        //近1个月总通话时长（秒）
+        result.put("total_call_length_sec_1m",total_length_1m);
+        //近1个月总通话时长（分）
+        result.put("total_call_length_minute_1m",Math.ceil(total_length_1m.doubleValue()/60));
+        //近3个月总通话时长（秒）
+        result.put("total_call_length_sec_3m",total_length_3m);
+        //近3个月总通话时长（分）
+        result.put("total_call_length_minute_3m",Math.ceil(total_length_3m.doubleValue()/60));
+        //近6个月总通话时长（秒）
+        result.put("total_call_length_sec_6m",total_length_6m);
+        //近6个月总通话时长（分）
+        result.put("total_call_length_minute_6m",Math.ceil(total_length_6m.doubleValue()/60));
+        //近3个月月均总通话时长
+        result.put("avg_call_length_sec_3m",String.format("%.2f",total_length_3m.doubleValue()/3));
+        //近6个月月均总通话时长
+        result.put("avg_call_length_sec_6m",String.format("%.2f",total_length_6m.doubleValue()/6));
+        //除近2个月，剩余月总通话时长（秒）
+        Integer day_call_length_2m = Algorithm.totalCalllength(data,applicant,2);
+        result.put("day_call_length_sec_2m",day_call_length_2m);
+        //除近2个月，剩余月总通话时长（分）
+        result.put("day_call_length_minute_2m",Math.ceil(day_call_length_2m.doubleValue()/60));
+        //除近2个月，剩余月月均总通话时长（秒）
+        result.put("avg_call_length_sec_2m",String.format("%.2f",day_call_length_2m.doubleValue()/2));
+        //除近2个月，剩余月月均总通话时长（分）
+        result.put("avg_call_length_minute_2m",String.format("%.2f",day_call_length_2m.doubleValue()/(2*60)));
+        //除近2个月，剩余月月均总通话时长比近1个月总通话时长
+        result.put("avg_call_length_sec_2m_total_1m",String.format("%.2f",day_call_length_2m.doubleValue()/(2*total_length_1m)));
+        //近1个月TOP10联系人联系最多号码的次数（正常号码）
+        //近3个月TOP10联系人联系最多号码的次数（正常号码）
+        //近6个月TOP10联系人联系最多号码的次数（正常号码）
 
-
+        //近3个月互通号码个数（正常号码）
+        result.put("inter_peer_num_3m",Algorithm.interPeerNum(data,applicant,3));
+        //近6个月互通号码个数（正常号码）
+        result.put("inter_peer_num_6m",Algorithm.interPeerNum(data,applicant,6));
+        //近3个月联系10次以上号码个数（正常号码）
+        result.put("good_friend_num_3m",Algorithm.goodFriendNum(data,applicant,3));
+        //近6个月联系10次以上号码个数（正常号码）
+        result.put("good_friend_num_6m",Algorithm.goodFriendNum(data,applicant,6));
+        //近1个月拨打110次数
+        result.put("call_110_num_1m",Algorithm.callCount(data,applicant,1,"110"));
+        //近3个月拨打110次数
+        result.put("call_110_num_3m",Algorithm.callCount(data,applicant,3,"110"));
+        //近6个月拨打110次数
+        result.put("call_110_num_6m",Algorithm.callCount(data,applicant,6,"110"));
+        //近1个月拨打12345次数
+        result.put("call_12345_num_1m",Algorithm.callCount(data,applicant,1,"12345"));
+        //近3个月拨打12345次数
+        result.put("call_12345_num_3m",Algorithm.callCount(data,applicant,3,"12345"));
+        //近6个月拨打12345次数
+        result.put("call_12345_num_6m",Algorithm.callCount(data,applicant,6,"12345"));
+        //近1个月拨打12321次数
+        result.put("call_12321_num_1m",Algorithm.callCount(data,applicant,1,"12321"));
+        //近3个月拨打12321次数
+        result.put("call_12321_num_3m",Algorithm.callCount(data,applicant,3,"12321"));
+        //近6个月拨打12321次数
+        result.put("call_12321_num_6m",Algorithm.callCount(data,applicant,6,"12321"));
 
         return result;
     }

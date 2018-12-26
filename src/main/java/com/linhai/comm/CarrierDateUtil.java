@@ -1,5 +1,9 @@
 package com.linhai.comm;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -309,5 +313,112 @@ public class CarrierDateUtil {
             System.out.println("判断day2 - day1 : " + (day2-day1));
             return day2-day1;
         }
+    }
+
+    //比较a、b值的大小（m = 1：小于；2：小于等于；0：等于；3：大于；4：大于等于）
+    public static int number(int a,int m,int b){
+
+        int num = 0;
+        switch (m){
+            case 0 :
+                if(a==b){
+                    num = 1;
+                }
+                break;
+            case 1 :
+                if(a<b) {
+                    num = 1;
+                }
+                break;
+            case 2 :
+                if(a<=b) {
+                    num = 1;
+                }
+                break;
+            case 3 :
+                if(a>b) {
+                    num = 1;
+                }
+                break;
+            case 4 :
+                if(a>=b) {
+                    num = 1;
+                }
+                break;
+        }
+        return num;
+    }
+
+    /**
+     * 将数据按月份倒序排列
+     * @param data
+     * @return
+     */
+    public static void order(JSONObject data){
+
+        if(data==null) return;
+        List<String> list = new ArrayList<>();
+        //JSONArray calls = JSONArray.parseArray(data.get("calls").toString());
+        //List<Object> calls = (ArrayList) data.get("calls");
+        JSONArray calls = data.getJSONArray("calls");
+
+        for (Object obj:calls) {
+            list.add(JSONObject.parseObject(obj.toString()).get("bill_month").toString());
+            //list.add(((JSONObject) obj).get("bill_month").toString());
+        }
+        Object[] arr = list.toArray();
+        list = Arrays.asList(ListSort(arr));
+        JSONArray jsonArray = new JSONArray();
+        for (String str:list) {
+            for (Object obj:calls) {
+                if(StringUtils.equals(str,JSONObject.parseObject(obj.toString()).get("bill_month").toString())){
+                    //Object o = orderDay(obj);
+                    jsonArray.set(jsonArray.size(),obj);
+                }
+            }
+        }
+        data.put("calls",jsonArray);
+
+    }
+
+    /**
+     * 将数据按天倒序排列
+     * @param obj
+     * @return
+     */
+    public static Object orderDay(Object obj){
+
+        JSONArray items = JSONObject.parseObject(obj.toString()).getJSONArray("items");
+        //JSONObject.parseObject(obj.toString()).put("items","");
+        for (int i = 0; i < items.size()-1; i++) {
+            for (int j = items.size()-1; j > i; j--) {
+                JSONObject day = (JSONObject)items.get(j);
+                JSONObject listDay = (JSONObject)items.get(j-1);
+                if(CarrierDateUtil.compareDate(listDay.getString("time"),day.getString("time"),"yyyy-MM-dd")==-1){
+                    items.add(j-1,day);
+                    items.add(j,listDay);
+                }
+            }
+        }
+        JSONObject.parseObject(obj.toString()).put("items",items);
+        return obj;
+    }
+
+    public static String[] ListSort(Object[] arr) {
+        String temp;//定义一个临时变量
+        for(int i=0;i<arr.length-1;i++){//冒泡趟数
+            for(int j=arr.length-1;j>i;j--){
+                if(CarrierDateUtil.compareDate(arr[j-1]+"-01",arr[j]+"-01","yyyy-MM-dd")==-1){
+                    temp = arr[j-1].toString();
+                    arr[j-1] = arr[j];
+                    arr[j] = temp;
+                }
+            }
+        }
+        String[] arrStr = new String[arr.length];
+        for (int i = 0; i < arr.length; i++) {
+            arrStr[i] = arr[i].toString();
+        }
+        return arrStr;
     }
 }
