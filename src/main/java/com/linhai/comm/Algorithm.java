@@ -1455,7 +1455,7 @@ public class Algorithm {
     //近N个月拨打N次数
     public static int callCount(JSONObject data, JSONObject applicant, int m, String n) {
         int num = 0;
-        //得到1个月前的时间
+        //得到M个月前的时间
         String monthBefore = CarrierDateUtil.monthsBefore(m,applicant.get("customerApplyDate").toString());
         //申请日期
         String previousDay = applicant.get("customerApplyDate").toString();
