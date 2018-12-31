@@ -1483,4 +1483,47 @@ public class Algorithm {
         System.out.println("近"+m+"个月拨打"+n+"次数:"+num);
         return num;
     }
+
+    //近M个月TOPN联系人联系最多号码的次数（正常号码）
+    public static int callMaxNum(JSONObject data, JSONObject applicant, int m, int n){
+
+        Map<String, Integer> map = new HashMap<>();
+        //得到m个月前的时间
+        String monthBefore = CarrierDateUtil.monthsBefore(m,applicant.get("customerApplyDate").toString());
+        //申请日期
+        String previousDay = applicant.get("customerApplyDate").toString();
+        //得到yyyy-mm
+        String pMonth = CarrierDateUtil.yearMonth(previousDay);
+        //得到yyyy-mm
+        String month = CarrierDateUtil.yearMonth(monthBefore);
+        //得到通话记录详单（按月份）
+        JSONArray jsonArray = data.getJSONArray("calls");
+        for (int i = 0; i < jsonArray.size(); i++) {
+            //按月遍历
+            JSONObject mon = (JSONObject)jsonArray.get(i);
+            //如果m个月前的时间小于或者等于历史时间则不做操作，大于则结束本次循环
+            if(!CarrierDateUtil.dateScope(pMonth,month,mon.get("bill_month").toString(),"-01")) continue;
+            for (int j = 0; j < mon.getJSONArray("items").size(); j++) {
+                JSONObject day = (JSONObject)mon.getJSONArray("items").get(j);
+                //如果m个月前的时间小于或者等于历史时间则不做操作，大于则结束本次循环
+                if(CarrierDateUtil.dateScope(previousDay,monthBefore,day.get("time").toString(),"")){
+                    //联系的号码数
+                    if(map.get(day.get("peer_number").toString())==null) map.put(day.get("peer_number").toString(),1);
+                    else map.put(day.get("peer_number").toString(),map.get(day.get("peer_number").toString())+1);
+                }
+            }
+        }
+        map = CarrierDateUtil.sortByValueDescending(map);
+        int num = 0;
+        for (Map.Entry<String,Integer> entry : map.entrySet()) {
+            //System.out.println("key= " + entry.getKey() + " and value= " + entry.getValue());
+            if(num==0){
+                num = entry.getValue();
+                break;
+            }
+        }
+
+        System.out.println("近"+m+"个月TOP"+n+"联系人联系最多号码的次数（正常号码）:"+num);
+        return num;
+    }
 }

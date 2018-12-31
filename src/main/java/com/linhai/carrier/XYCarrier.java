@@ -748,8 +748,11 @@ public class XYCarrier {
         //除近2个月，剩余月月均总通话时长比近1个月总通话时长
         result.put("avg_call_length_sec_2m_total_1m",String.format("%.2f",day_call_length_2m.doubleValue()/(2*total_length_1m)));
         //近1个月TOP10联系人联系最多号码的次数（正常号码）
+        result.put("call_max_num_1m",Algorithm.callMaxNum(data,applicant,1,10));
         //近3个月TOP10联系人联系最多号码的次数（正常号码）
+        result.put("call_max_num_3m",Algorithm.callMaxNum(data,applicant,3,10));
         //近6个月TOP10联系人联系最多号码的次数（正常号码）
+        result.put("call_max_num_6m",Algorithm.callMaxNum(data,applicant,6,10));
 
         //近3个月互通号码个数（正常号码）
         result.put("inter_peer_num_3m",Algorithm.interPeerNum(data,applicant,3));
