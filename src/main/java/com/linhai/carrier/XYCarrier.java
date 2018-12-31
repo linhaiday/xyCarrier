@@ -715,11 +715,11 @@ public class XYCarrier {
         result.put("first_call_num_city_6m",firstCallNumCity6m.size()>=1?firstCallNumCity6m.get(0):"");
         result.put("second_call_num_city_6m",firstCallNumCity6m.size()>=2?firstCallNumCity6m.get(1):"");
         //近1个月总通话次数比近1个月最多通话所在城市次数
-        result.put("total_first_call_num_1m",String.format("%.2f",callNumbersByOneMonth.doubleValue()/firstCallNumCity1m.get(0).doubleValue()));
+        result.put("total_first_call_num_1m",firstCallNumCity1m.size()==0?0:String.format("%.2f",callNumbersByOneMonth.doubleValue()/firstCallNumCity1m.get(0).doubleValue()));
         //近3个月总通话次数比近3个月最多通话所在城市次数
-        result.put("total_first_call_num_3m",String.format("%.2f",callNumbersByThreeMonth.doubleValue()/firstCallNumCity3m.get(0).doubleValue()));
+        result.put("total_first_call_num_3m",firstCallNumCity3m.size()==0?0:String.format("%.2f",callNumbersByThreeMonth.doubleValue()/firstCallNumCity3m.get(0).doubleValue()));
         //近6个月总通话次数比近6个月最多通话所在城市次数
-        result.put("total_first_call_num_6m",String.format("%.2f",callNumbersBySixMonth.doubleValue()/firstCallNumCity6m.get(0).doubleValue()));
+        result.put("total_first_call_num_6m", firstCallNumCity6m.size()==0?0:String.format("%.2f",callNumbersBySixMonth.doubleValue()/firstCallNumCity6m.get(0).doubleValue()));
         //近1个月总通话时长（秒）
         result.put("total_call_length_sec_1m",total_length_1m);
         //近1个月总通话时长（分）
@@ -780,6 +780,25 @@ public class XYCarrier {
         result.put("call_12321_num_3m",Algorithm.callCount(data,applicant,3,"12321"));
         //近6个月拨打12321次数
         result.put("call_12321_num_6m",Algorithm.callCount(data,applicant,6,"12321"));
+        //近1个月互通5次以上号码个数（正常号码）
+        result.put("interflow_5_num_1m",Algorithm.contactNumbers(data,applicant,1,5));
+        //近3个月互通5次以上号码个数（正常号码）
+        result.put("interflow_5_num_3m",Algorithm.contactNumbers(data,applicant,3,5));
+        //近1个月互通10次以上号码个数（正常号码）
+        result.put("interflow_10_num_1m",Algorithm.contactNumbers(data,applicant,1,10));
+        //近3个月互通10次以上号码个数（正常号码）
+        result.put("interflow_10_num_3m",Algorithm.contactNumbers(data,applicant,3,10));
+        //近6个月互通10次以上号码个数（正常号码）
+        result.put("interflow_10_num_6m",Algorithm.contactNumbers(data,applicant,6,10));
+        //近1个月23:30-7:00的通话次数
+        Integer total_num_2330_7_1m = Algorithm.callNumbers(data,applicant,1,"23:30:00","7:00:00");
+        result.put("total_num_2330_7_1m",total_num_2330_7_1m);
+        //近3个月23:30-7:00的通话次数
+        Integer total_num_2330_7_3m = Algorithm.callNumbers(data,applicant,3,"23:30:00","7:00:00");
+        result.put("total_num_2330_7_3m",total_num_2330_7_3m);
+        //近6个月23:30-7:00的通话次数
+        Integer total_num_2330_7_6m = Algorithm.callNumbers(data,applicant,6,"23:30:00","7:00:00");
+        result.put("total_num_2330_7_6m",total_num_2330_7_6m);
 
         return result;
     }
