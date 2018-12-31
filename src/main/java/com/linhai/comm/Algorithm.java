@@ -1526,4 +1526,71 @@ public class Algorithm {
         System.out.println("近"+m+"个月TOP"+n+"联系人联系最多号码的次数（正常号码）:"+num);
         return num;
     }
+
+    //近M个月TOPN联系人最多、第二多的归属地省、市（正常号码）
+    public static List<String> top10Address(JSONObject data, JSONObject applicant, int m, int n) {
+
+        List<String> ref = new ArrayList<>();
+        //TOP10联系人
+        Map<String, Integer> map = new HashMap<>();
+        Map<String,Integer> top = new HashMap<>();
+        try {
+            //得到m个月前的时间
+            String monthBefore = CarrierDateUtil.monthsBefore(m,applicant.get("customerApplyDate").toString());
+            //申请日期
+            String previousDay = applicant.get("customerApplyDate").toString();
+            //得到yyyy-mm
+            String pMonth = CarrierDateUtil.yearMonth(previousDay);
+            //得到yyyy-mm
+            String month = CarrierDateUtil.yearMonth(monthBefore);
+            //得到通话记录详单（按月份）
+            JSONArray jsonArray = data.getJSONArray("calls");
+            for (int i = 0; i < jsonArray.size(); i++) {
+                //按月遍历
+                JSONObject mon = (JSONObject)jsonArray.get(i);
+                //如果m个月前的时间小于或者等于历史时间则不做操作，大于则结束本次循环
+                if(!CarrierDateUtil.dateScope(pMonth,month,mon.get("bill_month").toString(),"-01")) continue;
+                for (int j = 0; j < mon.getJSONArray("items").size(); j++) {
+                    JSONObject day = (JSONObject)mon.getJSONArray("items").get(j);
+                    //如果m个月前的时间小于或者等于历史时间则不做操作，大于则结束本次循环
+                    if(CarrierDateUtil.dateScope(previousDay,monthBefore,day.get("time").toString(),"")){
+                        //联系的号码数
+                        if(map.get(day.get("peer_number").toString())==null) map.put(day.get("peer_number").toString(),1);
+                        else map.put(day.get("peer_number").toString(),map.get(day.get("peer_number").toString())+1);
+                    }
+                }
+            }
+            map = CarrierDateUtil.sortByValueDescending(map);
+            for (Map.Entry<String,Integer> entry : map.entrySet()) {
+                if(top.size()<n){
+                    String address = getMobileFrom(entry.getKey());
+                    top.put(address,top.get(address)==null?1:top.get(address)+1);
+                }
+            }
+
+            top = CarrierDateUtil.sortByValueDescending(top);
+
+            int i = 0;
+            for (Map.Entry<String,Integer> entry:top.entrySet()) {
+                if(i<2){
+                    String sheng = entry.getKey().indexOf("省")>0?entry.getKey().split("省")[0]+"省":entry.getKey();
+                    String shi = entry.getKey().indexOf("省")>0?entry.getKey().split("省")[1]:entry.getKey();
+                    ref.add(sheng);
+                    ref.add(shi);
+                    ref.add(entry.getValue().toString());
+                }else break;
+
+                i++;
+            }
+            while (ref.size()<6){
+                ref.add(null);
+            }
+            ref.add(String.valueOf(top.size()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("近"+m+"个月TOP"+n+"联系人最多、第二多的归属地省、市、号码数、归属地个数（正常号码）:"+ref.toString());
+        return ref;
+    }
 }

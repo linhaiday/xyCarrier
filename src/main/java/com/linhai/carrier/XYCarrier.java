@@ -798,6 +798,51 @@ public class XYCarrier {
         //近6个月23:30-7:00的通话次数
         Integer total_num_2330_7_6m = Algorithm.callNumbers(data,applicant,6,"23:30:00","7:00:00");
         result.put("total_num_2330_7_6m",total_num_2330_7_6m);
+        //近1个月TOP10联系人最多的归属地省（正常号码）
+        //近1个月TOP10联系人最多的归属地市（正常号码）
+        //近1个月TOP10联系人最多的归属地号码数（正常号码）
+        //近1个月TOP10联系人第二多的归属地省（正常号码）
+        //近1个月TOP10联系人第二多的归属地市（正常号码）
+        //近1个月TOP10联系人第二多的归属地号码数（正常号码）
+        //近1个月TOP10联系人的归属地个数（正常号码）
+        List<String> address1m = Algorithm.top10Address(data,applicant,1,10);
+        result.put("top10_first_province_1m",address1m.size()>0?address1m.get(0):null);
+        result.put("top10_first_city_1m",address1m.size()>1?address1m.get(1):null);
+        result.put("top10_first_num_1m",address1m.size()>2?address1m.get(2):null);
+        result.put("top10_second_province_1m",address1m.size()>3?address1m.get(3):null);
+        result.put("top10_second_city_1m",address1m.size()>4?address1m.get(4):null);
+        result.put("top10_second_num_1m",address1m.size()>5?address1m.get(5):null);
+        result.put("top10_address_num_1m",address1m.size()>6?address1m.get(6):null);
+        //近3个月TOP10联系人最多的归属地省（正常号码）
+        //近3个月TOP10联系人最多的归属地市（正常号码）
+        //近3个月TOP10联系人最多的归属地号码数（正常号码）
+        //近3个月TOP10联系人第二多的归属地省（正常号码）
+        //近3个月TOP10联系人第二多的归属地市（正常号码）
+        //近3个月TOP10联系人第二多的归属地号码数（正常号码）
+        //近3个月TOP10联系人的归属地个数（正常号码）
+        List<String> address3m = Algorithm.top10Address(data,applicant,3,10);
+        result.put("top10_first_province_3m",address3m.size()>0?address3m.get(0):null);
+        result.put("top10_first_city_3m",address3m.size()>1?address3m.get(1):null);
+        result.put("top10_first_num_3m",address3m.size()>2?address3m.get(2):null);
+        result.put("top10_second_province_3m",address3m.size()>3?address3m.get(3):null);
+        result.put("top10_second_city_3m",address3m.size()>4?address3m.get(4):null);
+        result.put("top10_second_num_3m",address3m.size()>5?address3m.get(5):null);
+        result.put("top10_address_num_3m",address3m.size()>6?address3m.get(6):null);
+        //近6个月TOP10联系人最多的归属地省（正常号码）
+        //近6个月TOP10联系人最多的归属地市（正常号码）
+        //近6个月TOP10联系人最多的归属地号码数（正常号码）
+        //近6个月TOP10联系人第二多的归属地省（正常号码）
+        //近6个月TOP10联系人第二多的归属地市（正常号码）
+        //近6个月TOP10联系人第二多的归属地号码数（正常号码）
+        //近6个月TOP10联系人的归属地个数（正常号码）
+        List<String> address6m = Algorithm.top10Address(data,applicant,6,10);
+        result.put("top10_first_province_6m",address3m.size()>0?address3m.get(0):null);
+        result.put("top10_first_city_6m",address3m.size()>1?address3m.get(1):null);
+        result.put("top10_first_num_6m",address3m.size()>2?address3m.get(2):null);
+        result.put("top10_second_province_6m",address3m.size()>3?address3m.get(3):null);
+        result.put("top10_second_city_6m",address3m.size()>4?address3m.get(4):null);
+        result.put("top10_second_num_6m",address3m.size()>5?address3m.get(5):null);
+        result.put("top10_address_num_6m",address3m.size()>6?address3m.get(6):null);
 
         return result;
     }
