@@ -753,7 +753,6 @@ public class XYCarrier {
         result.put("call_max_num_3m",Algorithm.callMaxNum(data,applicant,3,10));
         //近6个月TOP10联系人联系最多号码的次数（正常号码）
         result.put("call_max_num_6m",Algorithm.callMaxNum(data,applicant,6,10));
-
         //近3个月互通号码个数（正常号码）
         result.put("inter_peer_num_3m",Algorithm.interPeerNum(data,applicant,3));
         //近6个月互通号码个数（正常号码）
