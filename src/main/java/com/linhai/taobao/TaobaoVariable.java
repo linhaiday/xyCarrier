@@ -119,6 +119,11 @@ public class TaobaoVariable {
             TaobaoAlgorithm.spouseOnlyRecently(self,partner,application,result,1);
     }
 
+    private static void partnerClean(JSONObject data, JSONObject result) {
+    }
+
+    public static void selfClean(JSONObject data,JSONObject result) {
+    }
 
     public static void main(String[] args) {
 
@@ -131,7 +136,9 @@ public class TaobaoVariable {
         JSONObject applicant = JSONObject.parseObject(DataSource.applicant());
         //数据清洗入口方法
         try {
-            clean(self.getJSONObject("data"),partner.getJSONObject("data"),applicant.getJSONObject("userInfo"),result);
+            if(!self.isEmpty()) selfClean(self.getJSONObject("data"),result);
+            if(!partner.isEmpty()) partnerClean(partner.getJSONObject("data"),result);
+            if(!self.isEmpty() && !partner.isEmpty()) clean(self.getJSONObject("data"),partner.getJSONObject("data"),applicant.getJSONObject("userInfo"),result);
         } catch (Exception e) {
             e.printStackTrace();
         }
