@@ -1286,7 +1286,8 @@ public class Algorithm {
             for (int j = 0; j < mon.getJSONArray("items").size(); j++) {
                 JSONObject day = (JSONObject)mon.getJSONArray("items").get(j);
                 //当前日期大于M且小于N，继续执行
-                if(CarrierDateUtil.compareDate(nBefore,day.get("time").toString(),"yyyy-MM-dd")>-1){
+                if(CarrierDateUtil.compareDate(nBefore,day.get("time").toString(),"yyyy-MM-dd")>-1 &&
+                        PhoneNumberHelper.isMobilePhone(day.getString("peer_number"))){
                     map.put(day.getString("peer_number"),map.get(day.getString("peer_number"))==null?1:map.get(day.getString("peer_number"))+1);
                 }
             }
@@ -1397,7 +1398,8 @@ public class Algorithm {
             for (int j = 0; j < mon.getJSONArray("items").size(); j++) {
                 JSONObject day = (JSONObject)mon.getJSONArray("items").get(j);
                 //如果1个月前的时间小于或者等于历史时间则不做操作，大于则结束本次循环
-                if(CarrierDateUtil.dateScope(previousDay,monthBefore,day.get("time").toString(),"")){
+                if(CarrierDateUtil.dateScope(previousDay,monthBefore,day.get("time").toString(),"") &&
+                        PhoneNumberHelper.isMobilePhone(day.getString("peer_number"))){
                     //主叫号码与被叫号码
                     if("DIAL".equals(day.get("dial_type").toString())) dial.add(day.get("peer_number").toString());
                     if("DIALED".equals(day.get("dial_type").toString())) dialed.add(day.get("peer_number").toString());
@@ -1436,7 +1438,8 @@ public class Algorithm {
             for (int j = 0; j < mon.getJSONArray("items").size(); j++) {
                 JSONObject day = (JSONObject)mon.getJSONArray("items").get(j);
                 //如果1个月前的时间小于或者等于历史时间则不做操作，大于则结束本次循环
-                if(CarrierDateUtil.dateScope(previousDay,monthBefore,day.get("time").toString(),"")){
+                if(CarrierDateUtil.dateScope(previousDay,monthBefore,day.get("time").toString(),"") &&
+                        PhoneNumberHelper.isMobilePhone(day.getString("peer_number"))){
                     //联系的号码数
                     if(map.get(day.get("peer_number").toString())==null) map.put(day.get("peer_number").toString(),1);
                     else map.put(day.get("peer_number").toString(),map.get(day.get("peer_number").toString())+1);
@@ -1506,10 +1509,11 @@ public class Algorithm {
             for (int j = 0; j < mon.getJSONArray("items").size(); j++) {
                 JSONObject day = (JSONObject)mon.getJSONArray("items").get(j);
                 //如果m个月前的时间小于或者等于历史时间则不做操作，大于则结束本次循环
-                if(CarrierDateUtil.dateScope(previousDay,monthBefore,day.get("time").toString(),"")){
+                if(CarrierDateUtil.dateScope(previousDay,monthBefore,day.get("time").toString(),"") &&
+                        PhoneNumberHelper.isMobilePhone(day.getString("peer_number"))){
                     //联系的号码数
-                    if(map.get(day.get("peer_number").toString())==null) map.put(day.get("peer_number").toString(),1);
-                    else map.put(day.get("peer_number").toString(),map.get(day.get("peer_number").toString())+1);
+                    if(map.get(day.getString("peer_number"))==null) map.put(day.getString("peer_number"),1);
+                    else map.put(day.getString("peer_number"),map.get(day.getString("peer_number"))+1);
                 }
             }
         }
@@ -1553,7 +1557,8 @@ public class Algorithm {
                 for (int j = 0; j < mon.getJSONArray("items").size(); j++) {
                     JSONObject day = (JSONObject)mon.getJSONArray("items").get(j);
                     //如果m个月前的时间小于或者等于历史时间则不做操作，大于则结束本次循环
-                    if(CarrierDateUtil.dateScope(previousDay,monthBefore,day.get("time").toString(),"")){
+                    if(CarrierDateUtil.dateScope(previousDay,monthBefore,day.get("time").toString(),"") &&
+                            PhoneNumberHelper.isMobilePhone(day.getString("peer_number"))){
                         //联系的号码数
                         if(map.get(day.get("peer_number").toString())==null) map.put(day.get("peer_number").toString(),1);
                         else map.put(day.get("peer_number").toString(),map.get(day.get("peer_number").toString())+1);
