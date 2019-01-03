@@ -241,29 +241,32 @@ public class TaobaoPartnerAlgorithm {
         System.out.println("配偶_最近"+day+"天除本人外的收货号码数："+num);
     }
 
-    //无购物月数
+    //配偶_无购物月数
     public static void noShopMonth(JSONObject partner, JSONObject application, JSONObject result) {
 
-        /*try {
+        try {
             //申请日期
             String applicationDate = application.getString("customerApplyDate");
             //申请日期与当前日期之间包含的所有月份
             List<String> list = CarrierDateUtil.getMonthBetween(applicationDate,CarrierDateUtil.getNowDate());
             Set<String> set = new HashSet<>();
-            JSONArray tradedetails = self.getJSONObject("tradedetails").getJSONArray("tradedetails");
+            JSONArray tradedetails = partner.getJSONObject("tradedetails").getJSONArray("tradedetails");
             for (Object tradedetail:tradedetails) {
                 if(CarrierDateUtil.dateScope(CarrierDateUtil.getNowDate(),
                         applicationDate,
                         CarrierDateUtil.yearMonthDay(JSON.parseObject(tradedetail.toString()).getString("trade_createtime")),"")
-                        && StringUtils.indexOf(JSON.parseObject(tradedetail.toString()).getString("trade_status"),"成功")>=0
-                        && !StringUtils.equals(JSON.parseObject(tradedetail.toString()).getString("deliver_name"),partnerName))
-                    num += 1;
-                if(CarrierDateUtil.compareDate(applicationDate,CarrierDateUtil.getNowDate(),"yyyy-MM-dd")>=0)
+                        && StringUtils.indexOf(JSON.parseObject(tradedetail.toString()).getString("trade_status"),"成功")>=0)
+                    set.add(CarrierDateUtil.yearMonth(JSON.parseObject(tradedetail.toString()).getString("trade_createtime")));
+                //if(CarrierDateUtil.compareDate(applicationDate,CarrierDateUtil.getNowDate(),"yyyy-MM-dd")>=0)
             }
+            Set<String> all = new HashSet(list);
+            all.removeAll(set);
 
+            result.put("tb_partner_no_shop_month",all.size());
+            System.out.println("无购物月数："+all.size());
         }catch (Exception e){
             e.printStackTrace();
-        }*/
+        }
     }
 
     //配偶_收件地址总数量
