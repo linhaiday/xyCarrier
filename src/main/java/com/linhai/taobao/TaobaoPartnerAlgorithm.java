@@ -263,7 +263,7 @@ public class TaobaoPartnerAlgorithm {
             all.removeAll(set);
 
             result.put("tb_partner_no_shop_month",all.size());
-            System.out.println("无购物月数："+all.size());
+            System.out.println("配偶_无购物月数："+all.size());
         }catch (Exception e){
             e.printStackTrace();
         }
