@@ -325,7 +325,25 @@ public class TaobaoVariable {
 
     //交叉变量清洗
     public static void crossClean(JSONObject self, JSONObject partner, JSONObject applicant, JSONObject result){
-
+        //近30天有效订单收件人为本人的地址数量	tb_valid_order_self_address_30d	配偶_近一个月有效订单收件人为本人的地址数量	tb_partner_valid_order_self_address_30d	int
+        //近30天有效订单收件人为配偶的地址数量	tb_valid_order_spouse_address_30d	配偶_近一个月有效订单收件人为申请人的地址数量	tb_partner_valid_order_spouse_address_30d	int
+        TaobaoCrossAlgorithm.validOrderSelfAddress(self,partner,applicant,result,30);
+        //近90天有效订单收件人为本人的地址数量	tb_valid_order_self_address_90d	配偶_近三个月有效订单收件人为本人的地址数量	tb_partner_valid_order_self_address_90d	int
+        //近90天有效订单收件人为配偶的地址数量	tb_valid_order_spouse_address_90d	配偶_近三个月有效订单收件人为申请人的地址数量	tb_partner_valid_order_spouse_address_90d	int
+        TaobaoCrossAlgorithm.validOrderSelfAddress(self,partner,applicant,result,90);
+        //近180天有效订单收件人为本人的地址数量	tb_valid_order_self_address_180d	配偶_近六个月有效订单收件人为本人的地址数量	tb_partner_valid_order_self_address_180d	int
+        //近180天有效订单收件人为配偶的地址数量	tb_valid_order_spouse_address_180d	配偶_近六个月有效订单收件人为申请人的地址数量	tb_partner_valid_order_spouse_address_180d	int
+        TaobaoCrossAlgorithm.validOrderSelfAddress(self,partner,applicant,result,180);
+        //近一年内有效订单收件人为本人的地址数量	tb_valid_order_self_address_year	配偶_近一年内有效订单收件人为本人的地址数量	tb_partner_valid_order_self_address_year	int
+        //近一年内有效订单收件人为配偶的地址数量	tb_valid_order_spouse_address_year	配偶_近一年内有效订单收件人为申请人的地址数量	tb_partner_valid_order_spouse_address_year	int
+        TaobaoAlgorithm.validOrderSelfAddress(self,partner,applicant,result,360);
+        //近一年内收货地址中是否有和配偶相同的收货地址	tb_same_address_year	配偶_近一年内收货地址中是否有和申请人相同的收货地址	tb_partner_same_address_year	int(否：0，是：1)
+        TaobaoCrossAlgorithm.sameAddressYear(self,partner,applicant,result,365);
+        //淘宝收货号码是否含配偶的电话号码	tb_same_phone	配偶_淘宝收货号码是否含申请人的电话号码	tb_partner_same_phone	int(否：0，是：1)
+        //淘宝收货姓名是否含配偶的姓名	tb_same_name	配偶_淘宝收货姓名是否含申请人的姓名	tb_partner_same_name	int(否：0，是：1)
+        TaobaoCrossAlgorithm.samePhone(self,partner,applicant,result);
+        //只有最近一个月的订单包含配偶，而之前没有	tb_spouse_only_recently	配偶_只有最近一个月的订单包含申请人，而之前没有	tb_partner_spouse_only_recently	int(否：0，是：1)
+        TaobaoCrossAlgorithm.spouseOnlyRecently(self,partner,applicant,result,1);
     }
 
     public static void main(String[] args) {
