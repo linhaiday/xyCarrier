@@ -6,16 +6,73 @@ import com.alibaba.fastjson.JSONObject;
 import com.linhai.comm.CarrierDateUtil;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class TaobaoCrossAlgorithm {
 
-    //近N天有效订单收件人为本人的地址数量
+    //配偶_淘宝认证姓名是否与申请填写时姓名一致    int(否：0，是：1)
+    public static void consistencyName(JSONObject partner, JSONObject application, JSONObject result) {
+        //申请填写的姓名
+        String applicantName = application.getString("customerName");
+        //申请人配偶姓名
+        String partnerName = partner.getJSONObject("userinfo").getString("real_name");
+        result.put("tb_partner_name_consistency", StringUtils.equals(applicantName,partnerName)?1:0);
+        System.out.println("配偶_淘宝认证姓名是否与申请填写时姓名一致："+result.get("tb_partner_name_consistency"));
+    }
+
+    //配偶_申请时填写的亲密联系人是否出现在订单中	int(否：0，是：1)
+    public static void contact(JSONObject partner, JSONObject application, JSONObject result) {
+        //亲密联系人
+        String contacts = application.getString("customerIntimateContactsMobile1")+","
+                +application.getString("customerIntimateContactsMobile2")+","
+                +application.getString("customerIntimateContactsMobile3");
+        //申请人配偶的亲密联系人是否出现
+        int partnerContacts = 0;
+        JSONArray partnerTradedetails = partner.getJSONObject("tradedetails").getJSONArray("tradedetails");
+
+        //配偶_亲密联系人是否出现在订单中
+        for (Object tradedetail:partnerTradedetails) {
+            if(StringUtils.equals(contacts,((JSONObject)tradedetail).getString("deliver_name"))){
+                partnerContacts = 1;
+                break;
+            }
+        }
+
+        result.put("tb_partner_contact",partnerContacts);
+        System.out.println("配偶_申请时填写的亲密联系人是否出现在订单中:"+result.get("tb_partner_contact"));
+    }
+
+    //配偶_收件地址总数量
+    //配偶_收件地址中收件人为本人的城市个数
+    //配偶_收件地址中是否有申请人户籍所在地
+    //配偶_收货地址为申请城市的数量
+    //配偶_收件人为非本人的地址数量
+    public static void address(JSONObject partner, JSONObject application, JSONObject result) {
+
+        int applyPlaceCityCount = 0;
+        boolean bl = false;
+        //申请人姓名
+        String selfName = application.getString("customerName");
+        //申请人户籍所在地
+        String house = application.getString("customerHouseholdRegisterAddress");
+        //申请城市
+        String applyPlaceCity = application.getString("customerApplyPlaceCity");
+
+        JSONArray recentdeliveraddress = partner.getJSONArray("recentdeliveraddress");
+        for (Object recent:recentdeliveraddress) {
+            JSONObject jsonObject = JSON.parseObject(recent.toString());
+            if(!bl && StringUtils.equals(house,jsonObject.getString("deliver_address"))) bl = true;
+            if(StringUtils.equals(applyPlaceCity,jsonObject.getString("city"))) applyPlaceCityCount += 1;
+        }
+
+        result.put("tb_partner_partner_register",bl);
+        result.put("tb_partner_apply_city",applyPlaceCityCount);
+        System.out.println("配偶_收件地址中是否有申请人户籍所在地："+bl);
+        System.out.println("配偶_收货地址为申请城市的数量："+applyPlaceCityCount);
+
+    }
+
     //近N天有效订单收件人为配偶的地址数量
-    //配偶_近N天有效订单收件人为本人的地址数量
     //配偶_近N天有效订单收件人为申请人的地址数量
     public static void validOrderSelfAddress(JSONObject self, JSONObject partner, JSONObject application, JSONObject result, int day) {
 
@@ -70,6 +127,52 @@ public class TaobaoCrossAlgorithm {
         result.put("tb_partner_valid_order_spouse_address_"+day+"d",partnerAddress.size());
         System.out.println("配偶_近"+day+"天有效订单收件人为本人的地址数量"+selfAddress.size());
         System.out.println("配偶_近"+day+"天有效订单收件人为申请人的地址数量"+partnerAddress.size());
+    }
+
+    //配偶_申请人现居住地址送货次数
+    public static void placeCnt(JSONObject partner, JSONObject application, JSONObject result) {
+        //申请人现居住地址
+        String applicationAddress = application.getString("customerHomeAddress");
+
+        int num = 0;
+        JSONArray tradedetails = partner.getJSONObject("tradedetails").getJSONArray("tradedetails");
+        for (Object tradedetail:tradedetails) {
+            if(StringUtils.equals(JSON.parseObject(tradedetail.toString()).getString("deliver_address"),applicationAddress))
+                num += 1;
+        }
+
+        result.put("tb_partner_place_cnt",num);
+        System.out.println("配偶_申请人现居住地址送货次数:"+num);
+    }
+
+    //配偶_申请人现居住地址送货首次使用距离当前天数
+    //配偶_申请人现居住地址送货最后一次使用距离当前天数
+    public static void placeInterval(JSONObject partner, JSONObject application, JSONObject result) {
+        //申请人现居住地址
+        String applicationAddress = application.getString("customerHomeAddress");
+
+        List<String> list = new ArrayList<>();
+        JSONArray tradedetails = partner.getJSONObject("tradedetails").getJSONArray("tradedetails");
+        for (Object tradedetail:tradedetails) {
+            if(StringUtils.equals(JSON.parseObject(tradedetail.toString()).getString("deliver_address"),applicationAddress)) {
+                list.add(CarrierDateUtil.yearMonthDay(JSON.parseObject(tradedetail.toString()).getString("trade_createtime")).replaceAll("-",""));
+            }
+        }
+
+        int days = 0;
+        if(list.size()>0) {
+            Collections.sort(list);
+            days = CarrierDateUtil.differentDays(CarrierDateUtil.toDate(list.get(0)), new Date());
+        }
+        result.put("tb_partner_place_first_interval", days);
+        System.out.println("配偶_申请人现居住地址送货首次使用距离当前天数:" + days);
+
+        days = 0;
+        if(list.size()>0) {
+            days = CarrierDateUtil.differentDays(CarrierDateUtil.toDate(list.get(list.size() - 1)), new Date());
+        }
+        result.put("tb_partner_place_last_interval", days);
+        System.out.println("配偶_申请人现居住地址送货最后一次使用距离当前天数:" + days);
     }
 
     //近一年内收货地址中是否有和配偶相同的收货地址

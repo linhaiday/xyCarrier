@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 public class TaobaoVariable {
 
     public static void clean(JSONObject self,JSONObject partner,JSONObject application,JSONObject result){
+            //芝麻分	tb_zmf	配偶_芝麻分	tb_partner_zmf	int
             TaobaoAlgorithm.zmf(self,partner,result);
             //淘宝认证姓名是否与申请填写时姓名一致	tb_name_consistency	配偶_淘宝认证姓名是否与申请填写时姓名一致	tb_partner_name_consistency	int(否：0，是：1)
             TaobaoAlgorithm.consistencyName(self,partner,application,result);
@@ -121,6 +122,7 @@ public class TaobaoVariable {
 
     //申请人变量清洗
     public static void selfClean(JSONObject self, JSONObject applicant,JSONObject result) {
+        //芝麻分   tb_zmf	int
         TaobaoSelfAlgorithm.zmf(self,result);
         //淘宝认证姓名是否与申请填写时姓名一致	tb_name_consistency	int(否：0，是：1)
         TaobaoSelfAlgorithm.consistencyName(self,applicant,result);
@@ -192,13 +194,10 @@ public class TaobaoVariable {
         //收件人为非本人的地址数量	tb_exc_self_address	int
         TaobaoSelfAlgorithm.address(self,applicant,result);
         //近30天有效订单收件人为本人的地址数量	tb_valid_order_self_address_30d	int
-        //近30天有效订单收件人为配偶的地址数量	tb_valid_order_spouse_address_30d	int
         TaobaoSelfAlgorithm.validOrderSelfAddress(self,applicant,result,30);
         //近90天有效订单收件人为本人的地址数量	tb_valid_order_self_address_90d	int
-        //近90天有效订单收件人为配偶的地址数量	tb_valid_order_spouse_address_90d	int
         TaobaoSelfAlgorithm.validOrderSelfAddress(self,applicant,result,90);
         //近180天有效订单收件人为本人的地址数量	tb_valid_order_self_address_180d	int
-        //近180天有效订单收件人为配偶的地址数量	tb_valid_order_spouse_address_180d	int
         TaobaoSelfAlgorithm.validOrderSelfAddress(self,applicant,result,180);
         //近一年内有效订单收件人为本人的地址数量	tb_valid_order_self_address_year	int
         //近一年内有效订单收件人为配偶的地址数量	tb_valid_order_spouse_address_year	int
@@ -223,11 +222,8 @@ public class TaobaoVariable {
 
     //申请人配偶变量清洗
     public static void partnerClean(JSONObject partner, JSONObject applicant, JSONObject result) {
+        //配偶_芝麻分	tb_partner_zmf	int
         TaobaoPartnerAlgorithm.zmf(partner,result);
-        //配偶_淘宝认证姓名是否与申请填写时姓名一致	tb_partner_name_consistency	int(否：0，是：1)
-        TaobaoPartnerAlgorithm.consistencyName(partner,applicant,result);
-        //配偶_申请人申请时填写的亲密联系人是否出现在订单中	tb_partner_contact	int(否：0，是：1)
-        TaobaoPartnerAlgorithm.contact(partner,applicant,result);
         //配偶_支付宝账号	tb_partner_zfb	string
         TaobaoPartnerAlgorithm.zfb(partner,result);
         //配偶_实名认证姓名	tb_partner_real_name	string
@@ -289,8 +285,6 @@ public class TaobaoVariable {
         TaobaoPartnerAlgorithm.noShopMonth(partner,applicant,result);
         //配偶_收件地址总数量	tb_partner_address	int
         //配偶_收件地址中收件人为本人的城市个数	tb_partner_self_address	int
-        //配偶_收件地址中是否有申请人户籍所在地	tb_partner_register	int(否：0，是：1)
-        //配偶_收货地址为申请城市的数量	tb_partner_apply_city	int
         //配偶_收件人为非本人的地址数量	tb_partner_exc_self_address	int
         TaobaoPartnerAlgorithm.address(partner,applicant,result);
         //配偶_近一个月有效订单收件人为本人的地址数量	tb_partner_valid_order_self_address_30d	int
@@ -305,11 +299,6 @@ public class TaobaoVariable {
         //配偶_近一年内有效订单收件人为本人的地址数量	tb_partner_valid_order_self_address_year	int
         //配偶_近一年内有效订单收件人为申请人的地址数量	tb_partner_valid_order_spouse_address_year	int
         TaobaoPartnerAlgorithm.validOrderSelfAddress(partner,applicant,result,360);
-        //配偶_申请人现居住地址送货次数	tb_partner_place_cnt	int
-        TaobaoPartnerAlgorithm.placeCnt(partner,applicant,result);
-        //配偶_申请人现居住地址送货首次使用距离当前天数	tb_partner_place_first_interval	int
-        //配偶_申请人现居住地址送货最后一次使用距离当前天数	tb_partner_place_last_interval	int
-        TaobaoPartnerAlgorithm.placeInterval(partner,applicant,result);
         //配偶_1点-7点下订单的笔数占比	tb_partner_order_per_1_7_hour	double
         TaobaoPartnerAlgorithm.orderPerHour(partner,result);
         //配偶_账单中出现婴儿字段的订单次数	tb_partner_baby_order_cnt	int	关键词：婴儿尿不湿、婴儿奶粉
@@ -325,18 +314,27 @@ public class TaobaoVariable {
 
     //交叉变量清洗
     public static void crossClean(JSONObject self, JSONObject partner, JSONObject applicant, JSONObject result){
-        //近30天有效订单收件人为本人的地址数量	tb_valid_order_self_address_30d	配偶_近一个月有效订单收件人为本人的地址数量	tb_partner_valid_order_self_address_30d	int
+
+        //配偶_淘宝认证姓名是否与申请填写时姓名一致	tb_partner_name_consistency
+        TaobaoCrossAlgorithm.consistencyName(partner,applicant,result);
+        //配偶_申请人申请时填写的亲密联系人是否出现在订单中	tb_partner_contact	int(否：0，是：1)
+        TaobaoCrossAlgorithm.contact(partner,applicant,result);
+        //配偶_收件地址中是否有申请人户籍所在地	tb_partner_register	int(否：0，是：1)
+        //配偶_收货地址为申请城市的数量	tb_partner_apply_city	int
+        TaobaoCrossAlgorithm.address(partner,applicant,result);
         //近30天有效订单收件人为配偶的地址数量	tb_valid_order_spouse_address_30d	配偶_近一个月有效订单收件人为申请人的地址数量	tb_partner_valid_order_spouse_address_30d	int
         TaobaoCrossAlgorithm.validOrderSelfAddress(self,partner,applicant,result,30);
-        //近90天有效订单收件人为本人的地址数量	tb_valid_order_self_address_90d	配偶_近三个月有效订单收件人为本人的地址数量	tb_partner_valid_order_self_address_90d	int
         //近90天有效订单收件人为配偶的地址数量	tb_valid_order_spouse_address_90d	配偶_近三个月有效订单收件人为申请人的地址数量	tb_partner_valid_order_spouse_address_90d	int
         TaobaoCrossAlgorithm.validOrderSelfAddress(self,partner,applicant,result,90);
-        //近180天有效订单收件人为本人的地址数量	tb_valid_order_self_address_180d	配偶_近六个月有效订单收件人为本人的地址数量	tb_partner_valid_order_self_address_180d	int
         //近180天有效订单收件人为配偶的地址数量	tb_valid_order_spouse_address_180d	配偶_近六个月有效订单收件人为申请人的地址数量	tb_partner_valid_order_spouse_address_180d	int
         TaobaoCrossAlgorithm.validOrderSelfAddress(self,partner,applicant,result,180);
-        //近一年内有效订单收件人为本人的地址数量	tb_valid_order_self_address_year	配偶_近一年内有效订单收件人为本人的地址数量	tb_partner_valid_order_self_address_year	int
         //近一年内有效订单收件人为配偶的地址数量	tb_valid_order_spouse_address_year	配偶_近一年内有效订单收件人为申请人的地址数量	tb_partner_valid_order_spouse_address_year	int
-        TaobaoAlgorithm.validOrderSelfAddress(self,partner,applicant,result,360);
+        TaobaoCrossAlgorithm.validOrderSelfAddress(self,partner,applicant,result,360);
+        //配偶_申请人现居住地址送货次数	tb_partner_place_cnt	int
+        TaobaoCrossAlgorithm.placeCnt(partner,applicant,result);
+        //配偶_申请人现居住地址送货首次使用距离当前天数	tb_partner_place_first_interval	int
+        //配偶_申请人现居住地址送货最后一次使用距离当前天数	tb_partner_place_last_interval	int
+        TaobaoCrossAlgorithm.placeInterval(partner,applicant,result);
         //近一年内收货地址中是否有和配偶相同的收货地址	tb_same_address_year	配偶_近一年内收货地址中是否有和申请人相同的收货地址	tb_partner_same_address_year	int(否：0，是：1)
         TaobaoCrossAlgorithm.sameAddressYear(self,partner,applicant,result,365);
         //淘宝收货号码是否含配偶的电话号码	tb_same_phone	配偶_淘宝收货号码是否含申请人的电话号码	tb_partner_same_phone	int(否：0，是：1)

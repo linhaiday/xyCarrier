@@ -312,7 +312,6 @@ public class TaobaoSelfAlgorithm {
     }
 
     //近N天有效订单收件人为本人的地址数量
-    //近N天有效订单收件人为配偶的地址数量
     public static void validOrderSelfAddress(JSONObject self, JSONObject application, JSONObject result,int day) {
 
 
