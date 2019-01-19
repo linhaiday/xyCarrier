@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.linhai.comm.CarrierDateUtil;
 import com.linhai.comm.LevenshteinUtil;
+import com.linhai.comm.Util;
 import org.apache.commons.lang3.StringUtils;
 
 import java.text.SimpleDateFormat;
@@ -426,5 +427,85 @@ public class TaobaoSelfAlgorithm {
         System.out.println("账单中出现"+str+"字段的订单次数:"+num);
         result.put("tb_"+str+"_order_amount",money/100);
         System.out.println("账单中出现"+str+"字段的订单金额:"+money/100);
+    }
+
+    //存在于通讯录的淘宝收件号码个数
+    public static List<String> listReceiptNumber(JSONObject self) {
+
+        List<String> list = new ArrayList<>();
+
+        JSONArray deliveraddress = self.getJSONArray("deliveraddress");
+
+        for (int i = 0; i < deliveraddress.size(); i++) {
+            JSONObject jsonObject = JSONObject.parseObject(deliveraddress.getString(i));
+            list.add(jsonObject.getString("phone_no"));
+        }
+
+        System.out.println("存在于通讯录的淘宝收件号码个数:"+list.size());
+        return list;
+    }
+
+    //存在于通讯录的淘宝收件号码占全部收件号码的比例
+    public static void listPerReceiptNumber(JSONObject self, List<String> tb_list_receipt_number_cnt, JSONObject result) {
+        int allCount = 0;
+        int count = 0;
+
+        JSONArray tradedetails = self.getJSONObject("tradedetails").getJSONArray("tradedetails");
+        for (Object tradedetail:tradedetails) {
+            String deliver_mobilephone = JSON.parseObject(tradedetail.toString()).getString("deliver_mobilephone");
+            allCount += 1;
+            for (String mobilephone:tb_list_receipt_number_cnt) {
+                if(StringUtils.equals(mobilephone,deliver_mobilephone)){
+                    count += 1;
+                    break;
+                }
+            }
+        }
+
+        result.put("tb_list_per_receipt_number",String.format("%.2f",(double)count/allCount));
+        System.out.println("存在于通讯录的淘宝收件号码占全部收件号码的比例："+result.get("tb_list_per_receipt_number"));
+    }
+
+    //最近一单距今时间
+    //最远一单距今时间
+    public static void orderTime(JSONObject self, JSONObject result) {
+
+        String lately = "";
+        String furthest = "";
+        JSONArray tradedetails = self.getJSONObject("tradedetails").getJSONArray("tradedetails");
+        for (Object tradedetail:tradedetails) {
+            String trade_createtime = JSON.parseObject(tradedetail.toString()).getString("trade_createtime");
+            if(StringUtils.isBlank(lately) || CarrierDateUtil.compareDate(lately,trade_createtime,"yyyy-MM-dd HH:mm:ss")==-1)
+                lately = trade_createtime;
+            if(StringUtils.isBlank(furthest) || CarrierDateUtil.compareDate(furthest,trade_createtime,"yyyy-MM-dd HH:mm:ss")==1)
+                furthest = trade_createtime;
+        }
+
+        result.put("",lately);
+        System.out.println("最近一单距今时间："+lately);
+        result.put("",furthest);
+        System.out.println("最远一单距今时间："+furthest);
+
+    }
+
+    //收货地址为申请地的个数
+    public static void applyAddressCnt(JSONObject self, JSONObject applicant, JSONObject result) {
+
+        int count = 0;
+        //申请地
+        String address = applicant.getString("");
+        JSONArray tradedetails = self.getJSONObject("tradedetails").getJSONArray("tradedetails");
+        for (Object tradedetail:tradedetails) {
+            String trade_createtime = JSON.parseObject(tradedetail.toString()).getString("trade_createtime");
+
+        }
+    }
+
+    //总订单个数
+    public static void totalOrderCnt(JSONObject self, JSONObject result) {
+
+        JSONArray tradedetails = self.getJSONObject("tradedetails").getJSONArray("tradedetails");
+
+        result.put("tb_total_order_cnt",tradedetails.size());
     }
 }

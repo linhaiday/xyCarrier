@@ -5,6 +5,7 @@ import com.linhai.DataSource.DataSource;
 import com.linhai.comm.CarrierDateUtil;
 
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 /**
  * Created by linhai on 2018/12/15.
@@ -218,6 +219,18 @@ public class TaobaoVariable {
         //账单中生活用品类字段的订单次数	tb_daily_order_cnt	int	关键词：洗发水、洗衣液、卫生纸、洗洁精
         //账单中生活用品类字段订单金额	tb_daily_order_amount	double
         TaobaoSelfAlgorithm.orderCntAmount(self,result,new String[]{"洗发水","洗衣液","卫生纸","洗洁精"},"daily");
+        //存在于通讯录的淘宝收件号码个数   tb_list_receipt_number_cnt  int
+        List<String> tb_list_receipt_number_cnt = TaobaoSelfAlgorithm.listReceiptNumber(self);
+        result.put("tb_list_receipt_number_cnt",tb_list_receipt_number_cnt.size());
+        //存在于通讯录的淘宝收件号码占全部收件号码的比例   tb_list_per_receipt_number  double
+        TaobaoSelfAlgorithm.listPerReceiptNumber(self,tb_list_receipt_number_cnt,result);
+        //最近一单距今时间  tb_recently_order_time  int
+        //最远一单距今时间  tb_farthest_order_time  int
+        TaobaoSelfAlgorithm.orderTime(self,result);
+        //收货地址为申请地的个数  tb_apply_address_cnt    int
+        TaobaoSelfAlgorithm.applyAddressCnt(self,applicant,result);
+        //总订单个数 tb_total_order_cnt  int
+        TaobaoSelfAlgorithm.totalOrderCnt(self,result);
     }
 
     //申请人配偶变量清洗
