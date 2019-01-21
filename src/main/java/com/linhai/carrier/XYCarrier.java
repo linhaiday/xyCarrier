@@ -1,5 +1,6 @@
 package com.linhai.carrier;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.linhai.DataSource.DataSource;
 import com.linhai.comm.Algorithm;
@@ -18,7 +19,7 @@ public class XYCarrier {
      * @param data,applicant,result
      * @return
      */
-    public static JSONObject clean(JSONObject data, JSONObject applicant, JSONObject result) throws Exception{
+    public static JSONObject clean(JSONObject data, JSONObject applicant, JSONArray dfp, JSONObject result) throws Exception{
 
         //格式化数据
         CarrierDateUtil.order(data);
@@ -633,11 +634,11 @@ public class XYCarrier {
         //近6个月，除近1个月，其余5个月月均通话次数
         result.put("day_avg_num_not_1m_6m",Algorithm.callAvgNumbers(data,applicant,6,1));
         //除近3个月，剩余月总通话时长
-        Integer day_call_length_3m = Algorithm.totalCalllength(data,applicant,3);
-        result.put("day_call_length_3m",day_call_length_3m);
+        Integer total_time_no_3m = Algorithm.totalCalllength(data,applicant,3);
+        result.put("total_time_no_3m",total_time_no_3m);
         //除近3个月，剩余月月均总通话时长
-        String day_avg_call_length_3m = Algorithm.avgCalllength(data,applicant,3);
-        result.put("day_avg_call_length_3m",day_avg_call_length_3m);
+        String total_avg_time_no_3m = Algorithm.avgCalllength(data,applicant,3);
+        result.put("total_avg_time_no_3m",total_avg_time_no_3m);
         //入网时长（天）network_length
         result.put("network_length",Algorithm.networkLength(data,applicant));
         //近1个月主叫次数
@@ -654,7 +655,7 @@ public class XYCarrier {
         //近6个月月均主叫次数
         result.put("dial_avg_num_6m",String.format("%.2f",dial_num_6m.doubleValue()/6));
         //近6个月月均主叫次数比近1个月主叫次数
-        result.put("dial_avg_num_6m_1m",String.format("%.2f",dial_num_6m.doubleValue()/(6*dial_num_1m)));
+        result.put("total_dial_avg_6m_mul_1m",String.format("%.2f",dial_num_6m.doubleValue()/(6*dial_num_1m)));
         //近1个月无通话天数
         Integer no_call_1m = Algorithm.callDuration(data,applicant,1,0);
         result.put("no_call_1m",no_call_1m);
@@ -665,9 +666,9 @@ public class XYCarrier {
         Integer no_call_6m = Algorithm.callDuration(data,applicant,6,0);
         result.put("no_call_6m",no_call_6m);
         //近3个月无通话天数比近1个月无通话天数
-        result.put("no_call_3m_1m",String.format("%.2f",no_call_3m.doubleValue()/no_call_1m.doubleValue()));
+        result.put("no_call_day_mul_3m_1m",String.format("%.2f",no_call_3m.doubleValue()/no_call_1m.doubleValue()));
         //近6个月无通话天数比近1个月无通话天数
-        result.put("no_call_6m_1m",String.format("%.2f",no_call_6m.doubleValue()/no_call_1m.doubleValue()));
+        result.put("no_call_day_mul_6m_1m",String.format("%.2f",no_call_6m.doubleValue()/no_call_1m.doubleValue()));
         //近3个月消费总金额
         Integer total_money_3m = Algorithm.totalMoney(data,applicant,3);
         //近6个月消费总金额
@@ -677,49 +678,49 @@ public class XYCarrier {
         //近6个月月均消费金额
         result.put("total_avg_money_6m",String.format("%.2f",total_money_6m.doubleValue()/(6*100)));
         //近1个月联系3次以上的号码数
-        result.put("contact_3_num_1m",Algorithm.contactNumbers(data,applicant,1,3).size());
+        result.put("over_3_normal_phone_cnt_1m",Algorithm.contactNumbers(data,applicant,1,3).size());
         //近1个月联系5次以上的号码数
-        result.put("contact_5_num_1m",Algorithm.contactNumbers(data,applicant,1,5).size());
+        result.put("over_5_normal_phone_cnt_1m",Algorithm.contactNumbers(data,applicant,1,5).size());
         //近3个月联系3次以上的号码数
-        result.put("contact_3_num_3m",Algorithm.contactNumbers(data,applicant,3,3).size());
+        result.put("over_3_normal_phone_cnt_3m",Algorithm.contactNumbers(data,applicant,3,3).size());
         //近3个月联系5次以上的号码数
-        result.put("contact_5_num_3m",Algorithm.contactNumbers(data,applicant,3,5).size());
+        result.put("over_5_normal_phone_cnt_3m",Algorithm.contactNumbers(data,applicant,3,5).size());
         //近1个月最多通话所在城
         //近1个月第二多通话所在城
         List<String> firstCallCity1m = Algorithm.firstCallCity(data,applicant,1);
-        result.put("first_call_city_1m",firstCallCity1m.size()>=1?firstCallCity1m.get(0):"");
-        result.put("second_call_city_1m",firstCallCity1m.size()>=2?firstCallCity1m.get(1):"");
+        result.put("first_city_1m",firstCallCity1m.size()>=1?firstCallCity1m.get(0):"");
+        result.put("second_city_1m",firstCallCity1m.size()>=2?firstCallCity1m.get(1):"");
         //近3个月最多通话所在城
         //近3个月第二多通话所在城
         List<String> firstCallCity3m = Algorithm.firstCallCity(data,applicant,3);
-        result.put("first_call_city_3m",firstCallCity3m.size()>=1?firstCallCity3m.get(0):"");
-        result.put("second_call_city_3m",firstCallCity3m.size()>=2?firstCallCity3m.get(1):"");
+        result.put("first_city_3m",firstCallCity3m.size()>=1?firstCallCity3m.get(0):"");
+        result.put("second_city_3m",firstCallCity3m.size()>=2?firstCallCity3m.get(1):"");
         //近6个月最多通话所在城
         //近6个月第二多通话所在城
         List<String> firstCallCity6m = Algorithm.firstCallCity(data,applicant,6);
-        result.put("first_call_city_6m",firstCallCity6m.size()>=1?firstCallCity6m.get(0):"");
-        result.put("second_call_city_6m",firstCallCity6m.size()>=2?firstCallCity6m.get(1):"");
+        result.put("first_city_6m",firstCallCity6m.size()>=1?firstCallCity6m.get(0):"");
+        result.put("second_city_6m",firstCallCity6m.size()>=2?firstCallCity6m.get(1):"");
         //近1个月最多通话所在城市次数
         //近1个月第二多通话所在城市次数
         List<Integer> firstCallNumCity1m = Algorithm.firstCallNumCity(data,applicant,1);
-        result.put("first_call_num_city_1m",firstCallNumCity1m.size()>=1?firstCallNumCity1m.get(0):"");
-        result.put("second_call_num_city_1m",firstCallNumCity1m.size()>=2?firstCallNumCity1m.get(1):"");
+        result.put("first_city_cnt_1m",firstCallNumCity1m.size()>=1?firstCallNumCity1m.get(0):"");
+        result.put("second_city_cnt_1m",firstCallNumCity1m.size()>=2?firstCallNumCity1m.get(1):"");
         //近3个月最多通话所在城市次数
         //近3个月第二多通话所在城市次数
         List<Integer> firstCallNumCity3m = Algorithm.firstCallNumCity(data,applicant,3);
-        result.put("first_call_num_city_3m",firstCallNumCity3m.size()>=1?firstCallNumCity3m.get(0):"");
-        result.put("second_call_num_city_3m",firstCallNumCity3m.size()>=2?firstCallNumCity3m.get(1):"");
+        result.put("first_city_cnt_3m",firstCallNumCity3m.size()>=1?firstCallNumCity3m.get(0):"");
+        result.put("second_city_cnt_3m",firstCallNumCity3m.size()>=2?firstCallNumCity3m.get(1):"");
         //近6个月最多通话所在城市次数
         //近6个月第二多通话所在城市次数
         List<Integer> firstCallNumCity6m = Algorithm.firstCallNumCity(data,applicant,6);
-        result.put("first_call_num_city_6m",firstCallNumCity6m.size()>=1?firstCallNumCity6m.get(0):"");
-        result.put("second_call_num_city_6m",firstCallNumCity6m.size()>=2?firstCallNumCity6m.get(1):"");
+        result.put("first_city_cnt_6m",firstCallNumCity6m.size()>=1?firstCallNumCity6m.get(0):"");
+        result.put("second_city_cnt_6m",firstCallNumCity6m.size()>=2?firstCallNumCity6m.get(1):"");
         //近1个月总通话次数比近1个月最多通话所在城市次数
-        result.put("total_first_call_num_1m",firstCallNumCity1m.size()==0?0:String.format("%.2f",callNumbersByOneMonth.doubleValue()/firstCallNumCity1m.get(0).doubleValue()));
+        result.put("total_num_city_mul_1m",firstCallNumCity1m.size()==0?0:String.format("%.2f",callNumbersByOneMonth.doubleValue()/firstCallNumCity1m.get(0).doubleValue()));
         //近3个月总通话次数比近3个月最多通话所在城市次数
-        result.put("total_first_call_num_3m",firstCallNumCity3m.size()==0?0:String.format("%.2f",callNumbersByThreeMonth.doubleValue()/firstCallNumCity3m.get(0).doubleValue()));
+        result.put("total_num_city_mul_3m",firstCallNumCity3m.size()==0?0:String.format("%.2f",callNumbersByThreeMonth.doubleValue()/firstCallNumCity3m.get(0).doubleValue()));
         //近6个月总通话次数比近6个月最多通话所在城市次数
-        result.put("total_first_call_num_6m", firstCallNumCity6m.size()==0?0:String.format("%.2f",callNumbersBySixMonth.doubleValue()/firstCallNumCity6m.get(0).doubleValue()));
+        result.put("total_num_city_mul_6m", firstCallNumCity6m.size()==0?0:String.format("%.2f",callNumbersBySixMonth.doubleValue()/firstCallNumCity6m.get(0).doubleValue()));
         //近1个月总通话时长（秒）
         result.put("total_call_length_sec_1m",total_length_1m);
         //近1个月总通话时长（分）
@@ -738,29 +739,31 @@ public class XYCarrier {
         result.put("avg_call_length_sec_6m",String.format("%.2f",total_length_6m.doubleValue()/6));
         //除近2个月，剩余月总通话时长（秒）
         Integer day_call_length_2m = Algorithm.totalCalllength(data,applicant,2);
-        result.put("day_call_length_sec_2m",day_call_length_2m);
+        result.put("total_time_no_2m",day_call_length_2m);
         //除近2个月，剩余月总通话时长（分）
         result.put("day_call_length_minute_2m",Math.ceil(day_call_length_2m.doubleValue()/60));
         //除近2个月，剩余月月均总通话时长（秒）
-        result.put("avg_call_length_sec_2m",String.format("%.2f",day_call_length_2m.doubleValue()/2));
+        result.put("total_avg_time_no_2m",String.format("%.2f",day_call_length_2m.doubleValue()/2));
         //除近2个月，剩余月月均总通话时长（分）
         result.put("avg_call_length_minute_2m",String.format("%.2f",day_call_length_2m.doubleValue()/(2*60)));
         //除近2个月，剩余月月均总通话时长比近1个月总通话时长
         result.put("avg_call_length_sec_2m_total_1m",String.format("%.2f",day_call_length_2m.doubleValue()/(2*total_length_1m)));
         //近1个月TOP10联系人联系最多号码的次数（正常号码）
-        result.put("call_max_num_1m",Algorithm.callMaxNum(data,applicant,1,10));
+        result.put("top_10_most_normal_phone_cnt_1m",Algorithm.callMaxNum(data,applicant,1,10));
         //近3个月TOP10联系人联系最多号码的次数（正常号码）
-        result.put("call_max_num_3m",Algorithm.callMaxNum(data,applicant,3,10));
+        result.put("top_10_most_normal_phone_cnt_3m",Algorithm.callMaxNum(data,applicant,3,10));
         //近6个月TOP10联系人联系最多号码的次数（正常号码）
-        result.put("call_max_num_6m",Algorithm.callMaxNum(data,applicant,6,10));
+        result.put("top_10_most_normal_phone_cnt_6m",Algorithm.callMaxNum(data,applicant,6,10));
         //近3个月互通号码个数（正常号码）
         result.put("inter_peer_num_3m",Algorithm.interPeerNum(data,applicant,3));
         //近6个月互通号码个数（正常号码）
         result.put("inter_peer_num_6m",Algorithm.interPeerNum(data,applicant,6));
         //近3个月联系10次以上号码个数（正常号码）
-        result.put("good_friend_num_3m",Algorithm.goodFriendNum(data,applicant,3));
+        Integer good_friend_num_3m = Algorithm.goodFriendNum(data,applicant,3,10);
+        result.put("good_friend_num_3m",good_friend_num_3m);
         //近6个月联系10次以上号码个数（正常号码）
-        result.put("good_friend_num_6m",Algorithm.goodFriendNum(data,applicant,6));
+        Integer good_friend_num_6m = Algorithm.goodFriendNum(data,applicant,6,10);
+        result.put("good_friend_num_6m",good_friend_num_6m);
         //近1个月拨打110次数
         result.put("call_110_num_1m",Algorithm.callCount(data,applicant,1,"110"));
         //近3个月拨打110次数
@@ -808,11 +811,13 @@ public class XYCarrier {
         List<String> address1m = Algorithm.top10Address(data,applicant,1,10);
         result.put("top10_first_province_1m",address1m.size()>0?address1m.get(0):null);
         result.put("top10_first_city_1m",address1m.size()>1?address1m.get(1):null);
-        result.put("top10_first_num_1m",address1m.size()>2?address1m.get(2):null);
-        result.put("top10_second_province_1m",address1m.size()>3?address1m.get(3):null);
-        result.put("top10_second_city_1m",address1m.size()>4?address1m.get(4):null);
-        result.put("top10_second_num_1m",address1m.size()>5?address1m.get(5):null);
-        result.put("top10_address_num_1m",address1m.size()>6?address1m.get(6):null);
+        result.put("top_10_most_location_1m",address1m.size()>2?address1m.get(2):null);
+        result.put("top10_first_num_1m",address1m.size()>3?address1m.get(3):null);
+        result.put("top10_second_province_1m",address1m.size()>4?address1m.get(4):null);
+        result.put("top10_second_city_1m",address1m.size()>5?address1m.get(5):null);
+        result.put("top_10_second_location_1m",address1m.size()>6?address1m.get(6):null);
+        result.put("top10_second_num_1m",address1m.size()>7?address1m.get(7):null);
+        result.put("top10_address_num_1m",address1m.size()>8?address1m.get(8):null);
         //近3个月TOP10联系人最多的归属地省（正常号码）
         //近3个月TOP10联系人最多的归属地市（正常号码）
         //近3个月TOP10联系人最多的归属地号码数（正常号码）
@@ -823,26 +828,144 @@ public class XYCarrier {
         List<String> address3m = Algorithm.top10Address(data,applicant,3,10);
         result.put("top10_first_province_3m",address3m.size()>0?address3m.get(0):null);
         result.put("top10_first_city_3m",address3m.size()>1?address3m.get(1):null);
-        result.put("top10_first_num_3m",address3m.size()>2?address3m.get(2):null);
-        result.put("top10_second_province_3m",address3m.size()>3?address3m.get(3):null);
-        result.put("top10_second_city_3m",address3m.size()>4?address3m.get(4):null);
-        result.put("top10_second_num_3m",address3m.size()>5?address3m.get(5):null);
-        result.put("top10_address_num_3m",address3m.size()>6?address3m.get(6):null);
+        result.put("top_10_most_location_3m",address3m.size()>2?address3m.get(2):null);
+        result.put("top10_first_num_3m",address3m.size()>3?address3m.get(3):null);
+        result.put("top10_second_province_3m",address3m.size()>4?address3m.get(4):null);
+        result.put("top10_second_city_3m",address3m.size()>5?address3m.get(5):null);
+        result.put("top_10_second_location_3m",address3m.size()>6?address3m.get(6):null);
+        result.put("top10_second_num_3m",address3m.size()>7?address3m.get(7):null);
+        result.put("top10_address_num_3m",address3m.size()>8?address3m.get(8):null);
         //近6个月TOP10联系人最多的归属地省（正常号码）
         //近6个月TOP10联系人最多的归属地市（正常号码）
+        //近6个月TOP10联系人最多的归属地（正常号码）
         //近6个月TOP10联系人最多的归属地号码数（正常号码）
         //近6个月TOP10联系人第二多的归属地省（正常号码）
         //近6个月TOP10联系人第二多的归属地市（正常号码）
+        //近6个月TOP10联系人第二多的归属地（正常号码）
         //近6个月TOP10联系人第二多的归属地号码数（正常号码）
         //近6个月TOP10联系人的归属地个数（正常号码）
         List<String> address6m = Algorithm.top10Address(data,applicant,6,10);
-        result.put("top10_first_province_6m",address3m.size()>0?address3m.get(0):null);
-        result.put("top10_first_city_6m",address3m.size()>1?address3m.get(1):null);
-        result.put("top10_first_num_6m",address3m.size()>2?address3m.get(2):null);
-        result.put("top10_second_province_6m",address3m.size()>3?address3m.get(3):null);
-        result.put("top10_second_city_6m",address3m.size()>4?address3m.get(4):null);
-        result.put("top10_second_num_6m",address3m.size()>5?address3m.get(5):null);
-        result.put("top10_address_num_6m",address3m.size()>6?address3m.get(6):null);
+        result.put("top10_first_province_6m",address6m.size()>0?address6m.get(0):null);
+        result.put("top10_first_city_6m",address6m.size()>1?address6m.get(1):null);
+        result.put("top_10_most_location_6m",address6m.size()>2?address6m.get(2):null);
+        result.put("top10_first_num_6m",address6m.size()>3?address6m.get(3):null);
+        result.put("top10_second_province_6m",address6m.size()>4?address6m.get(4):null);
+        result.put("top10_second_city_6m",address6m.size()>5?address6m.get(5):null);
+        result.put("top_10_second_location_6m",address6m.size()>6?address6m.get(6):null);
+        result.put("top10_second_num_6m",address6m.size()>7?address6m.get(7):null);
+        result.put("top10_address_num_6m",address6m.size()>8?address6m.get(8):null);
+
+        //近1个月联系号码数(正常号码数)	friend_normal_num_1m	int
+        Algorithm.friendNormalNum(data,applicant,result,1);
+        //近3个月联系号码数(正常号码数)	friend_normal_num_3m	int
+        Algorithm.friendNormalNum(data,applicant,result,3);
+        //近6个月联系号码数(正常号码数)	friend_normal_num_6m	int
+        Algorithm.friendNormalNum(data,applicant,result,6);
+        //近1个月联系10次以上的号码数量(正常号码数)	good_10_friend_num_1m	int
+        result.put("good_10_friend_num_1m",Algorithm.contactNumbers(data,applicant,1,10).size());
+        //近3个月联系10次以上的号码数量(正常号码数)	good_10_friend_num_3m	int
+        result.put("good_10_friend_num_3m",Algorithm.contactNumbers(data,applicant,3,10).size());
+        //近6个月联系10次以上的号码数量(正常号码数)	good_10_friend_num_6m	int
+        result.put("good_10_friend_num_6m",Algorithm.contactNumbers(data,applicant,6,10).size());
+        //近1个月通话次数比主叫次数	total_dial_mul_1m	double
+        Algorithm.totalDialMuL(data,applicant,result,1,"total_dial_mul_1m");
+        //近6个月月均通话次数比近1个月通话次数	total_num_avg_6m_mul_1m	double
+        result.put("total_num_avg_6m_mul_1m",Double.parseDouble(Algorithm.callAvgNumbers(data,applicant,6,0))/Algorithm.totalCallNum(data,applicant,result,1));
+        //近6个月月均主叫次数比近1个月主叫次数	total_dial_avg_6m_mul_1m	double
+        //近3个月无通话天数比近1个月无通话天数	no_call_day_mul_3m_1m	double
+        //近6个月无通话天数比近1个月无通话天数	no_call_day_mul_6m_1m	double
+
+        //近1个月通话时长大于5秒的次数	over_5s_length_num_1m	int
+        result.put("over_5s_length_num_1m",Algorithm.talkTime(data,applicant,1,3,5));
+        //近3个月通话时长大于5秒的次数	over_5s_length_num_3m	int
+        result.put("over_5s_length_num_3m",Algorithm.talkTime(data,applicant,3,3,5));
+        //近6个月通话时长大于5秒的次数	over_5s_length_num_6m	int
+        result.put("over_5s_length_num_6m",Algorithm.talkTime(data,applicant,6,3,5));
+        //近3个月每个月都出现的号码个数（非手机号除外）	each_month_normal_phone_cnt_3m	int
+        result.put("each_month_normal_phone_cnt_3m",Algorithm.everMonthLocalNum(data,applicant,3).size());
+        //近6个月每个月都出现的号码个数（非手机号除外）	each_month_normal_phone_cnt_6m	int
+        result.put("each_month_normal_phone_cnt_6m",Algorithm.everMonthLocalNum(data,applicant,6).size());
+        //近1个月联系3次以上的号码数（非手机号除外）	over_3_normal_phone_cnt_1m	int
+        //近1个月联系5次以上的号码数（非手机号除外）	over_5_normal_phone_cnt_1m	int
+        //近3个月联系5次以上的号码数（非手机号除外）	over_3_normal_phone_cnt_3m	int
+        //近1个月最多通话所在城市	first_city_1m	string
+        //近1个月第二多通话所在城市	second_city_1m	string
+        //近3个月最多通话所在城市	first_city_3m	string
+        //近3个月第二多通话所在城市	second_city_3m	string
+        //近6个月最多通话所在城市	first_city_6m	string
+        //近6个月第二多通话所在城市	second_city_6m	string
+        //近1个月最多通话所在城市次数	first_city_cnt_1m	int
+        //近1个月第二多通话所在城市次数	second_city_cnt_1m	int
+        //近3个月最多通话所在城市次数	first_city_cnt_3m	int
+        //近3个月第二多通话所在城市次数	second_city_cnt_3m	int
+        //近6个月最多通话所在城市次数	first_city_cnt_6m	int
+        //近6个月第二多通话所在城市次数	second_city_cnt_6m	int
+        //近1个月总通话次数比近1个月最多通话所在城市次数	total_num_city_mul_1m	double
+        //近3个月总通话次数比近3个月最多通话所在城市次数	total_num_city_mul_3m	double
+        //近6个月总通话次数比近6个月最多通话所在城市次数	total_num_city_mul_6m	double
+        //除近2个月，剩余月总通话时长	total_time_no_2m	double
+        //除近2个月，剩余月月均总通话时长	total_avg_time_no_2m	double
+        //除近3个月，剩余月总通话时长	total_time_no_3m	double
+        //除近3个月，剩余月月均总通话时长	total_avg_time_no_3m	double
+        //近1个月TOP10联系人联系最多号码的次数（非手机号除外）	top_10_most_normal_phone_cnt_1m	int
+        //近3个月TOP10联系人联系最多号码的次数（非手机号除外）	top_10_most_normal_phone_cnt_3m	int
+        //近6个月TOP10联系人联系最多号码的次数（非手机号除外）	top_10_most_normal_phone_cnt_6m	int
+
+        //近1个月互通号码个数（非手机号除外）	interflow_normal_cnt_1m	int
+        result.put("interflow_normal_cnt_1m",Algorithm.interPeerNum(data,applicant,1));
+        //近3个月互通号码个数（非手机号除外）	interflow_normal_cnt_3m	int
+        //近6个月互通号码个数（非手机号除外）	interflow_normal_cnt_6m	int
+
+        //近1个月联系10次以上号码个数（非手机号除外）	over_10_phone_cnt_1m	int
+        Integer over_10_phone_cnt_1m = Algorithm.goodFriendNum(data,applicant,1,10);
+        result.put("over_10_phone_cnt_1m",over_10_phone_cnt_1m);
+        //近3个月联系10次以上号码个数（非手机号除外）	over_10_phone_cnt_3m	int
+        //近6个月联系10次以上号码个数（非手机号除外）	over_10_phone_cnt_6m	int
+        //近1个月TOP10联系人最多的归属地（非手机号除外）	top_10_most_location_1m	string
+        //近3个月TOP10联系人最多的归属地（非手机号除外）	top_10_most_location_3m	string
+        //近6个月TOP10联系人最多的归属地（非手机号除外）	top_10_most_location_6m	string
+        //近1个月TOP10联系人第二多的归属地（非手机号除外）	top_10_second_location_1m	string
+        //近3个月TOP10联系人第二多的归属地（非手机号除外）	top_10_second_location_3m	string
+        //近6个月TOP10联系人第二多的归属地（非手机号除外）	top_10_second_location_6m	string
+        //近1个月TOP10联系人最多的归属地号码数（非手机号除外）	top_10_most_location_cnt_1m	int
+        //近3个月TOP10联系人最多的归属地号码数（非手机号除外）	top_10_most_location_cnt_3m	int
+        //近6个月TOP10联系人最多的归属地号码数（非手机号除外）	top_10_most_location_cnt_6m	int
+        //近1个月TOP10联系人第二多的归属地号码数（非手机号除外）	top_10_second_location_cnt_1m	int
+        //近3个月TOP10联系人第二多的归属地号码数（非手机号除外）	top_10_second_location_cnt_3m	int
+        //近6个月TOP10联系人第二多的归属地号码数（非手机号除外）	top_10_second_location_cnt_6m	int
+        //近1个月TOP10联系人的归属地个数（非手机号除外）	top_10_location_cnt_1m	int
+        //近3个月TOP10联系人的归属地个数（非手机号除外）	top_10_location_cnt_3m	int
+        //近6个月TOP10联系人的归属地个数（非手机号除外）	top_10_location_cnt_6m	int
+
+        //近1个月单次最长通话时长	single_max_time_1m	long
+        Algorithm.singleMaxTime(data,applicant,result,1);
+        //近3个月单次最长通话时长	single_max_time_3m	long
+        Algorithm.singleMaxTime(data,applicant,result,3);
+        //近6个月单次最长通话时长	single_max_time_6m	long
+        Algorithm.singleMaxTime(data,applicant,result,6);
+        //近1个月联系10次以上号码出现在通讯录中的号码占近1个月联系10次以上号码的比例	in_list_10_pct_1m	double
+        Integer over_10_phone_address_1m = Algorithm.inListPct(data,applicant,dfp,1,10);
+        result.put("in_list_10_pct_1m",over_10_phone_cnt_1m==0?0:String.format("%.2f",over_10_phone_address_1m/over_10_phone_cnt_1m));
+        //近3个月联系10次以上号码出现在通讯录中的号码占近1个月联系10次以上号码的比例	in_list_10_pct_3m	double
+        Integer over_10_phone_address_3m = Algorithm.inListPct(data,applicant,dfp,3,10);
+        result.put("in_list_10_pct_3m",over_10_phone_cnt_1m==0?0:String.format("%.2f",over_10_phone_address_3m/over_10_phone_cnt_1m));
+        //近6个月联系10次以上号码出现在通讯录中的号码占近1个月联系10次以上号码的比例	in_list_10_pct_6m	double
+        Integer over_10_phone_address_6m = Algorithm.inListPct(data,applicant,dfp,6,10);
+        result.put("in_list_10_pct_6m",over_10_phone_cnt_1m==0?0:String.format("%.2f",over_10_phone_address_6m/over_10_phone_cnt_1m));
+        //近1个月联系5次以上号码出现在通讯录中的号码占近1个月联系5次以上号码的比例	in_list_5_pct_1m	double
+        Integer over_5_phone_cnt_1m = Algorithm.goodFriendNum(data,applicant,1,5);
+        Integer over_5_phone_address_1m = Algorithm.inListPct(data,applicant,dfp,1,5);
+        result.put("in_list_5_pct_1m",over_5_phone_cnt_1m==0?0:String.format("%.2f",(double)over_5_phone_address_1m/over_5_phone_cnt_1m));
+        //近3个月联系5次以上号码出现在通讯录中的号码占近1个月联系5次以上号码的比例	in_list_5_pct_3m	double
+        Integer over_5_phone_address_3m = Algorithm.inListPct(data,applicant,dfp,3,5);
+        result.put("in_list_5_pct_3m",over_5_phone_cnt_1m==0?0:String.format("%.2f",(double)over_5_phone_address_3m/over_5_phone_cnt_1m));
+        //近6个月联系5次以上号码出现在通讯录中的号码占近1个月联系5次以上号码的比例	in_list_5_pct_6m	double
+        Integer over_5_phone_address_6m = Algorithm.inListPct(data,applicant,dfp,6,5);
+        result.put("in_list_5_pct_6m",over_5_phone_cnt_1m==0?0:String.format("%.2f",(double)over_5_phone_address_6m/over_5_phone_cnt_1m));
+        //全部账单中最低消费金额	min_amount	double
+        //全部账单中最高消费金额	max_amount	double
+        Algorithm.amount(data,result);
+
 
         return result;
     }
@@ -860,7 +983,7 @@ public class XYCarrier {
         JSONObject applicant = JSONObject.parseObject(DataSource.applicant());
         //数据清洗入口方法
         try {
-            clean(jsonObject.getJSONObject("data"),applicant.getJSONObject("userInfo"),result);
+            clean(jsonObject.getJSONObject("data"),applicant.getJSONObject("userInfo"),new JSONArray(),result);
         } catch (Exception e) {
             e.printStackTrace();
         }

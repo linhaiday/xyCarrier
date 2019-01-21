@@ -493,12 +493,15 @@ public class TaobaoSelfAlgorithm {
 
         int count = 0;
         //申请地
-        String address = applicant.getString("");
+        String address = applicant.getString("customerApplyPlaceProvince")+applicant.getString("customerApplyPlaceCity");
         JSONArray tradedetails = self.getJSONObject("tradedetails").getJSONArray("tradedetails");
         for (Object tradedetail:tradedetails) {
             String trade_createtime = JSON.parseObject(tradedetail.toString()).getString("trade_createtime");
-
+            if(LevenshteinUtil.isSimilarAddress(address,trade_createtime)) count += 1;
         }
+
+        result.put("tb_apply_address_cnt",count);
+        System.out.println("收货地址为申请地的个数:"+count);
     }
 
     //总订单个数
