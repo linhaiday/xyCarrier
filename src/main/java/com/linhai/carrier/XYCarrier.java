@@ -966,6 +966,59 @@ public class XYCarrier {
         //全部账单中最高消费金额	max_amount	double
         Algorithm.amount(data,result);
 
+        //紧急联系人1出现在通话记录里的次数	eme1_contact_in_records_cnt_1m	int
+        //紧急联系人1最后一次通话距申请日时间	eme1_contact_distance_days	int
+        Algorithm.emelContactInRecordsCnt(data,applicant,result);
+        //近1个月紧急联系人1联系次数	eme1_contact_cnt_1m	int
+        Algorithm.emelContactCnt(data,applicant,result,1,0,1,"eme1_contact_cnt_1m");
+        //近3个月紧急联系人1联系次数	eme1_contact_cnt_3m	int
+        Algorithm.emelContactCnt(data,applicant,result,3,0,1,"eme1_contact_cnt_3m");
+        //近6个月紧急联系人1联系次数	eme1_contact_cnt_6m	int
+        Algorithm.emelContactCnt(data,applicant,result,6,0,1,"eme1_contact_cnt_6m");
+        //后3个月紧急联系人1联系次数	eme1_contact_cnt_later_3m	int
+        result.put("eme1_contact_cnt_later_3m",Algorithm.emelContactCntLater(data,applicant,result,3,1));
+        //前3个月除近1个月紧急联系人1联系次数	eme1_contact_cnt_near_exclude_1m_3m	int
+        Algorithm.emelContactCnt(data,applicant,result,3,1,1,"eme1_contact_cnt_near_exclude_1m_3m");
+        //近3个月紧急联系人2联系次数	eme2_contact_cnt_3m	int
+        Algorithm.emelContactCnt(data,applicant,result,3,0,2,"eme2_contact_cnt_3m");
+        //近6个月紧急联系人2联系次数	eme2_contact_cnt_6m	int
+        Algorithm.emelContactCnt(data,applicant,result,6,0,2,"eme2_contact_cnt_6m");
+        //后3个月紧急联系人2联系次数	eme2_contact_cnt_later_3m	int
+        result.put("eme2_contact_cnt_later_3m",Algorithm.emelContactCntLater(data,applicant,result,3,2));
+        //近3个月紧急联系人3联系次数	eme3_contact_cnt_3m	int
+        Algorithm.emelContactCnt(data,applicant,result,3,0,3,"eme3_contact_cnt_3m");
+        //近6个月紧急联系人3联系次数	eme3_contact_cnt_6m	int
+        Algorithm.emelContactCnt(data,applicant,result,6,0,3,"eme3_contact_cnt_6m");
+        //后3个月紧急联系人3联系次数	eme3_contact_cnt_later_3m	int
+        result.put("eme3_contact_cnt_later_3m",Algorithm.emelContactCntLater(data,applicant,result,3,3));
+        //运营商认证号码是否等于注册号码	operator_equal_reg_phone	int
+        Algorithm.operatorEqualRegPhone(data,applicant,result);
+        //后3个月连续5天无通话次数	5_day_no_call_later_3m	int
+        result.put("5_day_no_call_later_3m",Algorithm.dayNoCallLater(data,applicant,3,5));
+        //后3个月连续7天无通话次数	7_day_no_call_later_3m	int
+        result.put("7_day_no_call_later_3m",Algorithm.dayNoCallLater(data,applicant,3,7));
+        //前3个月除近1个月连续5天无通话次数	5_day_no_call_near_exclude_1m_3m	int
+        result.put("5_day_no_call_near_exclude_1m_3m",Algorithm.noCall(data,applicant,3,1,5));
+        //前3个月除近1个月连续7天无通话次数	7_day_no_call_near_exclude_1m_3m	int
+        result.put("7_day_no_call_near_exclude_1m_3m",Algorithm.noCall(data,applicant,3,1,7));
+        //后3个月无通话天数	no_call_day_later_3m	int
+        result.put("no_call_day_later_3m",Algorithm.noCallDayLater(data,applicant,3));
+        //前3个月除近1个月无通话天数	no_call_day_near_exclude_1m_3m	int
+        result.put("7_day_no_call_near_exclude_1m_3m",Algorithm.noCallDay(data,applicant,3,1));
+        //紧急联系人号码是否出现在通讯录	eme_contact_in_call_list	int
+        result.put("eme_contact_in_call_list",Algorithm.emeContactInCallList(data,applicant));
+        //近1个月日均通话时长	call_length_avg_day_1m	double
+        result.put("call_length_avg_day_1m",String.format("%.2f",total_length_1m.doubleValue()/ CarrierDateUtil.daysBetween(CarrierDateUtil.monthsBefore(1,applicant.get("customerApplyDate").toString()),CarrierDateUtil.getNowDate())));
+        //近3个月日均通话时长	call_length_avg_day_3m	double
+        result.put("call_length_avg_day_3m",String.format("%.2f",total_length_3m.doubleValue()/ CarrierDateUtil.daysBetween(CarrierDateUtil.monthsBefore(3,applicant.get("customerApplyDate").toString()),CarrierDateUtil.getNowDate())));
+        //近6个月日均通话时长	call_length_avg_day_6m	double
+        result.put("call_length_avg_day_6m",String.format("%.2f",total_length_6m.doubleValue()/ CarrierDateUtil.daysBetween(CarrierDateUtil.monthsBefore(6,applicant.get("customerApplyDate").toString()),CarrierDateUtil.getNowDate())));
+        //近7天无通话天数	no_call_day_7d	int
+        result.put("no_call_day_7d",Algorithm.noCallDayForDay(data,applicant,7));
+        //近7天连续无通话天数最大值	max_no_call_day_7d	int
+        result.put("",Algorithm.maxNoCallDay(data,applicant,7));
+        //近1个月连续无通话天数最大值	max_day_no_call_1m	int
+        result.put("",Algorithm.maxNoCallDay(data,applicant,30));
 
         return result;
     }

@@ -59,6 +59,38 @@ public class CarrierDateUtil {
     }
 
     /**
+     * 未来N个月的时间点
+     * @param month
+     * @return
+     */
+    public static String monthsAfter(int month,String date){
+
+
+        Calendar c = Calendar.getInstance();
+        c.setTime(toDate(date));
+        c.add(Calendar.MONTH, month);
+        Date m = c.getTime();
+
+        return format.format(m);
+    }
+
+    /**
+     * 过去N天的时间点
+     * @param days
+     * @return
+     */
+    public static String daysBefore(int days,String date){
+
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(toDate(date));
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        calendar.add(Calendar.DATE, -days);
+
+        return format.format(calendar.getTime());
+    }
+
+    /**
      * String型日期转换成Date
      * @param date
      * @return
