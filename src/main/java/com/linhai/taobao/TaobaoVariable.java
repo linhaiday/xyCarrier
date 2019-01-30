@@ -213,9 +213,9 @@ public class TaobaoVariable {
         //账单中出现婴儿字段的订单次数	tb_baby_order_cnt	int	关键词：婴儿尿不湿、婴儿奶粉
         //账单中出现婴儿字段的订单金额	tb_baby_order_amount	double
         TaobaoSelfAlgorithm.orderCntAmount(self,result,new String[]{"婴儿尿不湿","婴儿奶粉"},"baby");
-        //账单中出现儿童字段的订单次数	tb_child_order_cnt	int	关键词：童装
+        //账单中出现儿童字段的订单次数	tb_child_order_cnt	int	关键词：童装、男孩女孩、儿童蜡笔、儿童书籍、儿童周岁、年级课本、识字、注音、小学课本
         //账单中出现儿童字段的订单金额	tb_child_order_amount	double
-        TaobaoSelfAlgorithm.orderCntAmount(self,result,new String[]{"童装"},"child");
+        TaobaoSelfAlgorithm.orderCntAmount(self,result,new String[]{"童装","男孩女孩","儿童蜡笔","儿童书籍","儿童周岁","年级课本","识字","注音","小学课本"},"child");
         //账单中生活用品类字段的订单次数	tb_daily_order_cnt	int	关键词：洗发水、洗衣液、卫生纸、洗洁精
         //账单中生活用品类字段订单金额	tb_daily_order_amount	double
         TaobaoSelfAlgorithm.orderCntAmount(self,result,new String[]{"洗发水","洗衣液","卫生纸","洗洁精"},"daily");
@@ -231,6 +231,36 @@ public class TaobaoVariable {
         TaobaoSelfAlgorithm.applyAddressCnt(self,applicant,result);
         //总订单个数 tb_total_order_cnt  int
         TaobaoSelfAlgorithm.totalOrderCnt(self,result);
+
+        //机油有效订单次数	tb_oil_order_cnt	int
+        //机油有效订单金额	tb_oil_order_amount	double
+        TaobaoSelfAlgorithm.validOrder(self,result,"机油","tb_oil_order_cnt","tb_oil_order_amount");
+        //雨刮器有效订单次数	tb_wiper_order_cnt	int
+        //雨刮器有效订单金额	tb_wiper_order_amount	double
+        TaobaoSelfAlgorithm.validOrder(self,result,"雨刮器","tb_wiper_order_cnt","tb_wiper_order_amount");
+        //汽车改装有效订单次数	tb_car_refit_order_cnt	int
+        //汽车改装有效订单金额	tb_car_refit_order_amount	double
+        TaobaoSelfAlgorithm.validOrder(self,result,"汽车改装","tb_car_refit_order_cnt","tb_car_refit_order_amount");
+        //汽车护理有效订单次数	tb_car_nurse_order_cnt	int
+        //汽车护理有效订单金额	tb_car_nurse_order_amount	double
+        TaobaoSelfAlgorithm.validOrder(self,result,"汽车护理","tb_car_nurse_order_cnt","tb_car_nurse_order_amount");
+        //装修材料有效订单数 	tb_adorn_order_cnt	int
+        //装修材料有效订单金额	tb_adorn_order_amount	double
+        TaobaoSelfAlgorithm.validOrder(self,result,"装修材料","tb_adorn_order_cnt","tb_adorn_order_amount");
+        //婚戒有效订单次数	tb_ring_order_cnt	int
+        //婚戒有效订单金额	tb_ring_order_amount	double
+        TaobaoSelfAlgorithm.validOrder(self,result,"婚戒","tb_ring_order_cnt","tb_ring_order_amount");
+        //账单中出现女装字段的订单次数	tb_w_wear_order_cnt	int 关键词：女装
+        //账单中出现女装字段的订单金额	tb_w_wear_order_amount	double
+        TaobaoSelfAlgorithm.orderCntAmount(self,result,new String[]{"女装"},"w_wear");
+        //账单中出现男装字段的订单次数	tb_m_wear_order_cnt	int 关键词：男装
+        //账单中出现男装字段的订单金额	tb_m_wear_order_amount	double
+        TaobaoSelfAlgorithm.orderCntAmount(self,result,new String[]{"男装"},"m_wear");
+        //账单中出现剃须刀字段的订单次数	tb_shaver_order_cnt	int 关键词：剃须刀
+        //账单中出现剃须刀字段的订单金额	tb_shaver_order_amount	double
+        TaobaoSelfAlgorithm.orderCntAmount(self,result,new String[]{"剃须刀"},"shaver");
+
+
     }
 
     //申请人配偶变量清洗
@@ -317,12 +347,29 @@ public class TaobaoVariable {
         //配偶_账单中出现婴儿字段的订单次数	tb_partner_baby_order_cnt	int	关键词：婴儿尿不湿、婴儿奶粉
         //配偶_账单中出现婴儿字段的订单金额	tb_partner_baby_order_amount	double
         TaobaoPartnerAlgorithm.orderCntAmount(partner,result,new String[]{"婴儿尿不湿","婴儿奶粉"},"baby");
-        //配偶_账单中出现儿童字段的订单次数	tb_partner_child_order_cnt	int	关键词：童装
+        //配偶_账单中出现儿童字段的订单次数	tb_partner_child_order_cnt	int	关键词：童装、男孩女孩、儿童蜡笔、儿童书籍、儿童周岁、年级课本、识字、注音、小学课本
         //配偶_账单中出现儿童字段的订单金额	tb_partner_child_order_amount	double
-        TaobaoPartnerAlgorithm.orderCntAmount(partner,result,new String[]{"童装"},"child");
+        TaobaoPartnerAlgorithm.orderCntAmount(partner,result,new String[]{"童装","男孩女孩","儿童蜡笔","儿童书籍","儿童周岁","年级课本","识字","注音","小学课本"},"child");
         //配偶_账单中生活用品类字段的订单次数	tb_partner_daily_order_cnt	int	关键词：洗发水、洗衣液、卫生纸、洗洁精
         //配偶_账单中生活用品类字段订单金额	tb_partner_daily_order_amount	double
         TaobaoPartnerAlgorithm.orderCntAmount(partner,result,new String[]{"洗发水","洗衣液","卫生纸","洗洁精"},"daily");
+
+        //配偶_装修材料有效订单数 	tb_partner_adorn_order_cnt	int
+        //配偶_装修材料有效订单金额	tb_partner_adorn_order_amount	double
+        TaobaoPartnerAlgorithm.validOrder(partner,result,"装修材料","tb_partner_adorn_order_cnt","tb_partner_adorn_order_amount");
+        //配偶_婚戒有效订单次数	tb_partner_ring_order_cnt	int
+        //配偶_婚戒有效订单金额	tb_partner_ring_order_amount	double
+        TaobaoPartnerAlgorithm.validOrder(partner,result,"婚戒","tb_partner_ring_order_cnt","tb_partner_ring_order_amount");
+        //配偶_账单中出现女装字段的订单次数	tb_partner_w_wear_order_cnt	int 关键词：女装
+        //配偶_账单中出现女装字段的订单金额	tb_partner_w_wear_order_amount	double
+        TaobaoPartnerAlgorithm.orderCntAmount(partner,result,new String[]{"女装"},"w_wear");
+        //配偶_账单中出现男装字段的订单次数	tb_partner_m_wear_order_cnt	int 关键词：男装
+        //配偶_账单中出现男装字段的订单金额	tb_partner_m_wear_order_amount	double
+        TaobaoPartnerAlgorithm.orderCntAmount(partner,result,new String[]{"男装"},"m_wear");
+        //配偶_账单中出现剃须刀字段的订单次数	tb_partner_shaver_order_cnt	int 关键词：剃须刀
+        //配偶_账单中出现剃须刀字段的订单金额	tb_partner_shaver_order_amount	double
+        TaobaoPartnerAlgorithm.orderCntAmount(partner,result,new String[]{"剃须刀"},"shaver");
+
     }
 
     //交叉变量清洗
@@ -355,6 +402,7 @@ public class TaobaoVariable {
         TaobaoCrossAlgorithm.samePhone(self,partner,applicant,result);
         //只有最近一个月的订单包含配偶，而之前没有	tb_spouse_only_recently	配偶_只有最近一个月的订单包含申请人，而之前没有	tb_partner_spouse_only_recently	int(否：0，是：1)
         TaobaoCrossAlgorithm.spouseOnlyRecently(self,partner,applicant,result,1);
+
     }
 
     public static void main(String[] args) {

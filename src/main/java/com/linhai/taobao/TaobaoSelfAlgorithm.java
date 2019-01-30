@@ -403,8 +403,6 @@ public class TaobaoSelfAlgorithm {
 
     //账单中出现某字段的订单次数
     //账单中出现某字段的订单金额
-    //配偶_账单中出现某字段的订单次数
-    //配偶_账单中出现某字段的订单金额
     public static void orderCntAmount(JSONObject self, JSONObject result,String[] fields,String str) {
 
         int num = 0;
@@ -510,5 +508,31 @@ public class TaobaoSelfAlgorithm {
         JSONArray tradedetails = self.getJSONObject("tradedetails").getJSONArray("tradedetails");
 
         result.put("tb_total_order_cnt",tradedetails.size());
+    }
+
+    //name有效订单总次数
+    //name有效订单总金额
+    public static void validOrder(JSONObject self, JSONObject result,String name,String key1,String key2) {
+
+        int num = 0;
+        int money = 0;
+        JSONArray tradedetails = self.getJSONObject("tradedetails").getJSONArray("tradedetails");
+        for (Object tradedetail:tradedetails) {
+            if(StringUtils.indexOf(JSON.parseObject(tradedetail.toString()).getString("trade_status"),"成功")<0) continue;
+            JSONArray sub_orders = JSON.parseObject(tradedetail.toString()).getJSONArray("sub_orders");
+            for (Object obj:sub_orders) {
+                JSONObject sub_order = JSON.parseObject(obj.toString());
+                if(StringUtils.indexOf(sub_order.getString("item_name"),name)>0){
+                    num += 1;
+                    money += Integer.parseInt(sub_order.getString("real_total")==null?"0":sub_order.getString("real_total"));
+                    break;
+                }
+            }
+        }
+
+        result.put(key1,num);
+        result.put(key2,money/100);
+        System.out.println(name+"有效订单总次数:"+num);
+        System.out.println(name+"有效订单总金额:"+money/100);
     }
 }
