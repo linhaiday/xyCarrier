@@ -535,4 +535,21 @@ public class TaobaoSelfAlgorithm {
         System.out.println(name+"有效订单总次数:"+num);
         System.out.println(name+"有效订单总金额:"+money/100);
     }
+
+    //收件号码为紧急联系人N手机号的订单数
+    public static int tbEmelContactPhoneAddressCnt(JSONObject self, JSONObject applicant, JSONObject result,int n) {
+        int num = 0;
+        String intimateContactsMobile = applicant.getString("customerIntimateContactsMobile"+n);
+        JSONArray tradedetails = self.getJSONObject("tradedetails").getJSONArray("tradedetails");
+        for (Object tradedetail:tradedetails) {
+            if(StringUtils.indexOf(JSON.parseObject(tradedetail.toString()).getString("trade_status"),"成功")<0) continue;
+            String deliver_mobilephone = JSON.parseObject(tradedetail.toString()).getString("deliver_mobilephone");
+            if(StringUtils.equals(intimateContactsMobile,deliver_mobilephone)){
+                num += 1;
+            }
+        }
+
+        System.out.println("收件号码为紧急联系人"+n+"手机号的订单数："+num);
+        return num;
+    }
 }

@@ -629,8 +629,9 @@ public class XYCarrier {
         result.put("day_avg_num_3m",String.format("%.2f",callNumbersByThreeMonth.doubleValue()/CarrierDateUtil.daysBetween(CarrierDateUtil.monthsBefore(3,applicant.get("customerApplyDate").toString()),CarrierDateUtil.getNowDate())));
         //近6个月日均通话次数
         result.put("day_avg_num_6m",String.format("%.2f",callNumbersBySixMonth.doubleValue()/CarrierDateUtil.daysBetween(CarrierDateUtil.monthsBefore(6,applicant.get("customerApplyDate").toString()),CarrierDateUtil.getNowDate())));
-        //近3个月，除近1个月，其余2个月月均通话次数
-        result.put("day_avg_num_not_1m_3m",Algorithm.callAvgNumbers(data,applicant,3,1));
+        //近3个月，除近1个月，其余2个月月均通话次数 day_avg_num_not_1m_3m
+        String day_avg_num_not_1m_3m = Algorithm.callAvgNumbers(data,applicant,3,1);
+        result.put("day_avg_num_not_1m_3m",day_avg_num_not_1m_3m);
         //近6个月，除近1个月，其余5个月月均通话次数
         result.put("day_avg_num_not_1m_6m",Algorithm.callAvgNumbers(data,applicant,6,1));
         //除近3个月，剩余月总通话时长
@@ -1019,6 +1020,19 @@ public class XYCarrier {
         result.put("",Algorithm.maxNoCallDay(data,applicant,7));
         //近1个月连续无通话天数最大值	max_day_no_call_1m	int
         result.put("",Algorithm.maxNoCallDay(data,applicant,30));
+
+        //近1个月通话次数比除近2个月，剩余月月均通话次数	total_cnt_1m_mul_total_avg_cnt_no_2m	double
+        result.put("total_cnt_1m_mul_total_avg_cnt_no_2m",total_length_1m.doubleValue()/Double.parseDouble(Algorithm.avgCallNum(data,applicant,2)));
+        //近3个月除近1个月月均通话次数	call_cnt_avg_no_2m_3m	double
+        result.put("call_cnt_avg_no_2m_3m",day_avg_num_not_1m_3m);
+        //近3个月除近1个月月均通话时长	call_time_avg_no_2m_3m	double
+        result.put("call_time_avg_no_2m_3m",(total_length_3m-total_length_1m)/2);
+        //后3个月月均通话次数	call_cnt_avg_later_3m	double
+        result.put("call_cnt_avg_later_3m",Algorithm.callCntAvgLater(data,applicant,3));
+        //后3个月月均通话时长	call_time_avg_later_3m	double
+        result.put("call_time_avg_later_3m",Algorithm.callTimeAvgLater(data,applicant,3));
+        //运营商历史账单号码出现在通讯录的个数	yys_phone_in_contact_cnt	int
+        result.put("yys_phone_in_contact_cnt",Algorithm.yysPhoneInContactCnt(data,applicant));
 
         return result;
     }

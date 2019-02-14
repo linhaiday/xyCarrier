@@ -259,6 +259,21 @@ public class TaobaoVariable {
         //账单中出现剃须刀字段的订单次数	tb_shaver_order_cnt	int 关键词：剃须刀
         //账单中出现剃须刀字段的订单金额	tb_shaver_order_amount	double
         TaobaoSelfAlgorithm.orderCntAmount(self,result,new String[]{"剃须刀"},"shaver");
+        //收件号码为紧急联系人1手机号的订单数	tb_eme1_contact_phone_address_cnt	int
+        int tb_eme1_contact_phone_address_cnt = TaobaoSelfAlgorithm.tbEmelContactPhoneAddressCnt(self,applicant,result,1);
+        result.put("tb_eme1_contact_phone_address_cnt",tb_eme1_contact_phone_address_cnt);
+        //收件姓名为紧急联系人1姓名的订单数	tb_eme1_contact_name_address_cnt	int
+        //收件号码为紧急联系人2手机号的订单数	tb_eme2_contact_phone_address_cnt	int
+        int tb_eme2_contact_phone_address_cnt = TaobaoSelfAlgorithm.tbEmelContactPhoneAddressCnt(self,applicant,result,2);
+        result.put("tb_eme2_contact_phone_address_cnt",tb_eme2_contact_phone_address_cnt);
+        //收件姓名为紧急联系人2姓名的订单数	tb_eme2_contact_name_address_cnt	int
+        //收件号码为紧急联系人3手机号的订单数	tb_eme3_contact_phone_address_cnt	int
+        int tb_eme3_contact_phone_address_cnt = TaobaoSelfAlgorithm.tbEmelContactPhoneAddressCnt(self,applicant,result,3);
+        result.put("tb_eme3_contact_phone_address_cnt",tb_eme3_contact_phone_address_cnt);
+        //收件姓名为紧急联系人3姓名的订单数	tb_eme3_contact_name_address_cnt	int
+        //收件号码为紧急联系人手机号的订单数	tb_eme_contact_phone_address_cnt	int
+        result.put("tb_eme_contact_phone_address_cnt",tb_eme1_contact_phone_address_cnt+tb_eme2_contact_phone_address_cnt+tb_eme3_contact_phone_address_cnt);
+        //收件姓名为紧急联系人姓名的订单数	tb_eme_contact_name_address_cnt	int
 
 
     }
